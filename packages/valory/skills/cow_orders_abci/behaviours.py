@@ -18,10 +18,11 @@
 # ------------------------------------------------------------------------------
 
 """This package contains round behaviours of CowOrdersAbciApp."""
-
+import json
 from abc import ABC
 from collections import deque
-from typing import Generator, Set, Type, cast, Deque
+from copy import deepcopy
+from typing import Generator, Set, Type, cast, Deque, Dict, List, Any
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
@@ -51,9 +52,36 @@ from packages.valory.skills.abstract_round_abci.common import (
     SelectKeeperBehaviour as BaseSelectKeeperBehaviour,
 )
 
+ORDERS = "orders"
+DEFAULT_HTTP_HEADERS = {
+            "Content-Type": "application/json",
+            "accept": "application/json"
+        }
 
 class CowOrdersBaseBehaviour(BaseBehaviour, ABC):
     """Base behaviour for the cow_orders_abci skill."""
+
+    @property
+    def orders(self) -> List[Dict[str, Any]]:
+        """
+        Return the orders from shared state.
+
+        Use with care, the returned data here is NOT synchronized with the rest of the agents.
+
+        :return: the orders
+        """
+        orders = deepcopy(self.context.shared_state.get(ORDERS, []))
+        return cast(List[Dict[str, Any]], orders)
+
+    def remove_order(self, order: Dict[str, Any]) -> None:
+        """
+        Pop the order from shared state.
+
+        :param order: the order
+        """
+        orders = self.orders
+        orders.remove(order)
+        self.context.shared_state[ORDERS] = orders
 
     @property
     def synchronized_data(self) -> SynchronizedData:
@@ -82,20 +110,68 @@ class PlaceOrdersBehaviour(CowOrdersBaseBehaviour):
 
     matching_round: Type[AbstractRound] = PlaceOrdersRound
 
-    # TODO: implement logic required to set payload content for synchronization
     def async_act(self) -> Generator:
-        """Do the act, supporting asynchronous execution."""
+        """
+        Do the action.
 
-        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+        Steps:
+        - If the agent is the keeper, then prepare the transaction and send it.
+        - Otherwise, wait until the next round.
+        - If a timeout is hit, set exit A event, otherwise set done event.
+        """
+        if self._i_am_not_sending():
+            yield from self._not_sender_act()
+        else:
+            yield from self._sender_act()
+
+
+    def _i_am_not_sending(self) -> bool:
+        """Indicates if the current agent is the sender or not."""
+        return (
+            self.context.agent_address
+            != self.synchronized_data.most_voted_keeper_address
+        )
+
+    def _not_sender_act(self) -> Generator:
+        """Do the non-sender action."""
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            self.context.logger.info(
+                f"Waiting for the keeper to do its keeping: {self.synchronized_data.most_voted_keeper_address}"
+            )
+            yield from self.wait_until_round_end()
+        self.set_done()
+
+    def _sender_act(self) -> Generator:
+        """Do the sender action."""
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            order = self.synchronized_data.order
+            order_uid = yield from self._place_order(order)
+            self.context.logger.info(f"Order {order} placed with uid {order_uid}")
             sender = self.context.agent_address
-            payload = PlaceOrdersPayload(sender=sender, content=...)
-
+            payload = PlaceOrdersPayload(sender=sender, content=order_uid)
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             yield from self.send_a2a_transaction(payload)
             yield from self.wait_until_round_end()
-
         self.set_done()
 
+    def _place_order(self, order: Dict[str, Any]) -> Generator[None, None, str]:
+        """Places the order on the CoW Api, and return the order uid."""
+        order_bytes = json.dumps(order).encode()
+        response = yield from self.get_http_response(
+            method="POST",
+            url=self.params.cow_api_url + "/orders",
+            headers=DEFAULT_HTTP_HEADERS,
+            content=order_bytes,
+        )
+        if response.status_code != 201:
+            self.context.logger.error(
+                f"Could not retrieve submit order to CoW API. "
+                f"Received status code {response.status_code} response body: {response.body.decode()}."
+            )
+            return PlaceOrdersRound.ERROR_PAYLOAD
+
+        order_uid = response.body.decode()
+        return order_uid
 
 class RandomnessBehaviour(BaseRandomnessBehaviour, CowOrdersBaseBehaviour):
     """RandomnessBehaviour"""
@@ -131,19 +207,28 @@ class SelectOrdersBehaviour(CowOrdersBaseBehaviour):
 
     matching_round: Type[AbstractRound] = SelectOrdersRound
 
-    # TODO: implement logic required to set payload content for synchronization
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             sender = self.context.agent_address
-            payload = SelectOrdersPayload(sender=sender, content=...)
+            content = self.get_payload_content()
+            payload = SelectOrdersPayload(sender=sender, content=content)
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             yield from self.send_a2a_transaction(payload)
             yield from self.wait_until_round_end()
 
         self.set_done()
+
+    def get_payload_content(self) -> str:
+        """Get the payload content."""
+        if len(self.orders) == 0:
+            return SelectOrdersRound.NO_ORDERS_PAYLOAD
+
+        order = self.orders.pop()
+        order_str = json.dumps(order, sort_keys=True)
+        return order_str
 
 
 class VerifyExecutionBehaviour(CowOrdersBaseBehaviour):
@@ -151,19 +236,74 @@ class VerifyExecutionBehaviour(CowOrdersBaseBehaviour):
 
     matching_round: Type[AbstractRound] = VerifyExecutionRound
 
-    # TODO: implement logic required to set payload content for synchronization
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             sender = self.context.agent_address
-            payload = VerifyExecutionPayload(sender=sender, content=...)
+            content = yield from self.get_payload_content()
+            payload = VerifyExecutionPayload(sender=sender, content=content)
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             yield from self.send_a2a_transaction(payload)
             yield from self.wait_until_round_end()
 
         self.set_done()
+
+    def get_payload_content(self) -> str:
+        """Get the payload content based on verification outcome."""
+        order_uid = self.synchronized_data.order_uid
+        order = self.synchronized_data.order
+        is_ok = yield from self._verify_submission(order_uid, order)
+        if is_ok:
+            return VerifyExecutionRound.VERIFICATION_OK
+
+        # something went wrong, the order was not submitted correctly
+        return VerifyExecutionRound.VERIFICATION_FAILED
+
+    def _verify_submission(self, reported_order_uid: str, order: Dict[str, Any]) -> Generator[None, None, bool]:
+        """
+        Verify that the order was submitted.
+
+        :param reported_order_uid: the order uid reported by the keeper
+        :param order: the order to verify
+        :returns: the appropriate payload content depending on the verification result
+        """
+        expected_order_uid = yield from self._get_expected_order_uid(order)
+        if reported_order_uid != expected_order_uid:
+            self.context.logger.warning(f"Order {order} was not submitted correctly. Expected uid {expected_order_uid}, got {reported_order_uid}")
+            return VerifyExecutionRound.VERIFICATION_FAILED
+
+        was_submitted = yield from self._was_order_submitted(reported_order_uid)
+        if not was_submitted:
+            self.context.logger.warning(f"Order {order} was not submitted.")
+            return VerifyExecutionRound.VERIFICATION_FAILED
+
+        return VerifyExecutionRound.VERIFICATION_OK
+
+    def _was_order_submitted(self, order_uid: str) -> Generator[None, None, bool]:
+        """Check that the order was submitted to the api."""
+        url = self.params.cow_api_url + "/orders/" + order_uid
+        response = yield from self.get_http_response(
+            method="GET",
+            url=url,
+            headers=DEFAULT_HTTP_HEADERS,
+        )
+        if response.status_code != 200:
+            self.context.logger.error(
+                f"Could not get order with uid {order_uid}. "
+                f"Received status code {response.status_code} response body: {response.body.decode()}."
+            )
+            return False
+
+        # if the response is 200, the order was submitted
+        return True
+
+    def _get_expected_order_uid(self, order: Dict[str, Any]) -> Generator[None, None, str]:
+        """Get the expected order uid."""
+        return "TODO"
+        yield
+
 
 
 class CowOrdersRoundBehaviour(AbstractRoundBehaviour):
