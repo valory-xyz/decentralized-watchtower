@@ -19,16 +19,14 @@
 
 """This package contains payload tests for the CowOrdersAbciApp."""
 
-from typing import Type, Hashable
 from dataclasses import dataclass
+from typing import Hashable, Type
 
 import pytest
 
 from packages.valory.skills.cow_orders_abci.payloads import (
     BaseTxPayload,
     PlaceOrdersPayload,
-    RandomnessPayload,
-    SelectKeeperPayload,
     SelectOrdersPayload,
     VerifyExecutionPayload,
 )
@@ -43,12 +41,29 @@ class PayloadTestCase:
     content: Hashable
 
 
-# TODO: provide test cases
-@pytest.mark.parametrize("test_case", [])
+@pytest.mark.parametrize(
+    "test_case",
+    [
+        PayloadTestCase(
+            name="PlaceOrdersPayload",
+            payload_cls=PlaceOrdersPayload,
+            content="content",
+        ),
+        PayloadTestCase(
+            name="SelectOrdersPayload",
+            payload_cls=SelectOrdersPayload,
+            content="content",
+        ),
+        PayloadTestCase(
+            name="VerifyExecutionPayload",
+            payload_cls=VerifyExecutionPayload,
+            content="content",
+        ),
+    ],
+)
 def test_payloads(test_case: PayloadTestCase) -> None:
     """Tests for CowOrdersAbciApp payloads"""
 
     payload = test_case.payload_cls(sender="sender", content=test_case.content)
     assert payload.sender == "sender"
     assert payload.from_json(payload.json) == payload
-

@@ -22,19 +22,21 @@ import json
 import textwrap
 from collections import deque
 from enum import Enum
-from typing import Dict, List, Optional, Set, Tuple, cast, Deque, Any
+from typing import Any, Deque, Dict, Optional, Set, Tuple, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
-    AbstractRound,
     AppState,
     BaseSynchronizedData,
+    CollectSameUntilThresholdRound,
+    CollectionRound,
     DegenerateRound,
-    EventToTimeout, CollectSameUntilThresholdRound, get_name, DeserializedCollection, CollectionRound,
+    DeserializedCollection,
+    EventToTimeout,
     OnlyKeeperSendsRound,
+    get_name,
 )
-
 from packages.valory.skills.cow_orders_abci.payloads import (
     PlaceOrdersPayload,
     RandomnessPayload,
@@ -128,6 +130,11 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the order."""
         return cast(Dict[str, Any], self.db.get_strict("order"))
 
+    @property
+    def verified_order(self) -> Optional[Dict[str, Any]]:
+        """Get the order."""
+        return cast(Optional[Dict[str, Any]], self.db.get("verified_order", None))
+
 
 class PlaceOrdersRound(OnlyKeeperSendsRound):
     """PlaceOrdersRound"""
@@ -149,12 +156,11 @@ class PlaceOrdersRound(OnlyKeeperSendsRound):
         state = self.synchronized_data.update(
             synchronized_data_class=self.synchronized_data_class,
             **{
-                get_name(
-                    SynchronizedData.order_uid
-                ): order_uid,
+                get_name(SynchronizedData.order_uid): order_uid,
             }
         )
         return state, Event.DONE
+
 
 class RandomnessRound(CollectSameUntilThresholdRound):
     """A round for generating randomness"""
@@ -168,6 +174,7 @@ class RandomnessRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.most_voted_randomness_round),
         get_name(SynchronizedData.most_voted_randomness),
     )
+
 
 class SelectKeeperRound(CollectSameUntilThresholdRound):
     """A round in which a keeper is selected for transaction submission"""
@@ -184,7 +191,7 @@ class SelectOrdersRound(CollectSameUntilThresholdRound):
     """SelectOrdersRound"""
 
     payload_class = SelectOrdersPayload
-    payload_attribute = "content"  # TODO: update
+    payload_attribute = "content"
     synchronized_data_class = SynchronizedData
 
     NO_ORDERS_PAYLOAD = "no_orders_payload"
@@ -198,9 +205,7 @@ class SelectOrdersRound(CollectSameUntilThresholdRound):
             state = self.synchronized_data.update(
                 synchronized_data_class=self.synchronized_data_class,
                 **{
-                    get_name(
-                        SynchronizedData.order
-                    ): order,
+                    get_name(SynchronizedData.order): order,
                 }
             )
             return state, Event.DONE
@@ -227,15 +232,23 @@ class VerifyExecutionRound(CollectSameUntilThresholdRound):
         """Process the end of the block."""
         if self.threshold_reached:
             if self.most_voted_payload == self.VERIFICATION_FAILED:
-                return self.synchronized_data, Event.DONE
-            return self.synchronized_data, Event.BAD_SUBMISSION
+                return self.synchronized_data, Event.BAD_SUBMISSION
 
+            processed_order = cast(SynchronizedData, self.synchronized_data).order
+            state = self.synchronized_data.update(
+                synchronized_data_class=self.synchronized_data_class,
+                **{
+                    get_name(SynchronizedData.verified_order): processed_order,
+                }
+            )
+            return state, Event.DONE
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants
         ):
             return self.synchronized_data, Event.NO_MAJORITY
 
         return None
+
 
 class FinishedWithOrdersRound(DegenerateRound):
     """FinishedWithOrdersRound"""
@@ -251,30 +264,30 @@ class CowOrdersAbciApp(AbciApp[Event]):
             Event.DONE: RandomnessRound,
             Event.NO_MAJORITY: SelectOrdersRound,
             Event.ROUND_TIMEOUT: SelectOrdersRound,
-            Event.NO_ACTION: FinishedWithOrdersRound
+            Event.NO_ACTION: FinishedWithOrdersRound,
         },
         RandomnessRound: {
             Event.DONE: SelectKeeperRound,
             Event.NO_MAJORITY: RandomnessRound,
-            Event.ROUND_TIMEOUT: RandomnessRound
+            Event.ROUND_TIMEOUT: RandomnessRound,
         },
         SelectKeeperRound: {
             Event.DONE: PlaceOrdersRound,
             Event.NO_MAJORITY: RandomnessRound,
-            Event.ROUND_TIMEOUT: SelectKeeperRound
+            Event.ROUND_TIMEOUT: SelectKeeperRound,
         },
         PlaceOrdersRound: {
             Event.DONE: VerifyExecutionRound,
             Event.NO_MAJORITY: PlaceOrdersRound,
-            Event.ROUND_TIMEOUT: PlaceOrdersRound
+            Event.ROUND_TIMEOUT: PlaceOrdersRound,
         },
         VerifyExecutionRound: {
-            Event.DONE: FinishedWithOrdersRound,
+            Event.DONE: SelectOrdersRound,
             Event.BAD_SUBMISSION: RandomnessRound,
             Event.NO_MAJORITY: PlaceOrdersRound,
-            Event.ROUND_TIMEOUT: PlaceOrdersRound
+            Event.ROUND_TIMEOUT: PlaceOrdersRound,
         },
-        FinishedWithOrdersRound: {}
+        FinishedWithOrdersRound: {},
     }
     final_states: Set[AppState] = {FinishedWithOrdersRound}
     event_to_timeout: EventToTimeout = {}

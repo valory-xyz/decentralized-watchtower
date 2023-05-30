@@ -112,6 +112,7 @@ models:
       cow_api_url: https://api.cow.fi/mainnet
       round_timeout_seconds: 30.0
       service_id: cow_orders
+      use_termination: false
       service_registry_address: null
       setup:
         all_participants:
@@ -137,6 +138,17 @@ models:
   state:
     args: {}
     class_name: SharedState
+  randomness_api:
+    args:
+      api_id: cloudflare
+      headers: { }
+      method: GET
+      parameters: { }
+      response_key: null
+      response_type: dict
+      retries: 5
+      url: https://drand.cloudflare.com/public/latest
+    class_name: RandomnessApi
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
