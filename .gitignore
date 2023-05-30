@@ -13,7 +13,11 @@ Pipfile.lock
 abci_build/
 keys.json
 leak_report
-packages/valory/connections
+packages/valory/connections/abci/
+packages/valory/connections/http_client/
+packages/valory/connections/ipfs/
+packages/valory/connections/ledger/
+packages/valory/connections/p2p_libp2p_client/
 packages/valory/contracts/gnosis_safe
 packages/valory/contracts/gnosis_safe_proxy_factory
 packages/valory/contracts/multisend

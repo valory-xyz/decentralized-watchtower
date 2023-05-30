@@ -1,0 +1,45 @@
+name: order_monitoring
+author: valory
+version: 0.1.0
+type: skill
+description: The scaffold skill is a simple client to subscribe to transactions using
+  the websocket connection.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeifmvtpeq7ksqq262e2lupzv54sfdzygg2qxiygyztq7f2sujg4cwi
+  behaviours.py: bafybeih6piikykeydxin5c5iofgzc7xfrxkwnokh3em6yvh37ibylc3t2q
+  dialogues.py: bafybeiaaho77tsg4s7k2k27u2xqcoi2juze6cwx4psuueu7gbumpw5kgiu
+  handlers.py: bafybeieagcgzoggy6jspn2hzw4yhlwtii7nprouysxrjb7hrwt5fqntvbq
+  models.py: bafybeicxiv2m6whj37zffrqmb3zw6tzlouqvziocallca4gcghx3vigs6q
+fingerprint_ignore_patterns: []
+connections:
+- valory/websocket_client:0.1.0:bafybeiawlga3on5ijbxpt3zxgks5ssi4jbpez2vchzqfv3nxw3ixqcutfy
+contracts: []
+protocols:
+- fetchai/default:1.0.0:bafybeieqqzgzuappi2ped42upgzad5gt3mxiyjhojwibxm4o367ffsian4
+skills: []
+behaviours:
+  subscriptions:
+    args:
+      contracts:
+      - '0xFf82123dFB52ab75C417195c5fDB87630145ae81'
+    class_name: SubscriptionBehaviour
+handlers:
+  new_event:
+    args:
+      contract_to_monitor: '0xFf82123dFB52ab75C417195c5fDB87630145ae81'
+      websocket_provider: https://rpc.gnosischain.com
+    class_name: WebSocketHandler
+models:
+  default_dialogues:
+    args: {}
+    class_name: DefaultDialogues
+  params:
+    args:
+      use_polling: false
+      event_topics:
+      - '0x4af0ada67198226ad089fb87300dc01d76fb8883a59e6642c05a2f01dfd1eb67'
+    class_name: Params
+dependencies: {}
+is_abstract: false
