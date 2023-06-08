@@ -22,6 +22,7 @@
 
 import json
 import time
+from typing import Dict, Optional, List
 
 from aea.protocols.base import Message
 from aea.skills.base import Handler
@@ -30,7 +31,10 @@ from web3.types import TxReceipt
 
 from packages.fetchai.protocols.default.message import DefaultMessage
 
-JOB_QUEUE = "orders"
+# partial orders are orders we do not have the full information for
+# a partial order becomes (a full) order and is ready to be processed
+PARTIAL_ORDERS = "partial_orders"
+ORDERS = "orders"
 DISCONNECTION_POINT = "disconnection_point"
 
 
@@ -48,20 +52,18 @@ class WebSocketHandler(Handler):
 
     def setup(self) -> None:
         """Implement the setup."""
-        self.context.shared_state[JOB_QUEUE] = []
+        self.context.shared_state[PARTIAL_ORDERS] = []
+        self.context.shared_state[ORDERS] = []
         self.context.shared_state[DISCONNECTION_POINT] = None
-        # loads the contracts from the config file
-        with open(
-            "vendor/valory/contracts/conditional_order/build/ConditionalOrder.json",
-            "r",
-            encoding="utf-8",
-        ) as file:
-            abi = json.load(file)["abi"]
+    @property
+    def partial_orders(self) -> List[Dict[str, Dict]]:
+        """Get partial orders."""
+        return self.context.shared_state[PARTIAL_ORDERS]
 
-        self.w3 = Web3(  # pylint: disable=C0103
-            Web3.HTTPProvider(self.websocket_provider)
-        )
-        self.contract = self.w3.eth.contract(address=self.contract_to_monitor, abi=abi)
+    @property
+    def orders(self) -> List[Dict[str, Dict]]:
+        """Get orders."""
+        return self.context.shared_state[ORDERS]
 
     def handle(self, message: Message) -> None:
         """
@@ -77,28 +79,10 @@ class WebSocketHandler(Handler):
 
         self.context.logger.info("Extracting data")
         tx_hash = data["params"]["result"]["transactionHash"]
-        no_args = True
-        limit = 0
-        while no_args and limit < 10:
-            event_args, no_request = self._get_tx_args(tx_hash)
-            if no_request:
-                self.context.logger.info("Event not a Request.")
-                break
-            if len(event_args) == 0:
-                self.context.logger.info(f"Could not get event args. tx_hash={tx_hash}")
-                time.sleep(1)
-                limit += 1
-                return
-            no_args = False
-        if len(event_args) != 0:
-            self.context.shared_state[JOB_QUEUE].append(event_args)
-            self.context.logger.info(f"Added job to queue: {event_args}")
+        self._get_contract_events(tx_hash)
 
-    def teardown(self) -> None:
-        """Implement the handler teardown."""
-
-    def _get_tx_args(self, tx_hash: str):
-        """Get the transaction arguments."""
+    def _get_contract_events(self, tx_hash: str):
+        """Get contract events."""
         try:
             tx_receipt: TxReceipt = self.w3.eth.get_transaction_receipt(tx_hash)
             self.context.shared_state[DISCONNECTION_POINT] = tx_receipt["blockNumber"]
@@ -110,3 +94,27 @@ class WebSocketHandler(Handler):
                 f"An exception occurred while trying to get the transaction arguments for {tx_hash}: {exc}"
             )
             return {}, True
+
+    def _process_tx(self, tx_hash: str) -> Dict[str, List[Dict[str]]]:
+        """Get the relevant events out of the transaction."""
+        # TODO: send to ComposableCowContract for processing via ledger conn
+        dummy_response = {
+            "conditional_orders": [],
+            "merkle_root_set": [],
+        }
+
+    def _add_contract(self, owner: str, params: Dict, proof: Optional[Dict], composable_cow: str):
+        """Update contracts."""
+        exists = False
+        for order in self.orders:
+            if order['owner'] == owner and order['params'] == params:
+                exists = True
+                break
+        if not exists:
+            self.orders.append({
+                'owner': owner,
+                'params': params,
+                'proof': proof,
+                'composableCow': composable_cow
+            })
+

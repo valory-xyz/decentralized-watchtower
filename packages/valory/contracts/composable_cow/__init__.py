@@ -17,4 +17,4 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the support resources for the ConditionalOrder contracts."""  # pragma: nocover
+"""This module contains the support resources for the ComposableCow contracts."""  # pragma: nocover
