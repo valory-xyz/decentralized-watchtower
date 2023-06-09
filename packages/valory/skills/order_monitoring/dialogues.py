@@ -13,9 +13,15 @@ from packages.fetchai.protocols.default.dialogues import \
     DefaultDialogue as BaseDefaultDialogue
 from packages.fetchai.protocols.default.dialogues import \
     DefaultDialogues as BaseDefaultDialogues
+from packages.valory.protocols.contract_api.dialogues import (
+    ContractApiDialogue as BaseContractApiDialogue,
+    ContractApiDialogues as BaseContractApiDialogues,
+)
 
+
+ContractApiDialogue = BaseContractApiDialogue
+ContractApiDialogues = BaseContractApiDialogues
 DefaultDialogue = BaseDefaultDialogue
-
 
 class DefaultDialogues(Model, BaseDefaultDialogues):
     """The dialogues class keeps track of all dialogues."""

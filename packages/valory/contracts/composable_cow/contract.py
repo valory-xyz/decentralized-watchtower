@@ -19,7 +19,8 @@
 
 """This module contains the class to connect to an Gnosis Safe contract."""
 import logging
-from typing import Any, Optional
+from enum import Enum
+from typing import Any, Optional, Dict, List
 
 from aea.common import JSONLike
 from aea.configurations.base import PublicId
@@ -31,6 +32,21 @@ PUBLIC_ID = PublicId.from_str("valory/composable_cow:0.1.0")
 _logger = logging.getLogger(
     f"aea.packages.{PUBLIC_ID.author}.contracts.{PUBLIC_ID.name}.contract"
 )
+
+
+class CallType(Enum):
+    """Call type."""
+
+    EVENT_PROCESSING = "event_processing"
+    GET_TRADEABLE_ORDER = "tradable_order"
+
+
+class OrderBalance(Enum):
+    """Order balance."""
+
+    ERC20 = "erc20"
+    EXTERNAL = "external"
+    INTERNAL = "internal"
 
 
 class ComposableCowContract(Contract):
@@ -61,19 +77,31 @@ class ComposableCowContract(Contract):
 
     @classmethod
     def get_tradeable_order(
-            cls,
-            ledger_api: LedgerApi,
-            contract_address: str,
-            owner_address: str,
-            sender_address: str,
-            static_input: bytes,
-            offchain_input: bytes,
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+        owner_address: str,
+        params: Dict[str, Any],
+        offchain_input: bytes,
+        proof: List[bytes],
     ) -> Optional[JSONLike]:
         """Get tradeable order."""
         instance = cls.get_instance(ledger_api, contract_address)
-        order_data = instance.functions.getTradeableOrder(owner_address, sender_address, static_input,
-                                                          offchain_input).call()
-        return dict(data=order_data)
+        try:
+            order_data, signature = instance.functions.getTradeableOrderWithSignature(
+                owner_address,
+                params,
+                offchain_input,
+                proof
+            ).call()
+            data = {
+                "order_data": order_data,
+                "signature": signature
+            }
+        except Exception as e:
+            _logger.error(f"Error calling getTradeableOrderWithSignature: {e}")
+            data = {}
+        return dict(data=data, type=CallType.GET_TRADEABLE_ORDER.value)
 
     @classmethod
     def process_order_events(
@@ -87,4 +115,8 @@ class ComposableCowContract(Contract):
         receipt = ledger_api.api.eth.getTransactionReceipt(tx_hash)
         conditional_orders = contract.events.ConditionalOrderCreated().processReceipt(receipt)
         merkle_root_set = contract.events.MerkleRootSet().processReceipt(receipt)
-        return dict(conditional_orders=conditional_orders, merkle_root_set=merkle_root_set)
+        data = {
+            "conditional_orders": conditional_orders,
+            "merkle_root_set": merkle_root_set
+        }
+        return dict(data=data, type=CallType.EVENT_PROCESSING.value)

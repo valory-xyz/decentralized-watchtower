@@ -35,6 +35,9 @@ models:
   default_dialogues:
     args: {}
     class_name: DefaultDialogues
+  contract_api_dialogues:
+    args: {}
+    class_name: ContractApiDialogues
   params:
     args:
       use_polling: false
