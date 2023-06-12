@@ -13,8 +13,7 @@ fingerprint:
   tests/__init__.py: bafybeihbclcqwfoxoljzwnbg3nf22srsyx5dgdbcyj27irwizktg4ygujy
   tests/test_contract.py: bafybeidnlxmcedoean6xfhjwvj5yvgbaxevjgtlu6wnu2w6y5a37hiniri
 fingerprint_ignore_patterns: []
-contracts:
-- valory/composable_cow_proxy_factory:0.1.0:bafybeib2rat7ht33l6r6ix45x5yifotq7l6oqczmqe5edxh2ackv4i72jq
+contracts: []
 class_name: GnosisSafeContract
 contract_interface_paths:
   ethereum: build/ComposableCow.json

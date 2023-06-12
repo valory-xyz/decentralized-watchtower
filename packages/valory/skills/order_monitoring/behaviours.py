@@ -21,7 +21,7 @@
 """This package contains a scaffold of a behaviour."""
 
 import json
-from typing import Any, List, Optional, cast
+from typing import Any, List, Optional, cast, Dict
 
 from aea.mail.base import Envelope
 from aea.skills.behaviours import SimpleBehaviour
@@ -29,8 +29,11 @@ from aea.skills.behaviours import SimpleBehaviour
 from packages.fetchai.protocols.default.message import DefaultMessage
 from packages.valory.connections.websocket_client.connection import (
     CONNECTION_ID, WebSocketClient)
+from packages.valory.contracts.composable_cow.contract import ComposableCowContract
+from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.order_monitoring.handlers import \
-    DISCONNECTION_POINT
+    DISCONNECTION_POINT, LEDGER_API_ADDRESS, ORDERS
+from packages.valory.skills.order_monitoring.models import Params
 
 DEFAULT_ENCODING = "utf-8"
 WEBSOCKET_CLIENT_CONNECTION_NAME = "websocket_client"
@@ -60,6 +63,35 @@ class SubscriptionBehaviour(SimpleBehaviour):
 
     def act(self) -> None:
         """Implement the act."""
+        self._do_subscription()
+        self._check_orders_are_tradeable()
+
+    @property
+    def params(self) -> Params:
+        """Get the parameters."""
+        return cast(Params, self.context.params)
+
+    @property
+    def orders(self) -> Dict[str, Any]:
+        """Get partial orders."""
+        return self.context.shared_state[ORDERS]
+
+    def _check_orders_are_tradeable(self) -> None:
+        """Check if orders are tradeable."""
+        orders = list(self.orders.values())
+        contract_api_msg, _ = self.context.contract_api_dialogues.create(
+            performative=ContractApiMessage.Performative.GET_STATE,
+            contract_address=self.params.composable_cow_address,
+            contract_id=str(ComposableCowContract.contract_id),
+            contract_callable="get_tradeable_order",
+            orders=orders,
+            counterparty=LEDGER_API_ADDRESS,
+            ledger_id=self.context.default_ledger_id,
+        )
+        self.context.outbox.put_message(message=contract_api_msg)
+
+    def _do_subscription(self) -> None:
+        """Handle subscription logic."""
         use_polling = self.context.params.use_polling
         if use_polling:
             # do nothing if we are polling
@@ -112,6 +144,7 @@ class SubscriptionBehaviour(SimpleBehaviour):
 
         if not is_connected:
             self._subscription_required = True
+
 
     def _create_call(self, content: bytes) -> None:
         """Create a call."""

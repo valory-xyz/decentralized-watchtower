@@ -17,14 +17,45 @@
 #
 # ------------------------------------------------------------------------------
 """This module contains helpers for orders."""
-
-from typing import Union, Dict
+from dataclasses import dataclass
+from typing import Union, Dict, List, Optional
 from enum import Enum
 from datetime import datetime
 
 from eth_typing import HexStr
 from py_eth_sig_utils.eip712.encoding import create_struct_hash
 from web3 import Web3
+
+@dataclass
+class ConditionalOrderParamsStruct:
+    """Conditional order params dataclass."""
+    handler: str
+    salt: str
+    staticInput: str
+
+
+@dataclass
+class Proof:
+    """Proof dataclass."""
+    merkleRoot: str
+    path: List[str]
+
+
+@dataclass
+class ConditionalOrder:
+    """Conditional order dataclass."""
+
+    params: ConditionalOrderParamsStruct
+    proof: Optional[Proof]
+    orders: Dict[str, int]
+    composableCow: str
+
+
+OrderStatus = {
+    'SUBMITTED': 1,
+    'FILLED': 2
+}
+
 
 class Order:
     """Interface for orders."""

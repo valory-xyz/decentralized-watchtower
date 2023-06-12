@@ -30,4 +30,5 @@ class Params(Model):
         """Initialize the parameters object."""
         self.use_polling = kwargs.get("use_polling", False)
         self.event_topics = kwargs.get("event_topics", [])
+        self.composable_cow_address = kwargs.get("composable_cow_address", None)
         super().__init__(*args, **kwargs)

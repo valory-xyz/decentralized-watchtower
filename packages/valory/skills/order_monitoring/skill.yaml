@@ -15,9 +15,12 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections:
 - valory/websocket_client:0.1.0:bafybeiawlga3on5ijbxpt3zxgks5ssi4jbpez2vchzqfv3nxw3ixqcutfy
-contracts: []
+- valory/ledger:0.19.0:bafybeicgfupeudtmvehbwziqfxiz6ztsxr5rxzvalzvsdsspzz73o5fzfi
+contracts:
+- valory/composable_cow:0.1.0:bafybeicgfupeudtmvehbwziqfxiz6ztsxr5rxzvalzvsdsspzz73o5fzfi
 protocols:
 - fetchai/default:1.0.0:bafybeieqqzgzuappi2ped42upgzad5gt3mxiyjhojwibxm4o367ffsian4
+- valory/contract_api:1.0.0:bafybeidv6wxpjyb2sdyibnmmum45et4zcla6tl63bnol6ztyoqvpl4spmy
 skills: []
 behaviours:
   subscriptions:
@@ -37,10 +40,11 @@ models:
     class_name: DefaultDialogues
   contract_api_dialogues:
     args: {}
-    class_name: ContractApiDialogues
+    class_name: ContractDialogues
   params:
     args:
       use_polling: false
+      composable_cow_address: '0x4af0ada67198226ad089fb87300dc01d76fb8883'
       event_topics:
       - '0x4af0ada67198226ad089fb87300dc01d76fb8883a59e6642c05a2f01dfd1eb67'
     class_name: Params

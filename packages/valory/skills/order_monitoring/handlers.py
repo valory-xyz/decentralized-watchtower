@@ -21,7 +21,6 @@
 """This package contains a scaffold of a handler."""
 
 import json
-from dataclasses import dataclass
 from typing import Dict, Optional, List, cast, Any
 
 from aea.protocols.base import Message
@@ -30,16 +29,16 @@ from web3 import Web3
 from web3.types import TxReceipt
 
 from packages.fetchai.protocols.default.message import DefaultMessage
-from packages.valory.contracts.composable_cow.contract import ComposableCowContract, CallType
-from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.connections.ledger.connection import (
     PUBLIC_ID as LEDGER_CONNECTION_PUBLIC_ID,
 )
+from packages.valory.contracts.composable_cow.contract import ComposableCowContract, CallType
+from packages.valory.protocols.contract_api import ContractApiMessage
+from packages.valory.skills.order_monitoring.order_utils import ConditionalOrder, Proof, ConditionalOrderParamsStruct
 
-# partial orders are orders we do not have the full information for
-# a partial order becomes (a full) order and is ready to be processed
-PARTIAL_ORDERS = "partial_orders"
 ORDERS = "orders"
+# ready orders are orders that are ready to be filled
+READY_ORDERS = "ready_orders"
 DISCONNECTION_POINT = "disconnection_point"
 
 LEDGER_API_ADDRESS = str(LEDGER_CONNECTION_PUBLIC_ID)
@@ -59,17 +58,17 @@ class WebSocketHandler(Handler):
 
     def setup(self) -> None:
         """Implement the setup."""
-        self.context.shared_state[PARTIAL_ORDERS] = {}
-        self.context.shared_state[ORDERS] = []
+        self.context.shared_state[ORDERS] = {}
+        self.context.shared_state[READY_ORDERS] = []
         self.context.shared_state[DISCONNECTION_POINT] = None
 
     @property
-    def partial_orders(self) -> List[Dict[str, Dict]]:
+    def orders(self) -> Dict[str, Any]:
         """Get partial orders."""
-        return self.context.shared_state[PARTIAL_ORDERS]
+        return self.context.shared_state[ORDERS]
 
     @property
-    def orders(self) -> List[Dict[str, Dict]]:
+    def read_orders(self) -> List[Dict[str, Any]]:
         """Get orders."""
         return self.context.shared_state[ORDERS]
 
@@ -116,36 +115,9 @@ class WebSocketHandler(Handler):
         )
         self.context.outbox.put_message(message=contract_api_msg)
 
-
-@dataclass
-class ConditionalOrderParamsStruct:
-    """Conditional order params dataclass."""
-    handler: str
-    salt: str
-    staticInput: str
-
-
-@dataclass
-class Proof:
-    """Proof dataclass."""
-    merkleRoot: str
-    path: List[str]
-
-
-@dataclass
-class ConditionalOrder:
-    """Conditional order dataclass."""
-
-    params: ConditionalOrderParamsStruct
-    proof: Optional[Proof]
-    orders: Dict[str, int]
-    composableCow: str
-
-
-OrderStatus = {
-    'SUBMITTED': 1,
-    'FILLED': 2
-}
+    def teardown(self) -> None:
+        """Implement the handler teardown."""
+        self.context.logger.info("WebSocketHandler teardown method called.")
 
 
 class ContractHandler(Handler):
@@ -156,7 +128,12 @@ class ContractHandler(Handler):
     @property
     def orders(self) -> Dict[str, List[ConditionalOrder]]:
         """Get partial orders."""
-        return self.context.shared_state[PARTIAL_ORDERS]
+        return self.context.shared_state[ORDERS]
+
+    @property
+    def read_orders(self) -> List[Dict[str, Any]]:
+        """Get orders."""
+        return self.context.shared_state[ORDERS]
 
     def handle(self, message: Message) -> None:
         """
@@ -181,15 +158,9 @@ class ContractHandler(Handler):
         if call_type == CallType.GET_TRADEABLE_ORDER.value:
             self._handle_get_tradeable_order(data)
 
-
-    def _handle_get_tradeable_order(self, data: Dict[str, Any]) -> None:
+    def _handle_get_tradeable_order(self, tradeable_orders: List[Dict[str, Any]]) -> None:
         """Handle get tradeable order."""
-        order = data.get('order', None)
-        if order is None:
-            return
-
-        order_id = order['id']
-        self._add_order(order_id, order)
+        self.read_orders.extend(tradeable_orders)
 
     def _handle_event_processing(self, events: Dict[str, Any]) -> None:
         """Handle event processing."""
