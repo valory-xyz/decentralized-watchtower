@@ -48,9 +48,9 @@ from packages.valory.skills.cow_orders_abci.behaviours import (
 from packages.valory.skills.cow_orders_abci.rounds import Event, SynchronizedData
 
 
-_DUMMY_ORDERS = [{"order_id": "1", "keeper_id": "1", "amount": 1}]
 _DEFAULT_COW_API = "https://api.cow.fi/mainnet/orders"
 _DUMMY_ORDER_UID = "order_uid"
+_DUMMY_ORDERS = [{"order_uid": _DUMMY_ORDER_UID, "keeper_id": "1", "amount": 1}]
 _DEFAULT_HEADERS = ""
 for key, val in DEFAULT_HTTP_HEADERS.items():
     _DEFAULT_HEADERS += f"{key}: {val}\r\n"
