@@ -288,7 +288,7 @@ class VerifyExecutionBehaviour(CowOrdersBaseBehaviour):
         :param order: the order to verify
         :returns: the appropriate payload content depending on the verification result
         """
-        expected_order_uid = yield from self._get_expected_order_uid(order)
+        expected_order_uid = order["order_uid"]
         if reported_order_uid != expected_order_uid:
             self.context.logger.warning(
                 f"Order {order} was not submitted correctly. Expected uid {expected_order_uid}, got {reported_order_uid}"
@@ -319,13 +319,6 @@ class VerifyExecutionBehaviour(CowOrdersBaseBehaviour):
 
         # if the response is 200, the order was submitted
         return True
-
-    def _get_expected_order_uid(  # pylint: disable=no-self-use
-        self, order: Dict[str, Any]
-    ) -> Generator[None, None, str]:
-        """Get the expected order uid."""
-        return "order_uid"
-        yield
 
 
 class CowOrdersRoundBehaviour(AbstractRoundBehaviour):

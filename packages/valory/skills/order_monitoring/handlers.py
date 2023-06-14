@@ -2,7 +2,6 @@
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 Valory AG
-#   Copyright 2023 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -21,20 +20,29 @@
 """This package contains a scaffold of a handler."""
 
 import json
-from typing import Dict, Optional, List, cast, Any
+from typing import Any, Dict, List, Optional, Tuple, cast
 
 from aea.protocols.base import Message
 from aea.skills.base import Handler
 from web3 import Web3
-from web3.types import TxReceipt
 
 from packages.fetchai.protocols.default.message import DefaultMessage
 from packages.valory.connections.ledger.connection import (
     PUBLIC_ID as LEDGER_CONNECTION_PUBLIC_ID,
 )
-from packages.valory.contracts.composable_cow.contract import ComposableCowContract, CallType
+from packages.valory.contracts.composable_cow.contract import (
+    CallType,
+    ComposableCowContract,
+)
 from packages.valory.protocols.contract_api import ContractApiMessage
-from packages.valory.skills.order_monitoring.order_utils import ConditionalOrder, Proof, ConditionalOrderParamsStruct
+from packages.valory.skills.order_monitoring.models import Params
+from packages.valory.skills.order_monitoring.order_utils import (
+    ConditionalOrder,
+    ConditionalOrderParamsStruct,
+    Proof,
+    compute_order_uid,
+)
+
 
 ORDERS = "orders"
 # ready orders are orders that are ready to be filled
@@ -42,6 +50,8 @@ READY_ORDERS = "ready_orders"
 DISCONNECTION_POINT = "disconnection_point"
 
 LEDGER_API_ADDRESS = str(LEDGER_CONNECTION_PUBLIC_ID)
+
+GPV2SETTLEMENT_CONTRACT_ADDRESS = "0x9008D19f58AAbD9eD0D60971565AA8510560ab41"
 
 
 class WebSocketHandler(Handler):
@@ -86,30 +96,19 @@ class WebSocketHandler(Handler):
 
         self.context.logger.info("Extracting data")
         tx_hash = data["params"]["result"]["transactionHash"]
-        self._get_contract_events(tx_hash)
-
-    def _get_contract_events(self, tx_hash: str):
-        """Get contract events."""
-        try:
-            tx_receipt: TxReceipt = self.w3.eth.get_transaction_receipt(tx_hash)
-            self.context.shared_state[DISCONNECTION_POINT] = tx_receipt["blockNumber"]
-            rich_logs = self.contract.events.Request().processReceipt(tx_receipt)  # type: ignore
-            return dict(rich_logs[0]["args"]), False
-
-        except Exception as exc:  # pylint: disable=W0718
-            self.context.logger.error(
-                f"An exception occurred while trying to get the transaction arguments for {tx_hash}: {exc}"
-            )
-            return {}, True
+        self._process_tx(tx_hash)
 
     def _process_tx(self, tx_hash: str) -> None:
         """Get the relevant events out of the transaction."""
-        contract_api_msg, contract_api_dialogue = self.context.contract_api_dialogues.create(
+        (
+            contract_api_msg,
+            contract_api_dialogue,
+        ) = self.context.contract_api_dialogues.create(
             performative=ContractApiMessage.Performative.GET_STATE,
             contract_address=self.contract_to_monitor,
             contract_id=str(ComposableCowContract.contract_id),
-            contract_callable="process_order_events",
-            tx_hash=tx_hash,
+            callable="process_order_events",
+            kwargs=ContractApiMessage.Kwargs(dict(tx_hash=tx_hash)),
             counterparty=LEDGER_API_ADDRESS,
             ledger_id=self.context.default_ledger_id,
         )
@@ -123,6 +122,12 @@ class WebSocketHandler(Handler):
 class ContractHandler(Handler):
     """Contract API message handler."""
 
+    def setup(self) -> None:
+        pass
+
+    def teardown(self) -> None:
+        pass
+
     SUPPORTED_PROTOCOL = ContractApiMessage.protocol_id
 
     @property
@@ -131,9 +136,14 @@ class ContractHandler(Handler):
         return self.context.shared_state[ORDERS]
 
     @property
-    def read_orders(self) -> List[Dict[str, Any]]:
+    def ready_orders(self) -> List[Dict[str, Any]]:
         """Get orders."""
-        return self.context.shared_state[ORDERS]
+        return self.context.shared_state[READY_ORDERS]
+
+    @property
+    def params(self) -> Params:
+        """Get the parameters."""
+        return cast(Params, self.context.params)
 
     def handle(self, message: Message) -> None:
         """
@@ -150,57 +160,73 @@ class ContractHandler(Handler):
             return
 
         body = contract_api_msg.state.body
-        call_type = body.get('type', None)
-        data = body.get('data', {})
+        call_type = body.get("type", None)
+        data = body.get("data", {})
         if call_type == CallType.EVENT_PROCESSING.value:
             self._handle_event_processing(data)
 
         if call_type == CallType.GET_TRADEABLE_ORDER.value:
             self._handle_get_tradeable_order(data)
 
-    def _handle_get_tradeable_order(self, tradeable_orders: List[Dict[str, Any]]) -> None:
+    def get_domain(self, order: Dict[str, Any]) -> Dict[str, Any]:
+        """Get domain."""
+        domain = {
+            "name": "Gnosis Protocol",
+            "version": "v2",
+            "chainId": order["chainId"],
+            "verifyingContract": GPV2SETTLEMENT_CONTRACT_ADDRESS,
+        }
+        return domain
+
+    def _handle_get_tradeable_order(
+        self, tradeable_orders: List[Dict[str, Any]]
+    ) -> None:
         """Handle get tradeable order."""
-        self.read_orders.extend(tradeable_orders)
+        for order in tradeable_orders:
+            domain = self.get_domain(order)
+            order_uid = compute_order_uid(domain, order, order["from"])
+            order["order_uid"] = order_uid
+            self.ready_orders.extend(tradeable_orders)
+        self.params.in_flight_req = False
 
     def _handle_event_processing(self, events: Dict[str, Any]) -> None:
         """Handle event processing."""
-        conditional_orders = events.get('conditional_orders', [])
-        merkle_root_set_events = events.get('merkle_root_set', [])
+        conditional_orders = events.get("conditional_orders", [])
+        merkle_root_set_events = events.get("merkle_root_set", [])
         for conditional_order in conditional_orders:
             self._add_contract(
-                conditional_order['owner'],
-                conditional_order['params'],
-                conditional_order['proof'],
-                conditional_order['composableCow']
+                conditional_order["owner"],
+                conditional_order["params"],
+                conditional_order.get("proof", None),
+                conditional_order.get("composableCow", None),
             )
 
         for merkle_root_set in merkle_root_set_events:
             self._flush_contracts(
-                merkle_root_set['owner'],
-                merkle_root_set['merkleRoot'],
+                merkle_root_set["owner"],
+                merkle_root_set["merkleRoot"],
             )
-            for order in merkle_root_set['orders']:
+            for order in merkle_root_set["orders"]:
                 self._add_contract(
-                    merkle_root_set['owner'],
-                    order['params'],
-                    Proof(
-                        merkle_root_set['merkleRoot'],
-                        order['path']
-                    ),
-                    order['address'],
+                    merkle_root_set["owner"],
+                    order["params"],
+                    Proof(merkle_root_set["merkleRoot"], order["path"]),
+                    order["address"],
                 )
 
     def _add_contract(
         self,
         owner: str,
-        params: ConditionalOrderParamsStruct,
+        params: Tuple[str, bytes, bytes],
         proof: Optional[Proof],
         composable_cow: str,
     ) -> None:
         """Add a conditional order to the registry."""
         if owner in self.orders:
             conditional_orders = self.orders[owner]
-            self.context.logger.info(f"Adding conditional order {params} to already existing owner {owner}")
+            self.context.logger.info(
+                f"Adding conditional order {params} to already existing owner {owner}"
+            )
             exists = False
             # Iterate over the conditionalOrder to make sure that the params are not already in the registry
             for conditional_order in conditional_orders:
@@ -213,22 +239,26 @@ class ContractHandler(Handler):
             # we essentially use the params as identifier for the conditional order
             if not exists:
                 conditional_order = ConditionalOrder(
-                    params=params,
+                    params=ConditionalOrderParamsStruct(*params),
                     proof=proof,
                     orders={},
-                    composableCow=composable_cow
+                    composableCow=composable_cow,
+                    offchainInput=b"",
                 )
                 conditional_orders.append(conditional_order)
 
         else:
             # this is the first order for this owner
-            self.context.logger.info(f"Adding conditional order {params} to new contract {owner}")
+            self.context.logger.info(
+                f"Adding conditional order {params} to new contract {owner}"
+            )
             self.orders[owner] = [
                 ConditionalOrder(
-                    params=params,
+                    params=ConditionalOrderParamsStruct(*params),
                     proof=proof,
                     orders={},
-                    composableCow=composable_cow
+                    composableCow=composable_cow,
+                    offchainInput=b"",
                 )
             ]
 
@@ -236,7 +266,9 @@ class ContractHandler(Handler):
         """Flush contracts that have old roots."""
         conditional_orders = []
         for conditional_order in self.orders[owner]:
-            if conditional_order.proof.merkleRoot is not None and conditional_order.proof.merkleRoot != root:
+            if (
+                conditional_order.proof.merkleRoot is not None
+                and conditional_order.proof.merkleRoot != root
+            ):
                 conditional_orders.append(conditional_order)
         self.orders[owner] = conditional_orders
-

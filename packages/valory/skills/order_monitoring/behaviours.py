@@ -21,19 +21,25 @@
 """This package contains a scaffold of a behaviour."""
 
 import json
-from typing import Any, List, Optional, cast, Dict
+from typing import Any, Dict, List, Optional, cast
 
 from aea.mail.base import Envelope
 from aea.skills.behaviours import SimpleBehaviour
 
 from packages.fetchai.protocols.default.message import DefaultMessage
 from packages.valory.connections.websocket_client.connection import (
-    CONNECTION_ID, WebSocketClient)
+    CONNECTION_ID,
+    WebSocketClient,
+)
 from packages.valory.contracts.composable_cow.contract import ComposableCowContract
 from packages.valory.protocols.contract_api import ContractApiMessage
-from packages.valory.skills.order_monitoring.handlers import \
-    DISCONNECTION_POINT, LEDGER_API_ADDRESS, ORDERS
+from packages.valory.skills.order_monitoring.handlers import (
+    DISCONNECTION_POINT,
+    LEDGER_API_ADDRESS,
+    ORDERS,
+)
 from packages.valory.skills.order_monitoring.models import Params
+
 
 DEFAULT_ENCODING = "utf-8"
 WEBSOCKET_CLIENT_CONNECTION_NAME = "websocket_client"
@@ -72,23 +78,41 @@ class SubscriptionBehaviour(SimpleBehaviour):
         return cast(Params, self.context.params)
 
     @property
-    def orders(self) -> Dict[str, Any]:
+    def orders(self) -> Dict[str, List[ConditionalOrder]]:
         """Get partial orders."""
         return self.context.shared_state[ORDERS]
 
     def _check_orders_are_tradeable(self) -> None:
         """Check if orders are tradeable."""
-        orders = list(self.orders.values())
+        if self.params.in_flight_req or len(self.orders.values()) == 0:
+            # do nothing if there are no orders or if there is an in flight request
+            return
+        orders = [
+            {
+                "owner": owner,
+                "params": [
+                    order.params.handler,
+                    order.params.salt,
+                    order.params.staticInput,
+                ],
+                "offchainInput": order.offchainInput,
+                "proof": order.proof if order.proof is not None else [],
+                "composableCow": order.composableCow,
+            }
+            for owner, owner_orders in self.orders.items()
+            for order in owner_orders
+        ]
         contract_api_msg, _ = self.context.contract_api_dialogues.create(
             performative=ContractApiMessage.Performative.GET_STATE,
             contract_address=self.params.composable_cow_address,
             contract_id=str(ComposableCowContract.contract_id),
-            contract_callable="get_tradeable_order",
-            orders=orders,
+            callable="get_tradeable_order",
+            kwargs=ContractApiMessage.Kwargs(dict(orders=orders)),
             counterparty=LEDGER_API_ADDRESS,
             ledger_id=self.context.default_ledger_id,
         )
         self.context.outbox.put_message(message=contract_api_msg)
+        self.params.in_flight_req = True
 
     def _do_subscription(self) -> None:
         """Handle subscription logic."""
@@ -103,10 +127,10 @@ class SubscriptionBehaviour(SimpleBehaviour):
             # we only subscribe once, because the envelope will remain in the multiplexer until handled
             topics = self.context.params.event_topics
             subscription_msg_template = {
-                    "jsonrpc": "2.0",
-                    "id": 1,
-                    "method": "eth_subscribe",
-                    "params": ["logs", {"topics": topics}],
+                "jsonrpc": "2.0",
+                "id": 1,
+                "method": "eth_subscribe",
+                "params": ["logs", {"topics": topics}],
             }
             self.context.logger.info(f"Sending subscription for event topics: {topics}")
             self._create_call(
@@ -114,7 +138,7 @@ class SubscriptionBehaviour(SimpleBehaviour):
             )
         self._subscription_required = False
         if disconnection_point is not None:
-                self._missed_parts = True
+            self._missed_parts = True
 
         if is_connected and self._missed_parts:
             # if we are connected and have a disconnection point, then we need to fetch the parts that were missed
@@ -126,9 +150,7 @@ class SubscriptionBehaviour(SimpleBehaviour):
                 "params": [{"fromBlock": disconnection_point, "topics": topics}],
             }
             self.context.logger.info(f"Creating filter for event topics: {topics}")
-            self._create_call(
-                bytes(json.dumps(filter_msg_template), DEFAULT_ENCODING)
-            )
+            self._create_call(bytes(json.dumps(filter_msg_template), DEFAULT_ENCODING))
             self.context.logger.info(
                 "Getting parts that were missed while disconnected."
             )
@@ -144,7 +166,6 @@ class SubscriptionBehaviour(SimpleBehaviour):
 
         if not is_connected:
             self._subscription_required = True
-
 
     def _create_call(self, content: bytes) -> None:
         """Create a call."""

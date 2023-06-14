@@ -31,4 +31,5 @@ class Params(Model):
         self.use_polling = kwargs.get("use_polling", False)
         self.event_topics = kwargs.get("event_topics", [])
         self.composable_cow_address = kwargs.get("composable_cow_address", None)
+        self.in_flight_req: bool = False
         super().__init__(*args, **kwargs)

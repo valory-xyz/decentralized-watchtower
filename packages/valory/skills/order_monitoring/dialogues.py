@@ -9,12 +9,16 @@ from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 from aea.skills.base import Model
 
-from packages.fetchai.protocols.default.dialogues import \
-    DefaultDialogue as BaseDefaultDialogue
-from packages.fetchai.protocols.default.dialogues import \
-    DefaultDialogues as BaseDefaultDialogues
+from packages.fetchai.protocols.default.dialogues import (
+    DefaultDialogue as BaseDefaultDialogue,
+)
+from packages.fetchai.protocols.default.dialogues import (
+    DefaultDialogues as BaseDefaultDialogues,
+)
 from packages.valory.protocols.contract_api.dialogues import (
     ContractApiDialogue as BaseContractApiDialogue,
+)
+from packages.valory.protocols.contract_api.dialogues import (
     ContractApiDialogues as BaseContractApiDialogues,
 )
 
@@ -47,6 +51,7 @@ class ContractDialogues(Model, BaseContractApiDialogues):
             role_from_first_message=role_from_first_message,
             dialogue_class=ContractApiDialogue,
         )
+
 
 class DefaultDialogues(Model, BaseDefaultDialogues):
     """The dialogues class keeps track of all dialogues."""

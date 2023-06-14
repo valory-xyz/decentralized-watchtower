@@ -32,8 +32,11 @@ handlers:
   new_event:
     args:
       contract_to_monitor: '0xFf82123dFB52ab75C417195c5fDB87630145ae81'
-      websocket_provider: https://rpc.gnosischain.com
+      websocket_provider: ws://localhost:8545
     class_name: WebSocketHandler
+  contract_handler:
+    args: {}
+    class_name: ContractHandler
 models:
   default_dialogues:
     args: {}
@@ -44,9 +47,9 @@ models:
   params:
     args:
       use_polling: false
-      composable_cow_address: '0x4af0ada67198226ad089fb87300dc01d76fb8883'
+      composable_cow_address: '0x9A676e781A523b5d0C0e43731313A708CB607508'
       event_topics:
-      - '0x4af0ada67198226ad089fb87300dc01d76fb8883a59e6642c05a2f01dfd1eb67'
+      - '0x2cceac5555b0ca45a3744ced542f54b56ad2eb45e521962372eef212a2cbf361'
     class_name: Params
 dependencies: {}
 is_abstract: false
