@@ -16,6 +16,7 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+# pylint: skip-file
 
 """This module contains tests for order_utils."""
 from datetime import datetime, timezone

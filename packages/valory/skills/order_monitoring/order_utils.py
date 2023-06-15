@@ -16,6 +16,8 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+# pylint: disable=C0103
+
 """This module contains helpers for orders."""
 from dataclasses import dataclass
 from datetime import datetime
@@ -26,6 +28,7 @@ from eth_abi.packed import encode_packed
 from py_eth_sig_utils.eip712.encoding import create_struct_hash
 from py_eth_sig_utils.utils import sha3
 from web3 import Web3
+
 
 ORDER_TYPE_FIELDS = [
     {"name": "sellToken", "type": "address"},
@@ -89,9 +92,6 @@ class ConditionalOrder:
 OrderStatus = {"SUBMITTED": 1, "FILLED": 2}
 
 
-OrderStatus = {"SUBMITTED": 1, "FILLED": 2}
-
-
 class OrderKind(Enum):
     """Enum for order kinds."""
 
@@ -115,27 +115,25 @@ def timestamp(t: Union[int, datetime]) -> int:
 
 
 def balance_to_string(balance: str) -> str:
+    """Converts a balance type to a string."""
     if balance == "0x5a28e9363bb942b639270062aa6bb295f434bcdfc42c97267bf003f272060dc9":
         return OrderBalance.ERC20.value
-    elif (
-        balance == "0xabee3b73373acd583a130924aad6dc38cfdc44ba0555ba94ce2ff63980ea0632"
-    ):
+    if balance == "0xabee3b73373acd583a130924aad6dc38cfdc44ba0555ba94ce2ff63980ea0632":
         return OrderBalance.EXTERNAL.value
-    elif (
-        balance == "0x4ac99ace14ee0a5ef932dc609df0943ab7ac16b7583634612f8dc35a4289a6ce"
-    ):
+    if balance == "0x4ac99ace14ee0a5ef932dc609df0943ab7ac16b7583634612f8dc35a4289a6ce":
         return OrderBalance.INTERNAL.value
-    else:
-        raise ValueError(f"Unknown balance type: {balance}")
+
+    raise ValueError(f"Unknown balance type: {balance}")
 
 
 def kind_to_string(kind: str) -> str:
+    """Converts an order kind to a string."""
     if kind == "0xf3b277728b3fee749481eb3e0b3b48980dbbab78658fc419025cb16eee346775":
         return OrderKind.SELL.value
-    elif kind == "0x6ed88e868af0a1983e3886d5f3e95a2fafbd6c3450bc229e27342283dc429ccc":
+    if kind == "0x6ed88e868af0a1983e3886d5f3e95a2fafbd6c3450bc229e27342283dc429ccc":
         return OrderKind.BUY.value
-    else:
-        raise ValueError(f"Unknown kind: {kind}")
+
+    raise ValueError(f"Unknown kind: {kind}")
 
 
 def normalize_order(order: Dict) -> Dict[str, Union[str, int, bool]]:
@@ -156,10 +154,10 @@ def hash_domain(domain: Dict[str, Union[str, int]]) -> bytes:
     """Hashes domain"""
     domain_fields = []
     for name in domain:
-        type = DOMAIN_FIELD_TYPES.get(name)
-        if not type:
+        field_type = DOMAIN_FIELD_TYPES.get(name)
+        if not field_type:
             raise ValueError(f"invalid typed-data domain key: {name!r}")
-        domain_fields.append({"name": name, "type": type})
+        domain_fields.append({"name": name, "type": field_type})
 
     domain_fields.sort(key=lambda field: DOMAIN_FIELD_NAMES.index(field["name"]))
     domain_hash = create_struct_hash(
@@ -179,7 +177,7 @@ def hash_order(order: Dict[str, Any]) -> bytes:
     return order_hash
 
 
-class OrderUidParams:
+class OrderUidParams:  # pylint: disable=too-few-public-methods
     """Order UID params"""
 
     def __init__(

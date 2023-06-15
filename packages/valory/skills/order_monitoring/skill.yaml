@@ -27,7 +27,7 @@ behaviours:
     args:
       contracts:
       - '0xFf82123dFB52ab75C417195c5fDB87630145ae81'
-    class_name: SubscriptionBehaviour
+    class_name: MonitoringBehaviour
 handlers:
   new_event:
     args:

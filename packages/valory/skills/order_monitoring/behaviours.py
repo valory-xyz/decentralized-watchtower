@@ -2,7 +2,6 @@
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 Valory AG
-#   Copyright 2023 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -39,13 +38,14 @@ from packages.valory.skills.order_monitoring.handlers import (
     ORDERS,
 )
 from packages.valory.skills.order_monitoring.models import Params
+from packages.valory.skills.order_monitoring.order_utils import ConditionalOrder
 
 
 DEFAULT_ENCODING = "utf-8"
 WEBSOCKET_CLIENT_CONNECTION_NAME = "websocket_client"
 
 
-class SubscriptionBehaviour(SimpleBehaviour):
+class MonitoringBehaviour(SimpleBehaviour):
     """This class scaffolds a behaviour."""
 
     def __init__(self, **kwargs: Any) -> None:
@@ -124,7 +124,8 @@ class SubscriptionBehaviour(SimpleBehaviour):
         disconnection_point = self.context.shared_state.get(DISCONNECTION_POINT, None)
 
         if is_connected and self._subscription_required:
-            # we only subscribe once, because the envelope will remain in the multiplexer until handled
+            # we only subscribe once, because the envelope
+            # will remain in the multiplexer until handled
             topics = self.context.params.event_topics
             subscription_msg_template = {
                 "jsonrpc": "2.0",
@@ -141,7 +142,8 @@ class SubscriptionBehaviour(SimpleBehaviour):
             self._missed_parts = True
 
         if is_connected and self._missed_parts:
-            # if we are connected and have a disconnection point, then we need to fetch the parts that were missed
+            # if we are connected and have a disconnection point,
+            # then we need to fetch the parts that were missed
             topics = self.context.params.event_topics
             filter_msg_template = {
                 "jsonrpc": "2.0",

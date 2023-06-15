@@ -78,9 +78,9 @@ class WebSocketHandler(Handler):
         return self.context.shared_state[ORDERS]
 
     @property
-    def read_orders(self) -> List[Dict[str, Any]]:
+    def ready_orders(self) -> List[Dict[str, Any]]:
         """Get orders."""
-        return self.context.shared_state[ORDERS]
+        return self.context.shared_state[READY_ORDERS]
 
     def handle(self, message: Message) -> None:
         """
@@ -100,10 +100,7 @@ class WebSocketHandler(Handler):
 
     def _process_tx(self, tx_hash: str) -> None:
         """Get the relevant events out of the transaction."""
-        (
-            contract_api_msg,
-            contract_api_dialogue,
-        ) = self.context.contract_api_dialogues.create(
+        (contract_api_msg, _,) = self.context.contract_api_dialogues.create(
             performative=ContractApiMessage.Performative.GET_STATE,
             contract_address=self.contract_to_monitor,
             contract_id=str(ComposableCowContract.contract_id),
@@ -122,13 +119,16 @@ class WebSocketHandler(Handler):
 class ContractHandler(Handler):
     """Contract API message handler."""
 
+    SUPPORTED_PROTOCOL = ContractApiMessage.protocol_id
+
     def setup(self) -> None:
-        pass
+        """Setup the contract handler."""
+        self.context.shared_state[ORDERS] = {}
+        self.context.shared_state[READY_ORDERS] = []
 
     def teardown(self) -> None:
-        pass
-
-    SUPPORTED_PROTOCOL = ContractApiMessage.protocol_id
+        """Teardown the handler."""
+        self.context.logger.info("ContractHandler: teardown called.")
 
     @property
     def orders(self) -> Dict[str, List[ConditionalOrder]]:
@@ -168,7 +168,9 @@ class ContractHandler(Handler):
         if call_type == CallType.GET_TRADEABLE_ORDER.value:
             self._handle_get_tradeable_order(data)
 
-    def get_domain(self, order: Dict[str, Any]) -> Dict[str, Any]:
+    def get_domain(  # pylint: disable=no-self-use
+        self, order: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Get domain."""
         domain = {
             "name": "Gnosis Protocol",
@@ -228,7 +230,8 @@ class ContractHandler(Handler):
                 f"Adding conditional order {params} to already existing owner {owner}"
             )
             exists = False
-            # Iterate over the conditionalOrder to make sure that the params are not already in the registry
+            # Iterate over the conditionalOrder to make sure
+            # that the params are not already in the registry
             for conditional_order in conditional_orders:
                 # Check if the params are in the conditionalOrder
                 if conditional_order.params == params:
