@@ -5,8 +5,16 @@ license: Apache-2.0
 description: A decentralized watchtower agent.
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeiftu27piztiu5bfxbvhqsbppgtseykyfot6wtlrrzeuzya6zrgpky
-  tests/__init__.py: bafybeiftu27piztiu5bfxbvhqsbppgtseykyfot6wtlrrzeuzya6zrgpky
+  __init__.py: bafybeihmmm754t5uz7payh7jwlddckfk4a7sjkovneffauhiu57lwjvwky
+  tests/__init__.py: bafybeih43i6ohjc4t4yhhtdpznk5h3lmrkjpsdbkjhru34eq2xvk7lbjpm
+  tests/helpers/__init__.py: bafybeiaeembrwmubrocabnhtxubrufvyq74k4lwwcihkktqpn63jqrdudi
+  tests/helpers/constants.py: bafybeih6o7k2ulapbgyptmxc23rutaa7j3bk5gzlshe5svawjop42s7l5e
+  tests/helpers/data/json_server/data.json: bafybeif46j5zkplndkezilq2fxytyqd3zwe6xr52pkjwh7yulu5234f6em
+  tests/helpers/docker.py: bafybeibtyhtiny3lw67rzvlkvprcnsopxvwkisn3q4ooll2wn557ipad3y
+  tests/helpers/fixtures.py: bafybeihxzhlr3tbwsoe3y3zczivoxbbkvccvtct4c6rff6qhfentcyl32i
+  tests/test_agents/__init__.py: bafybeicmv3jjcqcdnmubfmrgdgeyic3nkm77z4mutsyuo34hpddwupofre
+  tests/test_agents/base.py: bafybeict5wlx6k2rdyhpo6otvthwticefisfh3el6so5tyxmjufry5hegq
+  tests/test_agents/test_decentralized_watchtower.py: bafybeifxgjxzzd6k4oqxhambdwcsp6is7kjc5npusk7jowidsdwqwbl6xq
 fingerprint_ignore_patterns: []
 connections:
 - valory/abci:0.1.0:bafybeieogrpktpxfq74leeeeylfx33sob2hovhpl5coxlswae6xblzbezy
@@ -16,7 +24,7 @@ connections:
 - valory/p2p_libp2p_client:0.1.0:bafybeidwcobzb7ut3efegoedad7jfckvt2n6prcmd4g7xnkm6hp6aafrva
 - valory/websocket_client:0.1.0:bafybeiawlga3on5ijbxpt3zxgks5ssi4jbpez2vchzqfv3nxw3ixqcutfy
 contracts:
-- valory/composable_cow:0.1.0:bafybeifqqhzh74fdyuob576y7sl2akfa6nla6ocxuwij3bhvjbtjobqwpm
+- valory/composable_cow:0.1.0:bafybeibf6ihwcjmod7dsjw6njruqjk3dgcxj4ulqc6c5cpll5hqfm2iqrm
 - valory/gnosis_safe:0.1.0:bafybeigfnb6hdixmdwoxingxrevx7beawm2voudgtexo6vazzfa4vhyx5m
 - valory/gnosis_safe_proxy_factory:0.1.0:bafybeib2rat7ht33l6r6ix45x5yifotq7l6oqczmqe5edxh2ackv4i72jq
 - valory/multisend:0.1.0:bafybeigjywkl7hydjsrkogob3xebj2ifhqwmfhhxoeyrndzhhxi5u6amey
@@ -34,10 +42,10 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeihgerjeq4u4apuue7zzhpb3wmntuju34dbdijbbvl4wclww2gy7di
 - valory/abstract_round_abci:0.1.0:bafybeicensk7a2vpqj52iyhf6yhc6z2iwulb2txbym546qvwgsxm3skvcm
-- valory/cow_orders_abci:0.1.0:bafybeieabjccawpjizcp6sulpkfnesfv3q2p4juof2vo6m2cglxw5d2yj4
-- valory/order_monitoring:0.1.0:bafybeicualknjsw5tm52k44zt33l3xtv6dsmads42i6gtutk4fybmn2loe
+- valory/cow_orders_abci:0.1.0:bafybeic5p4vpvq4enllrmlx7dww54si5rytvwiiktbri37uq6icbrvdshy
+- valory/order_monitoring:0.1.0:bafybeicqsbqhy54vn65nk3fnc7dn7chjnesuojvmhniman5pfohtpv6xay
 - valory/registration_abci:0.1.0:bafybeicsqhakfliwauyqow62yopcjhejknmfcjzh7ilbjt32ozydbhxleq
-- valory/decentralized_watchtower_abci:0.1.0:bafybeigwsp2crzvqan7xnap6dh4f4lxdut5il6naj7r4jwaslopstufgl4
+- valory/decentralized_watchtower_abci:0.1.0:bafybeidial7jnykfih3zhv4xp45c4zaoo4ver4aaq47txemap6bjzve7yu
 - valory/reset_pause_abci:0.1.0:bafybeigwsp2crzvqan7xnap6dh4f4lxdut5il6naj7r4jwaslopstufgl4
 - valory/termination_abci:0.1.0:bafybeiglkntthppslj5p64n35aoqer4fcalezhqvpndo6eb2vaoynm6qxe
 - valory/transaction_settlement_abci:0.1.0:bafybeibor5qxitvgvgm47vzor4u7p53tcpw3fzez7hbd6qv4rglxladxye

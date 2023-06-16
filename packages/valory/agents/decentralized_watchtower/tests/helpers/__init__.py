@@ -17,4 +17,4 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains tests for decentralized_watchtower."""
+"""Test helpers for valory/decentralized_watchtower agent."""

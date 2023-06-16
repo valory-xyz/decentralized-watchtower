@@ -8,13 +8,13 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiglilmcvbbxt6oczjbyayv6w6cr5j6wh4dkhgupej4jkjsedjwaiu
-  behaviours.py: bafybeihpoxegs4fqof3aswvsg4gk3upx4uk5ibwztb6vkz2sba74e7dfnu
+  behaviours.py: bafybeic52z2wahyvs5qpwnjczf7l2rlzbhk2xddf34ltdproifnn7zhqqy
   dialogues.py: bafybeigf7ndum3ysxd5wlautgxqbden4vad66wj3mmh73qpth3hhhuksha
-  handlers.py: bafybeid5dgwqxfnwem4f3jcckvbwajlf2jxkoso4ahfxjrthj5fzlqfgde
-  models.py: bafybeig3xufl7itibga5oy4m5fyn2qnmcxbrydux24zhvgxtcvqftaovvu
-  order_utils.py: bafybeia4tna47jekwbz7bcvmawnzrg7fsok5pptfdpsiwski6pons4ueky
+  handlers.py: bafybeiercpjeuk7m3r2yglsclly7zsluoj7zeq746atygo3hpzvjgmtkiq
+  models.py: bafybeibp2p2afluv7n6cfeofbglcrbduimhk43vbsezomslk4hfpvuujgq
+  order_utils.py: bafybeihaqmc2tcsyuf3gdqboqf3qhlaydy5b325zohkcd5vqqremmv6xdu
   tests/__init__.py: bafybeib2dgq23y4dvdpvftmnfcruocssbjoec3zrcdpugs6sxoxeh5lce4
-  tests/test_behaviours.py: bafybeifgxpiqwexuxxyypo3gc66zbyprfdf342qptiiazijwepgkouvk7u
+  tests/test_behaviours.py: bafybeiaq25vriuudgqjwahhmgu563kopzhad6gouvsdo6iwlmll37sjlam
   tests/test_dialogues.py: bafybeiftjdqbjhsvuqgcxdlht5dj4gimro4v7f4ya2ohk5qmkvur3egtwa
   tests/test_handlers.py: bafybeifd7mbnophuswllrfh635a4j5vo2jdjokbf5ybgzou6ytqf7pesgu
   tests/test_order_utils.py: bafybeiekwcpqalwngvidmkvjtw7v7jfzqoqatap43n3s3gv3c4tg76tpqm
@@ -23,7 +23,7 @@ connections:
 - valory/websocket_client:0.1.0:bafybeiawlga3on5ijbxpt3zxgks5ssi4jbpez2vchzqfv3nxw3ixqcutfy
 - valory/ledger:0.19.0:bafybeicgfupeudtmvehbwziqfxiz6ztsxr5rxzvalzvsdsspzz73o5fzfi
 contracts:
-- valory/composable_cow:0.1.0:bafybeifqqhzh74fdyuob576y7sl2akfa6nla6ocxuwij3bhvjbtjobqwpm
+- valory/composable_cow:0.1.0:bafybeibf6ihwcjmod7dsjw6njruqjk3dgcxj4ulqc6c5cpll5hqfm2iqrm
 protocols:
 - fetchai/default:1.0.0:bafybeieqqzgzuappi2ped42upgzad5gt3mxiyjhojwibxm4o367ffsian4
 - valory/contract_api:1.0.0:bafybeidv6wxpjyb2sdyibnmmum45et4zcla6tl63bnol6ztyoqvpl4spmy

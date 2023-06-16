@@ -17,4 +17,6 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains tests for decentralized_watchtower."""
+"""Defines constant used in the e2e tests."""
+
+MOCK_API_PATH = "/api/v1/orders"
