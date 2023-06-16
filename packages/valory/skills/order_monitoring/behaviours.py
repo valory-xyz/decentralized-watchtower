@@ -84,11 +84,12 @@ class MonitoringBehaviour(SimpleBehaviour):
 
     def _check_orders_are_tradeable(self) -> None:
         """Check if orders are tradeable."""
-        if self.params.in_flight_req or len(self.orders.values()) == 0:
+        if self.params.in_flight_req:
             # do nothing if there are no orders or if there is an in flight request
             return
         orders = [
             {
+                "id": order.id,
                 "owner": owner,
                 "params": [
                     order.params.handler,
@@ -102,6 +103,9 @@ class MonitoringBehaviour(SimpleBehaviour):
             for owner, owner_orders in self.orders.items()
             for order in owner_orders
         ]
+        if len(orders) == 0:
+            # do nothing if there are no orders
+            return
         contract_api_msg, _ = self.context.contract_api_dialogues.create(
             performative=ContractApiMessage.Performative.GET_STATE,
             contract_address=self.params.composable_cow_address,

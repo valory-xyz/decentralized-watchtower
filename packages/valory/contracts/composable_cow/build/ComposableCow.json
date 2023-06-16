@@ -51,7 +51,7 @@
         {
           "components": [
             {
-              "internalType": "contract IComposableCow",
+              "internalType": "contract IConditionalOrder",
               "name": "handler",
               "type": "address"
             },
@@ -67,12 +67,12 @@
             }
           ],
           "indexed": false,
-          "internalType": "struct IComposableCow.ComposableCowParams",
+          "internalType": "struct IConditionalOrder.ConditionalOrderParams",
           "name": "params",
           "type": "tuple"
         }
       ],
-      "name": "ComposableCowCreated",
+      "name": "ConditionalOrderCreated",
       "type": "event"
     },
     {
@@ -136,7 +136,7 @@
         {
           "components": [
             {
-              "internalType": "contract IComposableCow",
+              "internalType": "contract IConditionalOrder",
               "name": "handler",
               "type": "address"
             },
@@ -151,7 +151,7 @@
               "type": "bytes"
             }
           ],
-          "internalType": "struct IComposableCow.ComposableCowParams",
+          "internalType": "struct IConditionalOrder.ConditionalOrderParams",
           "name": "params",
           "type": "tuple"
         },
@@ -189,7 +189,7 @@
         {
           "components": [
             {
-              "internalType": "contract IComposableCow",
+              "internalType": "contract IConditionalOrder",
               "name": "handler",
               "type": "address"
             },
@@ -204,7 +204,7 @@
               "type": "bytes"
             }
           ],
-          "internalType": "struct IComposableCow.ComposableCowParams",
+          "internalType": "struct IConditionalOrder.ConditionalOrderParams",
           "name": "params",
           "type": "tuple"
         },
@@ -302,7 +302,7 @@
         {
           "components": [
             {
-              "internalType": "contract IComposableCow",
+              "internalType": "contract IConditionalOrder",
               "name": "handler",
               "type": "address"
             },
@@ -317,7 +317,7 @@
               "type": "bytes"
             }
           ],
-          "internalType": "struct IComposableCow.ComposableCowParams",
+          "internalType": "struct IConditionalOrder.ConditionalOrderParams",
           "name": "params",
           "type": "tuple"
         }

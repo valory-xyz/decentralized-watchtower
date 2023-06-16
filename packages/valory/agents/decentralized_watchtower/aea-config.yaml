@@ -5,21 +5,22 @@ license: Apache-2.0
 description: A decentralized watchtower agent.
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeidulnstm63bgmfo34rd74xqcvf36o7ly7w7s4bylr4afbclnogn6q
+  __init__.py: bafybeiftu27piztiu5bfxbvhqsbppgtseykyfot6wtlrrzeuzya6zrgpky
+  tests/__init__.py: bafybeiftu27piztiu5bfxbvhqsbppgtseykyfot6wtlrrzeuzya6zrgpky
 fingerprint_ignore_patterns: []
 connections:
-- valory/abci:0.1.0:bafybeifpdzwpwntu2qu5qks22elglwozpwpwvihrhgw7sgyjpff7yye3za
+- valory/abci:0.1.0:bafybeieogrpktpxfq74leeeeylfx33sob2hovhpl5coxlswae6xblzbezy
 - valory/http_client:0.23.0:bafybeidykl4elwbcjkqn32wt5h4h7tlpeqovrcq3c5bcplt6nhpznhgczi
-- valory/ipfs:0.1.0:bafybeigr2cipad23aebjpnqtzpgymiwrwgmnior2fk4inbscdnqyl5epla
+- valory/ipfs:0.1.0:bafybeifkzgdzuoxqovcjswsnzsehjh7bjwbska26ufmcrk7hbufk4c4dae
 - valory/ledger:0.19.0:bafybeicgfupeudtmvehbwziqfxiz6ztsxr5rxzvalzvsdsspzz73o5fzfi
 - valory/p2p_libp2p_client:0.1.0:bafybeidwcobzb7ut3efegoedad7jfckvt2n6prcmd4g7xnkm6hp6aafrva
 - valory/websocket_client:0.1.0:bafybeiawlga3on5ijbxpt3zxgks5ssi4jbpez2vchzqfv3nxw3ixqcutfy
 contracts:
-- valory/composable_cow:0.1.0:bafybeigjywkl7hydjsrkogob3xebj2ifhqwmfhhxoeyrndzhhxi5u6amey
+- valory/composable_cow:0.1.0:bafybeifqqhzh74fdyuob576y7sl2akfa6nla6ocxuwij3bhvjbtjobqwpm
 - valory/gnosis_safe:0.1.0:bafybeigfnb6hdixmdwoxingxrevx7beawm2voudgtexo6vazzfa4vhyx5m
 - valory/gnosis_safe_proxy_factory:0.1.0:bafybeib2rat7ht33l6r6ix45x5yifotq7l6oqczmqe5edxh2ackv4i72jq
 - valory/multisend:0.1.0:bafybeigjywkl7hydjsrkogob3xebj2ifhqwmfhhxoeyrndzhhxi5u6amey
-- valory/service_registry:0.1.0:bafybeiegj2cbtyqkw42q3wlqm2opl43ddnp4snavbyllsokscqrp4icwfu
+- valory/service_registry:0.1.0:bafybeidutcg64sih4syvaetggyswynfs4jlswaj63itoh4tqnwqz3ydywi
 protocols:
 - fetchai/default:1.0.0:bafybeieqqzgzuappi2ped42upgzad5gt3mxiyjhojwibxm4o367ffsian4
 - open_aea/signing:1.0.0:bafybeibqlfmikg5hk4phzak6gqzhpkt6akckx7xppbp53mvwt6r73h7tk4
@@ -31,14 +32,15 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeibo4bdtcrxi2suyzldwoetjar6pqfzm6vt5xal22ravkkcvdmtksi
 - valory/tendermint:0.1.0:bafybeicusvezoqlmyt6iqomcbwaz3xkhk2qf3d56q5zprmj3xdxfy64k54
 skills:
-- valory/abstract_abci:0.1.0:bafybeigte2l4en4otdp2maaoc3uesqdga5z4sqozrybsmcdp26bgfbcy54
-- valory/abstract_round_abci:0.1.0:bafybeigsbglflua5vdwmwmo2rjsogp4anxtpqjbtrcwfivuxjiv6xczpba
-- valory/cow_orders_abci:0.1.0:bafybeigte2l4en4otdp2maaoc3uesqdga5z4sqozrybsmcdp26bgfbcy54
-- valory/order_monitoring:0.1.0:bafybeigte2l4en4otdp2maaoc3uesqdga5z4sqozrybsmcdp26bgfbcy54
-- valory/registration_abci:0.1.0:bafybeidc7vaj5rw3rzkd6aj3x7bl7r76kcaklqwat2cg7dlzh4yo6h6hhu
-- valory/reset_pause_abci:0.1.0:bafybeigvfkbdmro6dddejdo5vcimdbp7macbez4ejv2beucm7nrje5oz34
-- valory/termination_abci:0.1.0:bafybeif7y4wcmjc4g5iyjkfedephvqwzgkxnkj3tucu24rqz6fsw267l2e
-- valory/transaction_settlement_abci:0.1.0:bafybeiahvk5lgkpwnaruzr34yp7to4fed7tgoufceerwqhvl57t4blqmiu
+- valory/abstract_abci:0.1.0:bafybeihgerjeq4u4apuue7zzhpb3wmntuju34dbdijbbvl4wclww2gy7di
+- valory/abstract_round_abci:0.1.0:bafybeicensk7a2vpqj52iyhf6yhc6z2iwulb2txbym546qvwgsxm3skvcm
+- valory/cow_orders_abci:0.1.0:bafybeieabjccawpjizcp6sulpkfnesfv3q2p4juof2vo6m2cglxw5d2yj4
+- valory/order_monitoring:0.1.0:bafybeicualknjsw5tm52k44zt33l3xtv6dsmads42i6gtutk4fybmn2loe
+- valory/registration_abci:0.1.0:bafybeicsqhakfliwauyqow62yopcjhejknmfcjzh7ilbjt32ozydbhxleq
+- valory/decentralized_watchtower_abci:0.1.0:bafybeigwsp2crzvqan7xnap6dh4f4lxdut5il6naj7r4jwaslopstufgl4
+- valory/reset_pause_abci:0.1.0:bafybeigwsp2crzvqan7xnap6dh4f4lxdut5il6naj7r4jwaslopstufgl4
+- valory/termination_abci:0.1.0:bafybeiglkntthppslj5p64n35aoqer4fcalezhqvpndo6eb2vaoynm6qxe
+- valory/transaction_settlement_abci:0.1.0:bafybeibor5qxitvgvgm47vzor4u7p53tcpw3fzez7hbd6qv4rglxladxye
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -74,7 +76,7 @@ default_connection: null
 public_id: valory/abci:0.1.0
 type: connection
 config:
-  target_skill_id: valory/cow_orders_abci:0.1.0
+  target_skill_id: valory/decentralized_watchtower_abci:0.1.0
   host: ${str:localhost}
   port: ${int:26658}
   use_tendermint: ${bool:false}
@@ -95,15 +97,15 @@ cert_requests:
   save_path: .certs/acn_cosmos_11000.txt
 is_abstract: true
 ---
-public_id: valory/cow_orders_abci:0.1.0
+public_id: valory/decentralized_watchtower_abci:0.1.0
 type: skill
 models:
   params:
     args:
       cleanup_history_depth: 1
       setup:
-        safe_contract_address: ${str:null}
-        all_participants: ${list:[]}
+        safe_contract_address: ${str:0x0000000000000000000000000000000000000000}
+        all_participants: ${list:["0x0000000000000000000000000000000000000000"]}
         consensus_threshold: ${int:null}
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
       finalize_timeout: 60.0
@@ -117,7 +119,7 @@ models:
       retry_attempts: 400
       retry_timeout: 3
       round_timeout_seconds: 120.0
-      service_id: el_collectooorr_1
+      service_id: decentralized_watchtower
       service_registry_address: ${str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
       sleep_time: 1
       share_tm_config_on_startup: ${bool:false}
@@ -142,5 +144,23 @@ config:
 public_id: valory/websocket_client:0.1.0:bafybeiexove4oqyhoae5xmk2hilskthosov5imdp65olpgj3cfrepbouyy
 type: connection
 config:
-  endpoint: ${str:wss://rpc.gnosischain.com/wss}
-  target_skill_id: valory/contract_subscription:0.1.0
+  endpoint: ${str:ws://localhost:8545}
+  target_skill_id: valory/order_monitoring:0.1.0
+---
+public_id: valory/order_monitoring:0.1.0:bafybeiby5ajjc7a3m2uq73d2pprx6enqt4ghfcq2gkmrtsr75e4d4napi4
+type: skill
+behaviours:
+  subscriptions:
+    args:
+      contracts: ${list:["0xFf82123dFB52ab75C417195c5fDB87630145ae81"]}
+handlers:
+  new_event:
+    args:
+      contract_to_monitor: ${str:0xFf82123dFB52ab75C417195c5fDB87630145ae81}
+      websocket_provider: ${str:ws://localhost:8545}
+models:
+  params:
+    args:
+      use_polling: ${bool:false}
+      composable_cow_address: ${str:0x9A676e781A523b5d0C0e43731313A708CB607508}
+      event_topics: ${list:["0x2cceac5555b0ca45a3744ced542f54b56ad2eb45e521962372eef212a2cbf361"]}

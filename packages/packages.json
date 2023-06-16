@@ -1,6 +1,10 @@
 {
     "dev": {
-        "skill/valory/cow_orders_abci/0.1.0": "bafybeicsqhakfliwauyqow62yopcjhejknmfcjzh7ilbjt32ozydbhxleq"
+        "skill/valory/cow_orders_abci/0.1.0": "bafybeieabjccawpjizcp6sulpkfnesfv3q2p4juof2vo6m2cglxw5d2yj4",
+        "skill/valory/decentralized_watchtower_abci/0.1.0": "bafybeibt4m4qztuw37bw3ydw6my362yr2tcykdqbcyharwevclyi73vhsm",
+        "skill/valory/order_monitoring/0.1.0": "bafybeicualknjsw5tm52k44zt33l3xtv6dsmads42i6gtutk4fybmn2loe",
+        "contract/valory/composable_cow/0.1.0": "bafybeifqqhzh74fdyuob576y7sl2akfa6nla6ocxuwij3bhvjbtjobqwpm",
+        "agent/valory/decentralized_watchtower/0.1.0": "bafybeie7d5gdbotzfujvo3ysg6utwmiidhjp22742wfpu3srlunlrqa4um"
     },
     "third_party": {
         "protocol/valory/abci/0.1.0": "bafybeig3dj5jhsowlvg3t73kgobf6xn4nka7rkttakdb2gwsg5bp7rt7q4",
@@ -26,6 +30,7 @@
         "skill/valory/termination_abci/0.1.0": "bafybeiglkntthppslj5p64n35aoqer4fcalezhqvpndo6eb2vaoynm6qxe",
         "protocol/valory/ipfs/0.1.0": "bafybeic72ncgqbzoz2guj4p4yjqulid7mv6yroeh65hxznloamoveeg7hq",
         "connection/valory/ipfs/0.1.0": "bafybeifkzgdzuoxqovcjswsnzsehjh7bjwbska26ufmcrk7hbufk4c4dae",
-        "protocol/fetchai/default/1.0.0": "bafybeieqqzgzuappi2ped42upgzad5gt3mxiyjhojwibxm4o367ffsian4"
+        "protocol/fetchai/default/1.0.0": "bafybeieqqzgzuappi2ped42upgzad5gt3mxiyjhojwibxm4o367ffsian4",
+        "connection/valory/websocket_client/0.1.0": "bafybeiawlga3on5ijbxpt3zxgks5ssi4jbpez2vchzqfv3nxw3ixqcutfy"
     }
 }

@@ -20,7 +20,7 @@
 """This module contains the class to connect to an Gnosis Safe contract."""
 import logging
 from enum import Enum
-from typing import Any, Optional, Dict, List
+from typing import Any, Optional, Dict, List, Tuple
 
 from aea.common import JSONLike
 from aea.configurations.base import PublicId
@@ -75,33 +75,56 @@ class ComposableCowContract(Contract):
         """Get state."""
         raise NotImplementedError
 
+    @staticmethod
+    def parse_order_data(order_data: Tuple) -> Dict[str, Any]:
+        """Parse order data."""
+        return {
+            "sellToken": order_data[0],
+            "buyToken": order_data[1],
+            "receiver": order_data[2],
+            "sellAmount": order_data[3],
+            "buyAmount": order_data[4],
+            "validTo": order_data[5],
+            "appData": '0x' + order_data[6].hex(),
+            "feeAmount": order_data[7],
+            "kind": '0x' + order_data[8].hex(),
+            "partiallyFillable": order_data[9],
+            "sellTokenBalance": '0x' + order_data[10].hex(),
+            "buyTokenBalance": '0x' + order_data[11].hex(),
+        }
+
     @classmethod
     def get_tradeable_order(
         cls,
         ledger_api: LedgerApi,
         contract_address: str,
-        owner_address: str,
-        params: Dict[str, Any],
-        offchain_input: bytes,
-        proof: List[bytes],
+        orders: List[Dict[str, Any]],
     ) -> Optional[JSONLike]:
         """Get tradeable order."""
-        instance = cls.get_instance(ledger_api, contract_address)
-        try:
-            order_data, signature = instance.functions.getTradeableOrderWithSignature(
-                owner_address,
-                params,
-                offchain_input,
-                proof
-            ).call()
-            data = {
-                "order_data": order_data,
-                "signature": signature
-            }
-        except Exception as e:
-            _logger.error(f"Error calling getTradeableOrderWithSignature: {e}")
-            data = {}
-        return dict(data=data, type=CallType.GET_TRADEABLE_ORDER.value)
+        tradeable_orders: List[Dict[str, Any]] = []
+        for order in orders:
+            try:
+                instance = cls.get_instance(ledger_api, order["composableCow"])
+                order_data, signature = instance.functions.getTradeableOrderWithSignature(
+                    order["owner"],
+                    order["params"],
+                    order["offchainInput"],
+                    order["proof"],
+                ).call()
+                tradeable_orders.append(
+                    {
+                        **cls.parse_order_data(order_data),
+                        "signingScheme": "eip1271",
+                        "signature": '0x' + signature.hex(),
+                        "from": order["owner"],
+                        "id": order["id"],
+                        "chainId": ledger_api.api.eth.chain_id,
+                    }
+                )
+            except Exception as e:
+                _logger.info(f"Order {order} not tradeable : {e}")
+
+        return dict(data=tradeable_orders, type=CallType.GET_TRADEABLE_ORDER.value)
 
     @classmethod
     def process_order_events(
@@ -113,8 +136,14 @@ class ComposableCowContract(Contract):
         """Process order events"""
         contract = cls.get_instance(ledger_api, contract_address)
         receipt = ledger_api.api.eth.getTransactionReceipt(tx_hash)
-        conditional_orders = contract.events.ConditionalOrderCreated().processReceipt(receipt)
-        merkle_root_set = contract.events.MerkleRootSet().processReceipt(receipt)
+        conditional_orders = [
+            {**event.get("args", {}), "composableCow": event.address}
+            for event in contract.events.ConditionalOrderCreated().processReceipt(receipt)
+        ]
+        merkle_root_set = [
+            {**event.get("args", {}), "composableCow": event.address}
+            for event in contract.events.MerkleRootSet().processReceipt(receipt)
+        ]
         data = {
             "conditional_orders": conditional_orders,
             "merkle_root_set": merkle_root_set

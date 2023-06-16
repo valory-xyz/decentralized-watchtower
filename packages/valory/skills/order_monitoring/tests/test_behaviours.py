@@ -23,11 +23,13 @@
 from unittest.mock import MagicMock
 
 from packages.fetchai.protocols.default.message import DefaultMessage
-from packages.valory.skills.abstract_round_abci.base import LEDGER_API_ADDRESS
-from packages.valory.skills.cow_orders_abci.behaviours import ORDERS
 from packages.valory.skills.order_monitoring import PUBLIC_ID
 from packages.valory.skills.order_monitoring.behaviours import MonitoringBehaviour
-from packages.valory.skills.order_monitoring.handlers import DISCONNECTION_POINT
+from packages.valory.skills.order_monitoring.handlers import (
+    DISCONNECTION_POINT,
+    LEDGER_API_ADDRESS,
+    ORDERS,
+)
 from packages.valory.skills.order_monitoring.order_utils import (
     ConditionalOrder,
     ConditionalOrderParamsStruct,
