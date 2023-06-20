@@ -14,14 +14,14 @@ fingerprint:
   models.py: bafybeibp2p2afluv7n6cfeofbglcrbduimhk43vbsezomslk4hfpvuujgq
   order_utils.py: bafybeihaqmc2tcsyuf3gdqboqf3qhlaydy5b325zohkcd5vqqremmv6xdu
   tests/__init__.py: bafybeib2dgq23y4dvdpvftmnfcruocssbjoec3zrcdpugs6sxoxeh5lce4
-  tests/test_behaviours.py: bafybeiaq25vriuudgqjwahhmgu563kopzhad6gouvsdo6iwlmll37sjlam
+  tests/test_behaviours.py: bafybeigezb53sku77oid63gxqypnemf7pxa5wjgsenhg6fuyg55f6gakci
   tests/test_dialogues.py: bafybeiftjdqbjhsvuqgcxdlht5dj4gimro4v7f4ya2ohk5qmkvur3egtwa
-  tests/test_handlers.py: bafybeifd7mbnophuswllrfh635a4j5vo2jdjokbf5ybgzou6ytqf7pesgu
+  tests/test_handlers.py: bafybeietywtth6enkwi6rzbvnoetpvx3hodjrb6yowdf52n7ax3lyvtv6q
   tests/test_order_utils.py: bafybeiekwcpqalwngvidmkvjtw7v7jfzqoqatap43n3s3gv3c4tg76tpqm
 fingerprint_ignore_patterns: []
 connections:
-- valory/websocket_client:0.1.0:bafybeihrz2tfalyh74im3cyqjworyhre4bsyeocyfrv5ysfmi23deeg2c4
 - valory/ledger:0.19.0:bafybeicgfupeudtmvehbwziqfxiz6ztsxr5rxzvalzvsdsspzz73o5fzfi
+- valory/websocket_client:0.1.0:bafybeihrz2tfalyh74im3cyqjworyhre4bsyeocyfrv5ysfmi23deeg2c4
 contracts:
 - valory/composable_cow:0.1.0:bafybeibf6ihwcjmod7dsjw6njruqjk3dgcxj4ulqc6c5cpll5hqfm2iqrm
 protocols:
@@ -35,30 +35,30 @@ behaviours:
       - '0xFf82123dFB52ab75C417195c5fDB87630145ae81'
     class_name: MonitoringBehaviour
 handlers:
+  contract_handler:
+    args: {}
+    class_name: ContractHandler
   new_event:
     args:
       contract_to_monitor: '0xFf82123dFB52ab75C417195c5fDB87630145ae81'
       websocket_provider: ws://localhost:8545
     class_name: WebSocketHandler
-  contract_handler:
-    args: {}
-    class_name: ContractHandler
 models:
-  default_dialogues:
-    args: {}
-    class_name: DefaultDialogues
   contract_api_dialogues:
     args: {}
     class_name: ContractDialogues
+  default_dialogues:
+    args: {}
+    class_name: DefaultDialogues
   params:
     args:
-      use_polling: false
       composable_cow_address: '0x9A676e781A523b5d0C0e43731313A708CB607508'
       event_topics:
       - '0x2cceac5555b0ca45a3744ced542f54b56ad2eb45e521962372eef212a2cbf361'
+      use_polling: false
     class_name: Params
 dependencies:
+  eth_abi: {}
   py_eth_sig_utils: {}
   web3: {}
-  eth_abi: {}
 is_abstract: false

@@ -208,6 +208,7 @@ class TestContractHandler:
         owner = "owner"
         root = "root"
         conditional_order = ConditionalOrder(
+            id="id",
             params=ConditionalOrderParamsStruct("param1", b"param2", b"param3"),
             proof=Proof("root", "path"),
             orders={},

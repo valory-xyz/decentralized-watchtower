@@ -18,7 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """This package contains round behaviours of CowOrdersAbciApp."""
-
+from collections import deque
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Type
@@ -46,6 +46,7 @@ from packages.valory.skills.cow_orders_abci.behaviours import (
     VerifyExecutionBehaviour,
 )
 from packages.valory.skills.cow_orders_abci.rounds import Event, SynchronizedData
+from packages.valory.skills.cow_orders_abci.tests.test_rounds import get_keepers
 
 
 _DEFAULT_COW_API = "https://api.cow.fi/mainnet/orders"
@@ -116,6 +117,7 @@ class TestPlaceOrdersBehaviour(BaseCowOrdersTest):
 
     _MY_AGENT_ADDRESS = "test_agent_address"
     _OTHER_AGENT_ADDRESS = "other_agent_address"
+    _KEEPERS = get_keepers(deque(("agent_1" + "-" * 35, "agent_3" + "-" * 35)))
 
     def _mock_place_order(self, **kwargs: Any) -> None:
         """Mock place order http request"""
@@ -142,7 +144,7 @@ class TestPlaceOrdersBehaviour(BaseCowOrdersTest):
                 name="the keeper places the order",
                 initial_data={
                     "order": _DUMMY_ORDERS[0],
-                    "most_voted_keeper_address": _MY_AGENT_ADDRESS,
+                    "keepers": _KEEPERS,
                 },
                 event=Event.DONE,
                 kwargs={"status_code": 201, "body": "dummy"},
@@ -152,7 +154,7 @@ class TestPlaceOrdersBehaviour(BaseCowOrdersTest):
                 name="the keeper fails to place the order",
                 initial_data={
                     "order": _DUMMY_ORDERS[0],
-                    "most_voted_keeper_address": _MY_AGENT_ADDRESS,
+                    "keepers": _KEEPERS,
                 },
                 event=Event.DONE,
                 kwargs={"status_code": 403, "body": "dummy"},
@@ -162,7 +164,7 @@ class TestPlaceOrdersBehaviour(BaseCowOrdersTest):
                 name="non keepers wait",
                 initial_data={
                     "order": _DUMMY_ORDERS[0],
-                    "most_voted_keeper_address": _OTHER_AGENT_ADDRESS,
+                    "keepers": _KEEPERS,
                 },
                 event=Event.DONE,
                 kwargs={},

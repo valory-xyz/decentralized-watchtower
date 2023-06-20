@@ -22,10 +22,10 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeicensk7a2vpqj52iyhf6yhc6z2iwulb2txbym546qvwgsxm3skvcm
+- valory/cow_orders_abci:0.1.0:bafybeifour4frn34llkssopwrp6xguiqx2zpi42p5yom4hfdzrg7akmqdy
+- valory/order_monitoring:0.1.0:bafybeicezljoewe766h4gwhujai5fftk7fl6pmixswdkiubik6gvalrj6i
 - valory/registration_abci:0.1.0:bafybeicsqhakfliwauyqow62yopcjhejknmfcjzh7ilbjt32ozydbhxleq
 - valory/reset_pause_abci:0.1.0:bafybeigwsp2crzvqan7xnap6dh4f4lxdut5il6naj7r4jwaslopstufgl4
-- valory/cow_orders_abci:0.1.0:bafybeia4v2o444tcn54ry4yils666qb2bxaosgnlk2dzuzjnznkbo74uzy
-- valory/order_monitoring:0.1.0:bafybeiaz64tjhaxxzxoiymux3diwepya2lowbmz65hiasi5a53p6dhb7ne
 behaviours:
   main:
     args: {}
@@ -76,6 +76,7 @@ models:
     args:
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
+      cow_api_url: https://api.cow.fi/mainnet
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
       finalize_timeout: 60.0
       genesis_config:
@@ -108,10 +109,8 @@ models:
       reset_tendermint_after: 2
       retry_attempts: 400
       retry_timeout: 3
-      cow_api_url: https://api.cow.fi/mainnet
       round_timeout_seconds: 30.0
       service_id: cow_orders
-      use_termination: false
       service_registry_address: null
       setup:
         all_participants:
@@ -126,17 +125,9 @@ models:
       tendermint_p2p_url: localhost:26656
       tendermint_url: http://localhost:26657
       tx_timeout: 10.0
+      use_termination: false
       validate_timeout: 1205
     class_name: Params
-  requests:
-    args: {}
-    class_name: Requests
-  signing_dialogues:
-    args: {}
-    class_name: SigningDialogues
-  state:
-    args: {}
-    class_name: SharedState
   randomness_api:
     args:
       api_id: cloudflare
@@ -148,6 +139,15 @@ models:
       retries: 5
       url: https://drand.cloudflare.com/public/latest
     class_name: RandomnessApi
+  requests:
+    args: {}
+    class_name: Requests
+  signing_dialogues:
+    args: {}
+    class_name: SigningDialogues
+  state:
+    args: {}
+    class_name: SharedState
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues

@@ -15,12 +15,12 @@ fingerprint:
   payloads.py: bafybeifprzxbdm5s3silxqyisr3qsebxpvzimmyf3wye45g3ujyntwsb7i
   rounds.py: bafybeihsuqbizpkg6uqg7zeielgjlcxgcir6gevawcoyt7ejlzxgnydgea
   tests/__init__.py: bafybeig5tc3hwaxrwmudlmni4b7zotzlrl5kfzqszyhkbah7p2s7fys63u
-  tests/test_behaviours.py: bafybeiborwxzyelz6676wuopryvlyenjo5s6qzjpbhi37ttksbvybq42oy
+  tests/test_behaviours.py: bafybeid5gtiwbcoo6yu2u2g3tidoxuolhq2kjrnxneuzgtxvdryxkdpyri
   tests/test_dialogues.py: bafybeiheiqj2gbaof46mtpfgk7qhq5rajcn24dg2jbfix4kztvrhgceyiy
   tests/test_handlers.py: bafybeih3kvw332d2kx2tcz5nels743s2yddsjhuqmc4valcsuv4okl6rxm
   tests/test_models.py: bafybeieigbrzjkijphn5nflv7bg7lgeow6adbzazg3rq2yocd3fgko3hwy
   tests/test_payloads.py: bafybeidpbtgqjczasw2lm62kipseozlc7nr4f7p2xivdizzvpunx544uem
-  tests/test_rounds.py: bafybeibjasxy3kqwq6dlq5yqggzpjzlgrkealfbwzusfhdwlje5bbsa2m4
+  tests/test_rounds.py: bafybeigthyqynd6kqvxobo37ths5y7wf6ztnaofcavikc3mhw6yx37rwua
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
@@ -77,6 +77,7 @@ models:
     args:
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
+      cow_api_url: https://api.cow.fi/mainnet
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
       finalize_timeout: 60.0
       genesis_config:
@@ -109,10 +110,8 @@ models:
       reset_tendermint_after: 2
       retry_attempts: 400
       retry_timeout: 3
-      cow_api_url: https://api.cow.fi/mainnet
       round_timeout_seconds: 30.0
       service_id: cow_orders
-      use_termination: false
       service_registry_address: null
       setup:
         all_participants:
@@ -127,17 +126,9 @@ models:
       tendermint_p2p_url: localhost:26656
       tendermint_url: http://localhost:26657
       tx_timeout: 10.0
+      use_termination: false
       validate_timeout: 1205
     class_name: Params
-  requests:
-    args: {}
-    class_name: Requests
-  signing_dialogues:
-    args: {}
-    class_name: SigningDialogues
-  state:
-    args: {}
-    class_name: SharedState
   randomness_api:
     args:
       api_id: cloudflare
@@ -149,6 +140,15 @@ models:
       retries: 5
       url: https://drand.cloudflare.com/public/latest
     class_name: RandomnessApi
+  requests:
+    args: {}
+    class_name: Requests
+  signing_dialogues:
+    args: {}
+    class_name: SigningDialogues
+  state:
+    args: {}
+    class_name: SharedState
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
