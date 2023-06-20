@@ -89,12 +89,12 @@ class SynchronizedData(BaseSynchronizedData):
     @property
     def most_voted_keeper_address(self) -> str:
         """Get the most_voted_keeper_address."""
-        return cast(str, self.db.get_strict("most_voted_keeper_address"))
+        return self.keepers[0]
 
     @property
     def is_keeper_set(self) -> bool:
         """Check whether keeper is set."""
-        return self.db.get("most_voted_keeper_address", None) is not None
+        return bool(self.db.get("keepers", False))
 
     @property
     def blacklisted_keepers(self) -> Set[str]:
@@ -291,10 +291,10 @@ class CowOrdersAbciApp(AbciApp[Event]):
     }
     final_states: Set[AppState] = {FinishedWithOrdersRound}
     event_to_timeout: EventToTimeout = {}
-    cross_period_persisted_keys: Set[str] = []
+    cross_period_persisted_keys: Set[str] = set()
     db_pre_conditions: Dict[AppState, Set[str]] = {
-        SelectOrdersRound: [],
+        SelectOrdersRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedWithOrdersRound: [],
+        FinishedWithOrdersRound: set(),
     }
