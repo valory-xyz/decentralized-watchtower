@@ -76,6 +76,7 @@ class TestMonitoringBehaviour:
         self.behaviour.context.shared_state[ORDERS] = {
             "owner1": [
                 ConditionalOrder(
+                    id="1",
                     params=None,
                     proof=None,
                     orders={},
@@ -106,6 +107,7 @@ class TestMonitoringBehaviour:
         self.behaviour.context.shared_state[ORDERS] = {
             "owner1": [
                 ConditionalOrder(
+                    id="1",
                     params=params,
                     proof=None,
                     orders={},

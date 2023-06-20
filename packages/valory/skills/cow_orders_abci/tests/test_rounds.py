@@ -19,8 +19,9 @@
 # pylint: disable=undefined-loop-variable
 """This package contains the tests for rounds of CowOrders."""
 import json
+from collections import deque
 from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, Hashable, List, Mapping, Type, cast
+from typing import Any, Callable, Deque, Dict, Hashable, List, Mapping, Type, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbstractRound,
@@ -60,6 +61,11 @@ MAX_PARTICIPANTS: int = 4
 _DUMMY_ADDRESS = "0x000000"
 
 
+def get_keepers(keepers: Deque[str], retries: int = 1) -> str:
+    """Get dummy keepers."""
+    return retries.to_bytes(32, "big").hex() + "".join(keepers)
+
+
 class BaseCowOrdersRoundTest(
     BaseRoundTestClass
 ):  # pylint: disable=too-few-public-methods
@@ -81,18 +87,24 @@ class TestPlaceOrdersRound(BaseCowOrdersRoundTest):
         test_round = self.round_class(
             synchronized_data=self.synchronized_data,
         )
-        participants = list(self.participants)
-        keeper = participants[0]
-        self.synchronized_data.update(
+        participants = tuple(f"agent_{i}" + "-" * 35 for i in range(4))
+        keepers = deque(("agent_1" + "-" * 35, "agent_3" + "-" * 35))
+        keeper_retries = 2
+        self.synchronized_data = self.synchronized_data.update(
             synchronized_data_class=SynchronizedData,
-            **{get_name(SynchronizedData.most_voted_keeper_address): keeper},
+            **{
+                get_name(SynchronizedData.participants): participants,
+                get_name(SynchronizedData.keepers): get_keepers(
+                    keepers, keeper_retries
+                ),
+            },
         )
 
         # before the first payload, the round should not end
         assert test_round.end_block() is None
 
         payload_data = "test"
-        payload = PlaceOrdersPayload(sender=keeper, content=payload_data)
+        payload = PlaceOrdersPayload(sender=keepers[0], content=payload_data)
 
         # only one participant has voted, and
         # that should be enough for proceeding to the next round
