@@ -16,7 +16,7 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-
+# pylint: disable=unused-import
 """Test the dialogues.py module of the CowOrders."""
 
 import packages.valory.skills.cow_orders_abci.dialogues  # noqa

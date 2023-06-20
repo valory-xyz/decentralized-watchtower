@@ -52,9 +52,9 @@ class SelectOrdersPayload(BaseTxPayload):
 
     content: str
 
+
 @dataclass(frozen=True)
 class VerifyExecutionPayload(BaseTxPayload):
     """Represent a transaction payload for the VerifyExecutionRound."""
 
-    # TODO: define your attributes
-
+    content: str

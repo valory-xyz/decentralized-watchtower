@@ -16,47 +16,48 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-
+# pylint: disable=line-too-long,too-many-ancestors,unused-argument
 """This package contains round behaviours of CowOrdersAbciApp."""
 import json
 from abc import ABC
 from collections import deque
 from copy import deepcopy
-from typing import Generator, Set, Type, cast, Deque, Dict, List, Any
+from typing import Any, Deque, Dict, Generator, List, Set, Type, cast
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
-
-from packages.valory.skills.cow_orders_abci.models import Params
-from packages.valory.skills.cow_orders_abci.rounds import (
-    SynchronizedData,
-    CowOrdersAbciApp,
-    PlaceOrdersRound,
-    RandomnessRound,
-    SelectKeeperRound,
-    SelectOrdersRound,
-    VerifyExecutionRound,
-)
-from packages.valory.skills.cow_orders_abci.rounds import (
-    PlaceOrdersPayload,
-    RandomnessPayload,
-    SelectKeeperPayload,
-    SelectOrdersPayload,
-    VerifyExecutionPayload,
-)
 from packages.valory.skills.abstract_round_abci.common import (
     RandomnessBehaviour as BaseRandomnessBehaviour,
+)
+from packages.valory.skills.abstract_round_abci.common import (
     SelectKeeperBehaviour as BaseSelectKeeperBehaviour,
 )
+from packages.valory.skills.cow_orders_abci.models import Params
+from packages.valory.skills.cow_orders_abci.rounds import (
+    CowOrdersAbciApp,
+    PlaceOrdersPayload,
+    PlaceOrdersRound,
+    RandomnessPayload,
+    RandomnessRound,
+    SelectKeeperPayload,
+    SelectKeeperRound,
+    SelectOrdersPayload,
+    SelectOrdersRound,
+    SynchronizedData,
+    VerifyExecutionPayload,
+    VerifyExecutionRound,
+)
 
-ORDERS = "orders"
+
+ORDERS = "ready_orders"
 DEFAULT_HTTP_HEADERS = {
-            "Content-Type": "application/json",
-            "accept": "application/json"
-        }
+    "Content-Type": "application/json",
+    "accept": "application/json",
+}
+
 
 class CowOrdersBaseBehaviour(BaseBehaviour, ABC):
     """Base behaviour for the cow_orders_abci skill."""
@@ -124,7 +125,6 @@ class PlaceOrdersBehaviour(CowOrdersBaseBehaviour):
         else:
             yield from self._sender_act()
 
-
     def _i_am_not_sending(self) -> bool:
         """Indicates if the current agent is the sender or not."""
         return (
@@ -172,6 +172,7 @@ class PlaceOrdersBehaviour(CowOrdersBaseBehaviour):
 
         order_uid = response.body.decode()
         return order_uid
+
 
 class RandomnessBehaviour(BaseRandomnessBehaviour, CowOrdersBaseBehaviour):
     """RandomnessBehaviour"""
@@ -223,12 +224,28 @@ class SelectOrdersBehaviour(CowOrdersBaseBehaviour):
 
     def get_payload_content(self) -> str:
         """Get the payload content."""
+        # remove the orders we have already processed
+        self._handle_processed_orders()
+
+        # check if there are any orders left to process
         if len(self.orders) == 0:
             return SelectOrdersRound.NO_ORDERS_PAYLOAD
 
+        # select an order to be processed
         order = self.orders.pop()
         order_str = json.dumps(order, sort_keys=True)
         return order_str
+
+    def _handle_processed_orders(self) -> None:
+        """Handle orders that have been processed before."""
+        prev_verified_order = self.synchronized_data.verified_order
+        if prev_verified_order is None:
+            return
+        self.context.logger.info(
+            f"Order {prev_verified_order} has already been verified. "
+            f"Removing it from the list of orders to be processed."
+        )
+        self.remove_order(prev_verified_order)
 
 
 class VerifyExecutionBehaviour(CowOrdersBaseBehaviour):
@@ -250,18 +267,20 @@ class VerifyExecutionBehaviour(CowOrdersBaseBehaviour):
 
         self.set_done()
 
-    def get_payload_content(self) -> str:
+    def get_payload_content(self) -> Generator[None, None, str]:
         """Get the payload content based on verification outcome."""
         order_uid = self.synchronized_data.order_uid
         order = self.synchronized_data.order
-        is_ok = yield from self._verify_submission(order_uid, order)
-        if is_ok:
+        verification_outcome = yield from self._verify_submission(order_uid, order)
+        if verification_outcome == VerifyExecutionRound.VERIFICATION_OK:
             return VerifyExecutionRound.VERIFICATION_OK
 
         # something went wrong, the order was not submitted correctly
         return VerifyExecutionRound.VERIFICATION_FAILED
 
-    def _verify_submission(self, reported_order_uid: str, order: Dict[str, Any]) -> Generator[None, None, bool]:
+    def _verify_submission(
+        self, reported_order_uid: str, order: Dict[str, Any]
+    ) -> Generator[None, None, bool]:
         """
         Verify that the order was submitted.
 
@@ -269,9 +288,11 @@ class VerifyExecutionBehaviour(CowOrdersBaseBehaviour):
         :param order: the order to verify
         :returns: the appropriate payload content depending on the verification result
         """
-        expected_order_uid = yield from self._get_expected_order_uid(order)
+        expected_order_uid = order["order_uid"]
         if reported_order_uid != expected_order_uid:
-            self.context.logger.warning(f"Order {order} was not submitted correctly. Expected uid {expected_order_uid}, got {reported_order_uid}")
+            self.context.logger.warning(
+                f"Order {order} was not submitted correctly. Expected uid {expected_order_uid}, got {reported_order_uid}"
+            )
             return VerifyExecutionRound.VERIFICATION_FAILED
 
         was_submitted = yield from self._was_order_submitted(reported_order_uid)
@@ -299,12 +320,6 @@ class VerifyExecutionBehaviour(CowOrdersBaseBehaviour):
         # if the response is 200, the order was submitted
         return True
 
-    def _get_expected_order_uid(self, order: Dict[str, Any]) -> Generator[None, None, str]:
-        """Get the expected order uid."""
-        return "TODO"
-        yield
-
-
 
 class CowOrdersRoundBehaviour(AbstractRoundBehaviour):
     """CowOrdersRoundBehaviour"""
@@ -316,5 +331,5 @@ class CowOrdersRoundBehaviour(AbstractRoundBehaviour):
         RandomnessBehaviour,
         SelectKeeperBehaviour,
         SelectOrdersBehaviour,
-        VerifyExecutionBehaviour
+        VerifyExecutionBehaviour,
     ]

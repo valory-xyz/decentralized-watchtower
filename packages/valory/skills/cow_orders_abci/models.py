@@ -20,7 +20,7 @@
 """This module contains the shared state for the abci skill of CowOrdersAbciApp."""
 from typing import Any
 
-from packages.valory.skills.abstract_round_abci.models import BaseParams
+from packages.valory.skills.abstract_round_abci.models import ApiSpecs, BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
 )
@@ -48,3 +48,4 @@ class Params(BaseParams):
 
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
+RandomnessApi = ApiSpecs
