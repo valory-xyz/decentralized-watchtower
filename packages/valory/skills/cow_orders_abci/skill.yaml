@@ -20,7 +20,7 @@ fingerprint:
   tests/test_handlers.py: bafybeih3kvw332d2kx2tcz5nels743s2yddsjhuqmc4valcsuv4okl6rxm
   tests/test_models.py: bafybeieigbrzjkijphn5nflv7bg7lgeow6adbzazg3rq2yocd3fgko3hwy
   tests/test_payloads.py: bafybeidpbtgqjczasw2lm62kipseozlc7nr4f7p2xivdizzvpunx544uem
-  tests/test_rounds.py: bafybeigcirtt6joxbxqajg5k32lq7yhrmi26ulucpbscxx5ecic7avh56i
+  tests/test_rounds.py: bafybeibjasxy3kqwq6dlq5yqggzpjzlgrkealfbwzusfhdwlje5bbsa2m4
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []

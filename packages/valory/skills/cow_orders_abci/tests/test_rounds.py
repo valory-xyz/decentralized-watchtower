@@ -112,7 +112,7 @@ class TestSelectOrdersRound(BaseCowOrdersRoundTest):
             synchronized_data=self.synchronized_data,
         )
 
-        payload = dict(token="dummy_token", orders="dummy_orders")
+        payload = dict(token="dummy_token", orders="dummy_orders")  # nosec
         serialized_payload = json.dumps(payload, sort_keys=True)
         first_payload, *payloads = [
             SelectOrdersPayload(sender=participant, content=serialized_payload)
@@ -165,7 +165,7 @@ class TestVerifyExecutionRound(BaseCowOrdersRoundTest):
         test_round = self.round_class(
             synchronized_data=self.synchronized_data,
         )
-        order = dict(token="dummy_token", orders="dummy_orders")
+        order = dict(token="dummy_token", orders="dummy_orders")  # nosec
         self.synchronized_data.update(
             synchronized_data_class=SynchronizedData,
             **{get_name(SynchronizedData.order): order},
