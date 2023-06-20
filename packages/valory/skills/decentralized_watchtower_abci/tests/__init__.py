@@ -17,8 +17,4 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains the agent for decentralized_watchtower."""
-
-from pathlib import Path
-
-PACKAGE_DIR = Path(__file__).parent
+"""This module contains tests for watchtower skill."""

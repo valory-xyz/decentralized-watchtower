@@ -82,6 +82,7 @@ class Proof:
 class ConditionalOrder:
     """Conditional order dataclass."""
 
+    id: str
     params: ConditionalOrderParamsStruct
     proof: Optional[Proof]
     orders: Dict[str, int]

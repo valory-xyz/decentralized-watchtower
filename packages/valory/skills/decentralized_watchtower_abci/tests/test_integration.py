@@ -17,8 +17,27 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains the agent for decentralized_watchtower."""
+"""This module contains tests for watchtower skill."""
+import inspect
+from packages.valory.skills.order_monitoring.handlers import (
+    READY_ORDERS as MONITORING_ORDERS_KEY,
+    ContractHandler,
+)
+from packages.valory.skills.cow_orders_abci.behaviours import (
+    ORDERS as COW_ORDERS_KEY,
+    CowOrdersBaseBehaviour
+)
 
-from pathlib import Path
 
-PACKAGE_DIR = Path(__file__).parent
+def test_orders_key_match():
+    """Test that the orders are the same."""
+    assert MONITORING_ORDERS_KEY == COW_ORDERS_KEY
+
+
+def test_types_match():
+    """Test that the types are the same."""
+    getter1 = ContractHandler.ready_orders.fget
+    getter2 = CowOrdersBaseBehaviour.orders.fget
+    assert inspect.signature(getter1).return_annotation == inspect.signature(getter2).return_annotation
+
+

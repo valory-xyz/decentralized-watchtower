@@ -17,8 +17,9 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains the agent for decentralized_watchtower."""
+"""This module contains the implementation of the default skill."""
 
-from pathlib import Path
+from aea.configurations.base import PublicId
 
-PACKAGE_DIR = Path(__file__).parent
+
+PUBLIC_ID = PublicId.from_str("valory/decentralized_watchtower_abci:0.1.0")

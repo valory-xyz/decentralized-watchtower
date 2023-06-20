@@ -52,7 +52,7 @@ from packages.valory.skills.cow_orders_abci.rounds import (
 )
 
 
-ORDERS = "orders"
+ORDERS = "ready_orders"
 DEFAULT_HTTP_HEADERS = {
     "Content-Type": "application/json",
     "accept": "application/json",

@@ -21,6 +21,7 @@
 
 import json
 from typing import Any, Dict, List, Optional, Tuple, cast
+from uuid import uuid4
 
 from aea.protocols.base import Message
 from aea.skills.base import Handler
@@ -186,8 +187,13 @@ class ContractHandler(Handler):
         """Handle get tradeable order."""
         for order in tradeable_orders:
             domain = self.get_domain(order)
+            id = order.pop("id")
             order_uid = compute_order_uid(domain, order, order["from"])
             order["order_uid"] = order_uid
+            # remove from orders
+            owner = order["from"]
+            owner_orders = self.orders.get(owner, [])
+            self.orders[owner] = [o for o in owner_orders if o.id != id]
             self.ready_orders.extend(tradeable_orders)
         self.params.in_flight_req = False
 
@@ -241,7 +247,10 @@ class ContractHandler(Handler):
             # If the params are not in the conditionalOrder, add them
             # we essentially use the params as identifier for the conditional order
             if not exists:
+                # this is a local id, it is not the same as the uid
+                id = uuid4().hex
                 conditional_order = ConditionalOrder(
+                    id=id,
                     params=ConditionalOrderParamsStruct(*params),
                     proof=proof,
                     orders={},
@@ -255,8 +264,11 @@ class ContractHandler(Handler):
             self.context.logger.info(
                 f"Adding conditional order {params} to new contract {owner}"
             )
+            # this is a local id, it is not the same as the uid
+            id = uuid4().hex
             self.orders[owner] = [
                 ConditionalOrder(
+                    id=id,
                     params=ConditionalOrderParamsStruct(*params),
                     proof=proof,
                     orders={},

@@ -17,8 +17,6 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains the agent for decentralized_watchtower."""
+"""Defines constant used in the e2e tests."""
 
-from pathlib import Path
-
-PACKAGE_DIR = Path(__file__).parent
+MOCK_API_PATH = "/api/v1/orders"
