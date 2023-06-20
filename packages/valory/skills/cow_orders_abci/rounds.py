@@ -278,7 +278,6 @@ class CowOrdersAbciApp(AbciApp[Event]):
         },
         PlaceOrdersRound: {
             Event.DONE: VerifyExecutionRound,
-            Event.NO_MAJORITY: PlaceOrdersRound,
             Event.ROUND_TIMEOUT: PlaceOrdersRound,
         },
         VerifyExecutionRound: {
@@ -290,7 +289,9 @@ class CowOrdersAbciApp(AbciApp[Event]):
         FinishedWithOrdersRound: {},
     }
     final_states: Set[AppState] = {FinishedWithOrdersRound}
-    event_to_timeout: EventToTimeout = {}
+    event_to_timeout: EventToTimeout = {
+        Event.ROUND_TIMEOUT: 30,
+    }
     cross_period_persisted_keys: Set[str] = set()
     db_pre_conditions: Dict[AppState, Set[str]] = {
         SelectOrdersRound: set(),

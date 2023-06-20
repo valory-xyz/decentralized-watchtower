@@ -10,7 +10,7 @@ fingerprint:
   behaviours.py: bafybeigccxrwocm6hkrya6amwsxrrctbhtcyskxifafktwogkghdcjcfwm
   composition.py: bafybeicycxdvoe4tfmlsvrm7iwem62deuqdzc5vcig54hwpeiselwywbza
   dialogues.py: bafybeihdhvtmrsj7ridlt6xv24qiyax2otozn6ucxzoci65wwxxfowetdi
-  fsm_specification.yaml: bafybeibii54536qzkgo2hiy7rscr5buq4q26r7bhr7xdcadf277fl2gsqu
+  fsm_specification.yaml: bafybeibjdfk3igviai6jpgd7bha3nmdeknwcunc3mcxmiz4dbuqaojkcbe
   handlers.py: bafybeicjq7qnhuccdmqtgfp55btts6syzfkgmrmr4khynfdvlf4wogxwyq
   models.py: bafybeib4loegcl7jti4emmjt75blmzlg4s3kzbmhonziomjlhhcyhj6fui
   payloads.py: bafybeifcoe6rgr5kkh4ka2nvat75vyanfo5du74v7ygryzw6tn5klslp5y
@@ -24,7 +24,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeicensk7a2vpqj52iyhf6yhc6z2iwulb2txbym546qvwgsxm3skvcm
 - valory/registration_abci:0.1.0:bafybeicsqhakfliwauyqow62yopcjhejknmfcjzh7ilbjt32ozydbhxleq
 - valory/reset_pause_abci:0.1.0:bafybeigwsp2crzvqan7xnap6dh4f4lxdut5il6naj7r4jwaslopstufgl4
-- valory/cow_orders_abci:0.1.0:bafybeibcdmvsebjvgal7zt5rxpumawr6lznotstavqxoh4r2ticizkocvm
+- valory/cow_orders_abci:0.1.0:bafybeia4v2o444tcn54ry4yils666qb2bxaosgnlk2dzuzjnznkbo74uzy
 - valory/order_monitoring:0.1.0:bafybeiaz64tjhaxxzxoiymux3diwepya2lowbmz65hiasi5a53p6dhb7ne
 behaviours:
   main:

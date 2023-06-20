@@ -22,7 +22,6 @@ states:
 - VerifyExecutionRound
 transition_func:
     (PlaceOrdersRound, DONE): VerifyExecutionRound
-    (PlaceOrdersRound, NO_MAJORITY): PlaceOrdersRound
     (PlaceOrdersRound, ROUND_TIMEOUT): PlaceOrdersRound
     (RandomnessRound, DONE): SelectKeeperRound
     (RandomnessRound, NO_MAJORITY): RandomnessRound
