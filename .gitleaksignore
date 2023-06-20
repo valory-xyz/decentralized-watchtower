@@ -1,0 +1,7 @@
+./leak_report
+-------
+3bd79b1d2cff99763fba654f35484297b721673e:packages/valory/skills/decentralized_watchtower_abci/skill.yaml:generic-api-key:83
+267380ed07818c702be93cbedb151a47a0cd9dba:packages/valory/skills/order_monitoring/tests/test_order_utils.py:generic-api-key:46
+267380ed07818c702be93cbedb151a47a0cd9dba:packages/valory/skills/order_monitoring/tests/test_order_utils.py:generic-api-key:47
+fea78308032a3b53e8c7dd71d12edbc76a5c171e:packages/valory/agents/decentralized_watchtower/aea-config.yaml:generic-api-key:105
+7b81977889898013149cab6e3d2d83430fcbf560:packages/valory/skills/cow_orders_abci/skill.yaml:generic-api-key:80
