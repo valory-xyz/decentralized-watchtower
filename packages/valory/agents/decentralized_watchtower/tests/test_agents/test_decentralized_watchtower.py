@@ -65,7 +65,7 @@ ORDER_CHECK_STRINGS = (
 
 
 @pytest.mark.parametrize("nb_nodes", (1,))
-class TestAutonomousFundSingleAgent(
+class TestWatchtowerSingleAgent(
     BaseTestDecentralizedWatchtowerEnd2End,
     UseMockApiBaseTest,
     UseHardHatWatchtowerBaseTest,
@@ -92,7 +92,7 @@ class TestAutonomousFundSingleAgent(
 
 
 @pytest.mark.parametrize("nb_nodes", (2,))
-class TestAutonomousFundTwoAgents(
+class TestWatchtowerTwoAgents(
     BaseTestDecentralizedWatchtowerEnd2End,
     UseMockApiBaseTest,
     UseHardHatWatchtowerBaseTest,
@@ -119,7 +119,7 @@ class TestAutonomousFundTwoAgents(
 
 
 @pytest.mark.parametrize("nb_nodes", (4,))
-class TestAutonomousFundFourAgents(
+class TestWatchtowerFourAgents(
     BaseTestDecentralizedWatchtowerEnd2End,
     UseMockApiBaseTest,
     UseHardHatWatchtowerBaseTest,
