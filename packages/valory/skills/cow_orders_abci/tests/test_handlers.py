@@ -16,7 +16,7 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-
+# pylint: disable=unused-import
 """Test the handlers.py module of the CowOrders."""
 
 import packages.valory.skills.cow_orders_abci.handlers  # noqa
@@ -24,4 +24,3 @@ import packages.valory.skills.cow_orders_abci.handlers  # noqa
 
 def test_import() -> None:
     """Test that the 'handlers.py' of the CowOrders can be imported."""
-

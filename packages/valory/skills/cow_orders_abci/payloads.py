@@ -28,7 +28,7 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 class PlaceOrdersPayload(BaseTxPayload):
     """Represent a transaction payload for the PlaceOrdersRound."""
 
-    # TODO: define your attributes
+    content: str
 
 
 @dataclass(frozen=True)
@@ -50,12 +50,11 @@ class SelectKeeperPayload(BaseTxPayload):
 class SelectOrdersPayload(BaseTxPayload):
     """Represent a transaction payload for the SelectOrdersRound."""
 
-    # TODO: define your attributes
+    content: str
 
 
 @dataclass(frozen=True)
 class VerifyExecutionPayload(BaseTxPayload):
     """Represent a transaction payload for the VerifyExecutionRound."""
 
-    # TODO: define your attributes
-
+    content: str

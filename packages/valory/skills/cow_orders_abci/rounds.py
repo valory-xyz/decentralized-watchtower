@@ -18,21 +18,25 @@
 # ------------------------------------------------------------------------------
 
 """This package contains the rounds of CowOrdersAbciApp."""
+import json
 import textwrap
 from collections import deque
 from enum import Enum
-from typing import Dict, List, Optional, Set, Tuple, cast, Deque
+from typing import Any, Deque, Dict, Optional, Set, Tuple, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
-    AbstractRound,
     AppState,
     BaseSynchronizedData,
+    CollectSameUntilThresholdRound,
+    CollectionRound,
     DegenerateRound,
-    EventToTimeout, CollectSameUntilThresholdRound, get_name, DeserializedCollection, CollectionRound,
+    DeserializedCollection,
+    EventToTimeout,
+    OnlyKeeperSendsRound,
+    get_name,
 )
-
 from packages.valory.skills.cow_orders_abci.payloads import (
     PlaceOrdersPayload,
     RandomnessPayload,
@@ -85,12 +89,12 @@ class SynchronizedData(BaseSynchronizedData):
     @property
     def most_voted_keeper_address(self) -> str:
         """Get the most_voted_keeper_address."""
-        return cast(str, self.db.get_strict("most_voted_keeper_address"))
+        return self.keepers[0]
 
     @property
     def is_keeper_set(self) -> bool:
         """Check whether keeper is set."""
-        return self.db.get("most_voted_keeper_address", None) is not None
+        return bool(self.db.get("keepers", False))
 
     @property
     def blacklisted_keepers(self) -> Set[str]:
@@ -116,30 +120,46 @@ class SynchronizedData(BaseSynchronizedData):
             return deque(keepers_parsed)
         return deque()
 
-class PlaceOrdersRound(AbstractRound):
+    @property
+    def order_uid(self) -> str:
+        """Get the order."""
+        return cast(str, self.db.get_strict("order_uid"))
+
+    @property
+    def order(self) -> Dict[str, Any]:
+        """Get the order."""
+        return cast(Dict[str, Any], self.db.get_strict("order"))
+
+    @property
+    def verified_order(self) -> Optional[Dict[str, Any]]:
+        """Get the order."""
+        return cast(Optional[Dict[str, Any]], self.db.get("verified_order", None))
+
+
+class PlaceOrdersRound(OnlyKeeperSendsRound):
     """PlaceOrdersRound"""
 
+    keeper_payload: Optional[PlaceOrdersPayload] = None
     payload_class = PlaceOrdersPayload
-    payload_attribute = ""  # TODO: update
+    payload_attribute = "content"
     synchronized_data_class = SynchronizedData
 
-    # TODO: replace AbstractRound with one of CollectDifferentUntilAllRound,
-    # CollectSameUntilAllRound, CollectSameUntilThresholdRound,
-    # CollectDifferentUntilThresholdRound, OnlyKeeperSendsRound, VotingRound,
-    # from packages/valory/skills/abstract_round_abci/base.py
-    # or implement the methods
+    ERROR_PAYLOAD = "error"
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
-        """Process the end of the block."""
-        raise NotImplementedError
+        """End the block."""
+        if self.keeper_payload is None:
+            return None
 
-    def check_payload(self, payload: PlaceOrdersPayload) -> None:
-        """Check payload."""
-        raise NotImplementedError
-
-    def process_payload(self, payload: PlaceOrdersPayload) -> None:
-        """Process payload."""
-        raise NotImplementedError
+        # even if the content is ERROR_PAYLOAD, we still want to update the state
+        order_uid = self.keeper_payload.content
+        state = self.synchronized_data.update(
+            synchronized_data_class=self.synchronized_data_class,
+            **{
+                get_name(SynchronizedData.order_uid): order_uid,
+            }
+        )
+        return state, Event.DONE
 
 
 class RandomnessRound(CollectSameUntilThresholdRound):
@@ -155,6 +175,7 @@ class RandomnessRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.most_voted_randomness),
     )
 
+
 class SelectKeeperRound(CollectSameUntilThresholdRound):
     """A round in which a keeper is selected for transaction submission"""
 
@@ -165,56 +186,68 @@ class SelectKeeperRound(CollectSameUntilThresholdRound):
     collection_key = get_name(SynchronizedData.participant_to_selection)
     selection_key = get_name(SynchronizedData.keepers)
 
-class SelectOrdersRound(AbstractRound):
+
+class SelectOrdersRound(CollectSameUntilThresholdRound):
     """SelectOrdersRound"""
 
     payload_class = SelectOrdersPayload
-    payload_attribute = ""  # TODO: update
+    payload_attribute = "content"
     synchronized_data_class = SynchronizedData
 
-    # TODO: replace AbstractRound with one of CollectDifferentUntilAllRound,
-    # CollectSameUntilAllRound, CollectSameUntilThresholdRound,
-    # CollectDifferentUntilThresholdRound, OnlyKeeperSendsRound, VotingRound,
-    # from packages/valory/skills/abstract_round_abci/base.py
-    # or implement the methods
+    NO_ORDERS_PAYLOAD = "no_orders_payload"
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
         """Process the end of the block."""
-        raise NotImplementedError
+        if self.threshold_reached:
+            if self.most_voted_payload == self.NO_ORDERS_PAYLOAD:
+                return self.synchronized_data, Event.NO_ACTION
+            order = json.loads(self.most_voted_payload)
+            state = self.synchronized_data.update(
+                synchronized_data_class=self.synchronized_data_class,
+                **{
+                    get_name(SynchronizedData.order): order,
+                }
+            )
+            return state, Event.DONE
 
-    def check_payload(self, payload: SelectOrdersPayload) -> None:
-        """Check payload."""
-        raise NotImplementedError
+        if not self.is_majority_possible(
+            self.collection, self.synchronized_data.nb_participants
+        ):
+            return self.synchronized_data, Event.NO_MAJORITY
 
-    def process_payload(self, payload: SelectOrdersPayload) -> None:
-        """Process payload."""
-        raise NotImplementedError
+        return None
 
 
-class VerifyExecutionRound(AbstractRound):
+class VerifyExecutionRound(CollectSameUntilThresholdRound):
     """VerifyExecutionRound"""
 
     payload_class = VerifyExecutionPayload
-    payload_attribute = ""  # TODO: update
+    payload_attribute = "content"
     synchronized_data_class = SynchronizedData
 
-    # TODO: replace AbstractRound with one of CollectDifferentUntilAllRound,
-    # CollectSameUntilAllRound, CollectSameUntilThresholdRound,
-    # CollectDifferentUntilThresholdRound, OnlyKeeperSendsRound, VotingRound,
-    # from packages/valory/skills/abstract_round_abci/base.py
-    # or implement the methods
+    VERIFICATION_FAILED = "verification_failed"
+    VERIFICATION_OK = "verification_ok"
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
         """Process the end of the block."""
-        raise NotImplementedError
+        if self.threshold_reached:
+            if self.most_voted_payload == self.VERIFICATION_FAILED:
+                return self.synchronized_data, Event.BAD_SUBMISSION
 
-    def check_payload(self, payload: VerifyExecutionPayload) -> None:
-        """Check payload."""
-        raise NotImplementedError
+            processed_order = cast(SynchronizedData, self.synchronized_data).order
+            state = self.synchronized_data.update(
+                synchronized_data_class=self.synchronized_data_class,
+                **{
+                    get_name(SynchronizedData.verified_order): processed_order,
+                }
+            )
+            return state, Event.DONE
+        if not self.is_majority_possible(
+            self.collection, self.synchronized_data.nb_participants
+        ):
+            return self.synchronized_data, Event.NO_MAJORITY
 
-    def process_payload(self, payload: VerifyExecutionPayload) -> None:
-        """Process payload."""
-        raise NotImplementedError
+        return None
 
 
 class FinishedWithOrdersRound(DegenerateRound):
@@ -231,37 +264,38 @@ class CowOrdersAbciApp(AbciApp[Event]):
             Event.DONE: RandomnessRound,
             Event.NO_MAJORITY: SelectOrdersRound,
             Event.ROUND_TIMEOUT: SelectOrdersRound,
-            Event.NO_ACTION: FinishedWithOrdersRound
+            Event.NO_ACTION: FinishedWithOrdersRound,
         },
         RandomnessRound: {
             Event.DONE: SelectKeeperRound,
             Event.NO_MAJORITY: RandomnessRound,
-            Event.ROUND_TIMEOUT: RandomnessRound
+            Event.ROUND_TIMEOUT: RandomnessRound,
         },
         SelectKeeperRound: {
             Event.DONE: PlaceOrdersRound,
             Event.NO_MAJORITY: RandomnessRound,
-            Event.ROUND_TIMEOUT: SelectKeeperRound
+            Event.ROUND_TIMEOUT: SelectKeeperRound,
         },
         PlaceOrdersRound: {
             Event.DONE: VerifyExecutionRound,
-            Event.NO_MAJORITY: PlaceOrdersRound,
-            Event.ROUND_TIMEOUT: PlaceOrdersRound
+            Event.ROUND_TIMEOUT: PlaceOrdersRound,
         },
         VerifyExecutionRound: {
-            Event.DONE: FinishedWithOrdersRound,
+            Event.DONE: SelectOrdersRound,
             Event.BAD_SUBMISSION: RandomnessRound,
             Event.NO_MAJORITY: PlaceOrdersRound,
-            Event.ROUND_TIMEOUT: PlaceOrdersRound
+            Event.ROUND_TIMEOUT: PlaceOrdersRound,
         },
-        FinishedWithOrdersRound: {}
+        FinishedWithOrdersRound: {},
     }
     final_states: Set[AppState] = {FinishedWithOrdersRound}
-    event_to_timeout: EventToTimeout = {}
-    cross_period_persisted_keys: Set[str] = []
+    event_to_timeout: EventToTimeout = {
+        Event.ROUND_TIMEOUT: 30,
+    }
+    cross_period_persisted_keys: Set[str] = set()
     db_pre_conditions: Dict[AppState, Set[str]] = {
-        SelectOrdersRound: [],
+        SelectOrdersRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedWithOrdersRound: [],
+        FinishedWithOrdersRound: set(),
     }

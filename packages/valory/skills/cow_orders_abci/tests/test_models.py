@@ -23,10 +23,9 @@ from packages.valory.skills.abstract_round_abci.test_tools.base import DummyCont
 from packages.valory.skills.cow_orders_abci.models import SharedState
 
 
-class TestSharedState:
+class TestSharedState:  # pylint: disable=too-few-public-methods
     """Test SharedState of CowOrders."""
 
-    def test_initialization(self) -> None:
+    def test_initialization(self) -> None:  # pylint: disable=no-self-use
         """Test initialization."""
         SharedState(name="", skill_context=DummyContext())
-

@@ -16,40 +16,32 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-
+# pylint: disable=undefined-loop-variable
 """This package contains the tests for rounds of CowOrders."""
-
-from typing import Any, Type, Dict, List, Callable, Hashable, Mapping
+import json
+from collections import deque
 from dataclasses import dataclass, field
+from typing import Any, Callable, Deque, Dict, Hashable, List, Mapping, Type, cast
 
-import pytest
-
-from packages.valory.skills.cow_orders_abci.payloads import (
-    PlaceOrdersPayload,
-    RandomnessPayload,
-    SelectKeeperPayload,
-    SelectOrdersPayload,
-    VerifyExecutionPayload,
-)
-from packages.valory.skills.cow_orders_abci.rounds import (
-    AbstractRound,
-    Event,
-    SynchronizedData,
-    PlaceOrdersRound,
-    RandomnessRound,
-    SelectKeeperRound,
-    SelectOrdersRound,
-    VerifyExecutionRound,
-)
 from packages.valory.skills.abstract_round_abci.base import (
+    AbstractRound,
     BaseTxPayload,
+    get_name,
 )
 from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
     BaseRoundTestClass,
-    BaseOnlyKeeperSendsRoundTest,
-    BaseCollectDifferentUntilThresholdRoundTest,
-    BaseCollectSameUntilThresholdRoundTest,
- )
+)
+from packages.valory.skills.cow_orders_abci.payloads import (
+    PlaceOrdersPayload,
+    SelectOrdersPayload,
+)
+from packages.valory.skills.cow_orders_abci.rounds import (
+    Event,
+    PlaceOrdersRound,
+    SelectOrdersRound,
+    SynchronizedData,
+    VerifyExecutionRound,
+)
 
 
 @dataclass
@@ -66,9 +58,17 @@ class RoundTestCase:
 
 
 MAX_PARTICIPANTS: int = 4
+_DUMMY_ADDRESS = "0x000000"
 
 
-class BaseCowOrdersRoundTest(BaseRoundTestClass):
+def get_keepers(keepers: Deque[str], retries: int = 1) -> str:
+    """Get dummy keepers."""
+    return retries.to_bytes(32, "big").hex() + "".join(keepers)
+
+
+class BaseCowOrdersRoundTest(
+    BaseRoundTestClass
+):  # pylint: disable=too-few-public-methods
     """Base test class for CowOrders rounds."""
 
     round_cls: Type[AbstractRound]
@@ -76,64 +76,40 @@ class BaseCowOrdersRoundTest(BaseRoundTestClass):
     _synchronized_data_class = SynchronizedData
     _event_class = Event
 
-    def run_test(self, test_case: RoundTestCase) -> None:
-        """Run the test"""
-
-        self.synchronized_data.update(**test_case.initial_data)
-
-        test_round = self.round_cls(
-            synchronized_data=self.synchronized_data,
-        )
-
-        self._complete_run(
-            self._test_round(
-                test_round=test_round,
-                round_payloads=test_case.payloads,
-                synchronized_data_update_fn=lambda sync_data, _: sync_data.update(**test_case.final_data),
-                synchronized_data_attr_checks=test_case.synchronized_data_attr_checks,
-                exit_event=test_case.event,
-                **test_case.kwargs,  # varies per BaseRoundTestClass child
-            )
-        )
-
 
 class TestPlaceOrdersRound(BaseCowOrdersRoundTest):
     """Tests for PlaceOrdersRound."""
 
     round_class = PlaceOrdersRound
 
-    # TODO: provide test cases
-    @pytest.mark.parametrize("test_case", [])
-    def test_run(self, test_case: RoundTestCase) -> None:
-        """Run tests."""
+    def test_run(self) -> None:
+        """Tests the happy path for ObservationRound."""
+        test_round = self.round_class(
+            synchronized_data=self.synchronized_data,
+        )
+        participants = tuple(f"agent_{i}" + "-" * 35 for i in range(4))
+        keepers = deque(("agent_1" + "-" * 35, "agent_3" + "-" * 35))
+        keeper_retries = 2
+        self.synchronized_data = self.synchronized_data.update(
+            synchronized_data_class=SynchronizedData,
+            **{
+                get_name(SynchronizedData.participants): participants,
+                get_name(SynchronizedData.keepers): get_keepers(
+                    keepers, keeper_retries
+                ),
+            },
+        )
 
-        self.run_test(test_case)
+        # before the first payload, the round should not end
+        assert test_round.end_block() is None
 
+        payload_data = "test"
+        payload = PlaceOrdersPayload(sender=keepers[0], content=payload_data)
 
-class TestRandomnessRound(BaseCowOrdersRoundTest):
-    """Tests for RandomnessRound."""
-
-    round_class = RandomnessRound
-
-    # TODO: provide test cases
-    @pytest.mark.parametrize("test_case", [])
-    def test_run(self, test_case: RoundTestCase) -> None:
-        """Run tests."""
-
-        self.run_test(test_case)
-
-
-class TestSelectKeeperRound(BaseCowOrdersRoundTest):
-    """Tests for SelectKeeperRound."""
-
-    round_class = SelectKeeperRound
-
-    # TODO: provide test cases
-    @pytest.mark.parametrize("test_case", [])
-    def test_run(self, test_case: RoundTestCase) -> None:
-        """Run tests."""
-
-        self.run_test(test_case)
+        # only one participant has voted, and
+        # that should be enough for proceeding to the next round
+        test_round.process_payload(payload)
+        assert test_round.end_block() is not None
 
 
 class TestSelectOrdersRound(BaseCowOrdersRoundTest):
@@ -141,12 +117,53 @@ class TestSelectOrdersRound(BaseCowOrdersRoundTest):
 
     round_class = SelectOrdersRound
 
-    # TODO: provide test cases
-    @pytest.mark.parametrize("test_case", [])
-    def test_run(self, test_case: RoundTestCase) -> None:
+    def test_run(self) -> None:
         """Run tests."""
 
-        self.run_test(test_case)
+        test_round = self.round_class(
+            synchronized_data=self.synchronized_data,
+        )
+
+        payload = dict(token="dummy_token", orders="dummy_orders")  # nosec
+        serialized_payload = json.dumps(payload, sort_keys=True)
+        first_payload, *payloads = [
+            SelectOrdersPayload(sender=participant, content=serialized_payload)
+            for participant in self.participants
+        ]
+
+        # only one participant has voted
+        # no event should be returned
+        test_round.process_payload(first_payload)
+        assert test_round.collection[first_payload.sender] == first_payload
+        assert test_round.end_block() is None
+
+        # enough members have voted
+        # but no majority is reached
+        self._test_no_majority_event(test_round)
+
+        # all members voted in the same way
+        for payload in payloads:  # type: ignore
+            test_round.process_payload(payload)  # type: ignore
+
+        expected_next_state = cast(
+            SynchronizedData,
+            self.synchronized_data.update(
+                participant_to_observations=self.round_class.serialize_collection(
+                    test_round.collection
+                ),
+                most_voted_observation=cast(SelectOrdersPayload, payload).json,
+            ),
+        )
+
+        res = test_round.end_block()
+        assert res is not None
+        state, event = res
+        actual_next_state = cast(SynchronizedData, state)
+
+        # check that the state is updated as expected
+        assert actual_next_state.order == expected_next_state.order
+
+        assert event == Event.DONE
 
 
 class TestVerifyExecutionRound(BaseCowOrdersRoundTest):
@@ -154,10 +171,53 @@ class TestVerifyExecutionRound(BaseCowOrdersRoundTest):
 
     round_class = VerifyExecutionRound
 
-    # TODO: provide test cases
-    @pytest.mark.parametrize("test_case", [])
-    def test_run(self, test_case: RoundTestCase) -> None:
+    def test_run(self) -> None:
         """Run tests."""
 
-        self.run_test(test_case)
+        test_round = self.round_class(
+            synchronized_data=self.synchronized_data,
+        )
+        order = dict(token="dummy_token", orders="dummy_orders")  # nosec
+        self.synchronized_data.update(
+            synchronized_data_class=SynchronizedData,
+            **{get_name(SynchronizedData.order): order},
+        )
+        serialized_payload = json.dumps(order, sort_keys=True)
+        first_payload, *payloads = [
+            SelectOrdersPayload(sender=participant, content=serialized_payload)
+            for participant in self.participants
+        ]
 
+        # only one participant has voted
+        # no event should be returned
+        test_round.process_payload(first_payload)
+        assert test_round.collection[first_payload.sender] == first_payload
+        assert test_round.end_block() is None
+
+        # enough members have voted
+        # but no majority is reached
+        self._test_no_majority_event(test_round)
+
+        # all members voted in the same way
+        for payload in payloads:  # type: ignore
+            test_round.process_payload(payload)  # type: ignore
+
+        expected_next_state = cast(
+            SynchronizedData,
+            self.synchronized_data.update(
+                participant_to_observations=self.round_class.serialize_collection(
+                    test_round.collection
+                ),
+                verified_order=cast(SelectOrdersPayload, payload).json,
+            ),
+        )
+
+        res = test_round.end_block()
+        assert res is not None
+        state, event = res
+        actual_next_state = cast(SynchronizedData, state)
+
+        # check that the state is updated as expected
+        assert actual_next_state.order == expected_next_state.order
+
+        assert event == Event.DONE
