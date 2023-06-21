@@ -110,6 +110,7 @@ type: skill
 models:
   params:
     args:
+      cow_api_url: ${str:https://api.cow.fi/mainnet}
       cleanup_history_depth: 1
       setup:
         safe_contract_address: ${str:0x0000000000000000000000000000000000000000}

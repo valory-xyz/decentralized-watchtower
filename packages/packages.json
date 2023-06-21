@@ -4,7 +4,8 @@
         "skill/valory/decentralized_watchtower_abci/0.1.0": "bafybeigyxqznscqxab2whfkg3c4e24fivip6etb7umujcd7e7k4haegk4u",
         "skill/valory/order_monitoring/0.1.0": "bafybeicezljoewe766h4gwhujai5fftk7fl6pmixswdkiubik6gvalrj6i",
         "contract/valory/composable_cow/0.1.0": "bafybeibf6ihwcjmod7dsjw6njruqjk3dgcxj4ulqc6c5cpll5hqfm2iqrm",
-        "agent/valory/decentralized_watchtower/0.1.0": "bafybeib6pxoyrw2fvitefc2fz4iejw6xwhwpw73sby66hqhtqcfqivnvli"
+        "agent/valory/decentralized_watchtower/0.1.0": "bafybeifhsuggtipuyku3xn6wbfzydfs2epcyehzhi6vcexwo2p4v35wg34",
+        "service/valory/decentralized_watchtower_goerli/0.1.0": "bafybeiec67dzin2vs4cr5egqyxaqq4rw7pl7mandccjpncn64mmrjisvyu"
     },
     "third_party": {
         "protocol/valory/abci/0.1.0": "bafybeig3dj5jhsowlvg3t73kgobf6xn4nka7rkttakdb2gwsg5bp7rt7q4",
