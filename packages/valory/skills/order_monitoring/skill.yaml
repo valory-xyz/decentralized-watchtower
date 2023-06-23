@@ -23,7 +23,7 @@ connections:
 - valory/ledger:0.19.0:bafybeicgfupeudtmvehbwziqfxiz6ztsxr5rxzvalzvsdsspzz73o5fzfi
 - valory/websocket_client:0.1.0:bafybeihrz2tfalyh74im3cyqjworyhre4bsyeocyfrv5ysfmi23deeg2c4
 contracts:
-- valory/composable_cow:0.1.0:bafybeibf6ihwcjmod7dsjw6njruqjk3dgcxj4ulqc6c5cpll5hqfm2iqrm
+- valory/composable_cow:0.1.0:bafybeiepmiflob4vagnscveoibjzracjyvul5sxkbrzop2xicamhklhbwi
 protocols:
 - fetchai/default:1.0.0:bafybeieqqzgzuappi2ped42upgzad5gt3mxiyjhojwibxm4o367ffsian4
 - valory/contract_api:1.0.0:bafybeidv6wxpjyb2sdyibnmmum45et4zcla6tl63bnol6ztyoqvpl4spmy
