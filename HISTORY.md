@@ -1,2 +1,2 @@
-# Release History - `Autonomous Fund`
+# Release History - `Decentralized Watchtower`
 
