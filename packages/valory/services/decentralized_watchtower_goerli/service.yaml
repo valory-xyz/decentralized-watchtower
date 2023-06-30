@@ -7,7 +7,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeia5wpsl5wqomo4t64vvxme7m6s6mr25nrcsqautoljhbhqdpyrfqq
 fingerprint_ignore_patterns: []
-agent: valory/decentralized_watchtower:0.1.0:bafybeiajqq2zfvntfsm5sbmvix6n5z4cq66btsq6ebel65qjdcmcg5wtuy
+agent: valory/decentralized_watchtower:0.1.0:bafybeibsi55jqad6e7brhv7gna46775rxxlubg3sctjc2toxcbrjvjeely
 number_of_agents: 4
 deployment:
   tendermint:
@@ -32,15 +32,17 @@ extra:
       cow_api_url: ${COW_API_URL:str:https://api.cow.fi/goerli}
       service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
       share_tm_config_on_startup: ${USE_ACN:bool:false}
+      on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:53}
 0:
   models:
     params:
       args:
         setup: *id001
         cow_api_url: ${COW_API_URL:str:https://api.cow.fi/goerli}
-        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
+        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x1cEe30D08943EB58EFF84DD1AB44a6ee6FEff63a}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
         tendermint_p2p_url: ${TENDERMINT_P2P_URL_0:str:node0:26656}
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:53}
 1:
   models:
     params:
@@ -50,6 +52,7 @@ extra:
         service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
         tendermint_p2p_url: ${TENDERMINT_P2P_URL_1:str:node1:26656}
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:53}
 2:
   models:
     params:
@@ -59,6 +62,7 @@ extra:
         service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
         tendermint_p2p_url: ${TENDERMINT_P2P_URL_2:str:node2:26656}
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:53}
 3:
   models:
     params:
@@ -68,6 +72,7 @@ extra:
         service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
         tendermint_p2p_url: ${TENDERMINT_P2P_URL_3:str:node3:26656}
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:53}
 ---
 public_id: valory/ledger:0.19.0
 type: connection
