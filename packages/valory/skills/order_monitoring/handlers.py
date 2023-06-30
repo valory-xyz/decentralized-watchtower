@@ -41,7 +41,9 @@ from packages.valory.skills.order_monitoring.order_utils import (
     ConditionalOrder,
     ConditionalOrderParamsStruct,
     Proof,
+    balance_to_string,
     compute_order_uid,
+    kind_to_string,
 )
 
 
@@ -193,8 +195,21 @@ class ContractHandler(Handler):
             # remove from orders
             owner = order["from"]
             owner_orders = self.orders.get(owner, [])
+            # remove from orders
             self.orders[owner] = [o for o in owner_orders if o.id != id]
-            self.ready_orders.extend(tradeable_orders)
+
+            # add to ready orders
+            self.ready_orders.append(
+                {
+                    **order,
+                    "sellAmount": str(order["sellAmount"]),
+                    "buyAmount": str(order["buyAmount"]),
+                    "feeAmount": str(order["feeAmount"]),
+                    "sellTokenBalance": balance_to_string(order["sellTokenBalance"]),
+                    "buyTokenBalance": balance_to_string(order["sellTokenBalance"]),
+                    "kind": kind_to_string(order["kind"]),
+                }
+            )
         self.params.in_flight_req = False
 
     def _handle_event_processing(self, events: Dict[str, Any]) -> None:
