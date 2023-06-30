@@ -206,6 +206,7 @@ class SelectOrdersRound(CollectSameUntilThresholdRound):
                 synchronized_data_class=self.synchronized_data_class,
                 **{
                     get_name(SynchronizedData.order): order,
+                    get_name(SynchronizedData.verified_order): None,
                 }
             )
             return state, Event.DONE

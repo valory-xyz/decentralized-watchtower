@@ -290,7 +290,7 @@ class TestVerifyExecutionBehaviour(BaseCowOrdersTest):
                 kwargs={
                     "status_code": 404,
                     "body": "dummy",
-                    "order_uid": _DUMMY_ORDER_UID,
+                    "order_uid": f'"{_DUMMY_ORDER_UID}"',
                 },
                 orders=_DUMMY_ORDERS,
             ),
@@ -315,6 +315,6 @@ class TestVerifyExecutionBehaviour(BaseCowOrdersTest):
         self.behaviour.context.shared_state[ORDERS] = test_case.orders
         self.fast_forward(test_case.initial_data)
         self.behaviour.act_wrapper()
-        if test_case.initial_data.get("order_uid") == _DUMMY_ORDER_UID:
+        if test_case.initial_data.get("order_uid") == f'"{_DUMMY_ORDER_UID}"':
             self._mock_get_order(**test_case.kwargs)
         self.complete(test_case.event)

@@ -1,0 +1,106 @@
+name: decentralized_watchtower_goerli
+author: valory
+version: 0.1.0
+description: A set of agents implementing the Decentralized Watchtower.
+aea_version: '>=1.0.0, <2.0.0'
+license: Apache-2.0
+fingerprint:
+  README.md: bafybeia5wpsl5wqomo4t64vvxme7m6s6mr25nrcsqautoljhbhqdpyrfqq
+fingerprint_ignore_patterns: []
+agent: valory/decentralized_watchtower:0.1.0:bafybeigmtq5wk5k7nojvqnwoc6qlz65lup4wfgfhxgelyyddy7ephnum34
+number_of_agents: 4
+deployment:
+  tendermint:
+    ports:
+      0:
+        26656: 26656
+      1:
+        26666: 26656
+      2:
+        26676: 26656
+      3:
+        26686: 26656
+---
+public_id: valory/decentralized_watchtower_abci:0.1.0
+type: skill
+extra:
+  params_args:
+    args:
+      setup: &id001
+        safe_contract_address: ${SAFE_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
+        all_participants: ${ALL_PARTICIPANTS:list:["0x0000000000000000000000000000000000000000"]}
+      cow_api_url: ${COW_API_URL:str:https://api.cow.fi/goerli/api/v1}
+      service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
+      share_tm_config_on_startup: ${USE_ACN:bool:false}
+      on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:53}
+0:
+  models:
+    params:
+      args:
+        setup: *id001
+        cow_api_url: ${COW_API_URL:str:https://api.cow.fi/goerli/api/v1}
+        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x1cEe30D08943EB58EFF84DD1AB44a6ee6FEff63a}
+        share_tm_config_on_startup: ${USE_ACN:bool:false}
+        tendermint_p2p_url: ${TENDERMINT_P2P_URL_0:str:node0:26656}
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:53}
+1:
+  models:
+    params:
+      args:
+        setup: *id001
+        cow_api_url: ${COW_API_URL:str:https://api.cow.fi/goerli/api/v1}
+        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
+        share_tm_config_on_startup: ${USE_ACN:bool:false}
+        tendermint_p2p_url: ${TENDERMINT_P2P_URL_1:str:node1:26656}
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:53}
+2:
+  models:
+    params:
+      args:
+        setup: *id001
+        cow_api_url: ${COW_API_URL:str:https://api.cow.fi/goerli/api/v1}
+        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
+        share_tm_config_on_startup: ${USE_ACN:bool:false}
+        tendermint_p2p_url: ${TENDERMINT_P2P_URL_2:str:node2:26656}
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:53}
+3:
+  models:
+    params:
+      args:
+        setup: *id001
+        cow_api_url: ${COW_API_URL:str:https://api.cow.fi/goerli/api/v1}
+        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
+        share_tm_config_on_startup: ${USE_ACN:bool:false}
+        tendermint_p2p_url: ${TENDERMINT_P2P_URL_3:str:node3:26656}
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:53}
+---
+public_id: valory/ledger:0.19.0
+type: connection
+config:
+  ledger_apis:
+    ethereum:
+      address: ${HTTP_RPC:str:http://localhost:8545}
+      chain_id: ${CHAIN_ID:int:5}
+---
+public_id: valory/websocket_client:0.1.0:bafybeiexove4oqyhoae5xmk2hilskthosov5imdp65olpgj3cfrepbouyy
+type: connection
+config:
+  endpoint: ${WS_RPC:str:ws://localhost:8545}
+---
+public_id: valory/order_monitoring:0.1.0:bafybeiby5ajjc7a3m2uq73d2pprx6enqt4ghfcq2gkmrtsr75e4d4napi4
+type: skill
+behaviours:
+  subscriptions:
+    args:
+      contracts: ${CONTRACT_TO_MONITOR:list:["0xFf82123dFB52ab75C417195c5fDB87630145ae81"]}
+handlers:
+  new_event:
+    args:
+      contract_to_monitor: ${CONTRACT_TO_MONITOR:str:0xFf82123dFB52ab75C417195c5fDB87630145ae81}
+      websocket_provider: ${WS_RPC:str:ws://localhost:8545}
+models:
+  params:
+    args:
+      use_polling: ${USE_POLLING:bool:false}
+      composable_cow_address: ${COMPOSABLE_COW_ADDRESS:str:0x9A676e781A523b5d0C0e43731313A708CB607508}
+      event_topics: ${EVENT_TOPICS:list:["0x2cceac5555b0ca45a3744ced542f54b56ad2eb45e521962372eef212a2cbf361"]}

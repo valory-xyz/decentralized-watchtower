@@ -288,14 +288,18 @@ class VerifyExecutionBehaviour(CowOrdersBaseBehaviour):
         :param order: the order to verify
         :returns: the appropriate payload content depending on the verification result
         """
-        expected_order_uid = order["order_uid"]
-        if reported_order_uid != expected_order_uid:
+        expected_order_uid = f'"{order["order_uid"]}"'
+        if (
+            reported_order_uid != PlaceOrdersRound.ERROR_PAYLOAD
+            and reported_order_uid != expected_order_uid
+        ):
             self.context.logger.warning(
-                f"Order {order} was not submitted correctly. Expected uid {expected_order_uid}, got {reported_order_uid}"
+                f"Order {order} was not submitted correctly. "
+                f"Expected uid {expected_order_uid}, got {reported_order_uid}"
             )
             return VerifyExecutionRound.VERIFICATION_FAILED
 
-        was_submitted = yield from self._was_order_submitted(reported_order_uid)
+        was_submitted = yield from self._was_order_submitted(order["order_uid"])
         if not was_submitted:
             self.context.logger.warning(f"Order {order} was not submitted.")
             return VerifyExecutionRound.VERIFICATION_FAILED
