@@ -27,7 +27,7 @@ from aea.protocols.base import Message
 from aea.skills.base import Handler
 from web3 import Web3
 
-from packages.fetchai.protocols.default.message import DefaultMessage
+from packages.valory.protocols.default.message import DefaultMessage
 from packages.valory.connections.ledger.connection import (
     PUBLIC_ID as LEDGER_CONNECTION_PUBLIC_ID,
 )
