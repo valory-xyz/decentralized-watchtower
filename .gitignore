@@ -22,13 +22,7 @@ packages/valory/contracts/gnosis_safe
 packages/valory/contracts/gnosis_safe_proxy_factory
 packages/valory/contracts/multisend
 packages/valory/contracts/service_registry
-packages/valory/protocols/abci
-packages/valory/protocols/acn
-packages/valory/protocols/contract_api
-packages/valory/protocols/http
-packages/valory/protocols/ipfs
-packages/valory/protocols/ledger_api
-packages/valory/protocols/tendermint
+packages/valory/protocols
 packages/valory/skills/abstract_abci
 packages/valory/skills/abstract_round_abci
 packages/valory/skills/registration_abci
@@ -39,4 +33,3 @@ packages/open_aea
 packages/fetchai⏎
 /decentralized_watchtower/
 /packages/valory/protocols/__init__.py
-/packages/valory/protocols/default/
