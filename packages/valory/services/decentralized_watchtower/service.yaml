@@ -1,11 +1,11 @@
-name: decentralized_watchtower_goerli
+name: decentralized_watchtower
 author: valory
 version: 0.1.0
 description: A set of agents implementing the Decentralized Watchtower.
 aea_version: '>=1.0.0, <2.0.0'
 license: Apache-2.0
 fingerprint:
-  README.md: bafybeia5wpsl5wqomo4t64vvxme7m6s6mr25nrcsqautoljhbhqdpyrfqq
+  README.md: bafybeianjwmwo57osmquuefpzouyxyl6dt4hnolgmxlvx5pkspdrwhkvk4
 fingerprint_ignore_patterns: []
 agent: valory/decentralized_watchtower:0.1.0:bafybeih7uapbrvp3ecxze4zwt5ozkowsiq4wkapr3dhi5kvbciaueyzonq
 number_of_agents: 4
@@ -29,7 +29,7 @@ extra:
       setup: &id001
         safe_contract_address: ${SAFE_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
         all_participants: ${ALL_PARTICIPANTS:list:["0x0000000000000000000000000000000000000000"]}
-      cow_api_url: ${COW_API_URL:str:https://api.cow.fi/goerli/api/v1}
+      cow_api_url: ${COW_API_URL:str:https://api.cow.fi/mainnet/api/v1}
       service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
       share_tm_config_on_startup: ${USE_ACN:bool:false}
       on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:53}
@@ -38,7 +38,7 @@ extra:
     params:
       args:
         setup: *id001
-        cow_api_url: ${COW_API_URL:str:https://api.cow.fi/goerli/api/v1}
+        cow_api_url: ${COW_API_URL:str:https://api.cow.fi/mainnet/api/v1}
         service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x1cEe30D08943EB58EFF84DD1AB44a6ee6FEff63a}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
         tendermint_p2p_url: ${TENDERMINT_P2P_URL_0:str:node0:26656}
@@ -48,7 +48,7 @@ extra:
     params:
       args:
         setup: *id001
-        cow_api_url: ${COW_API_URL:str:https://api.cow.fi/goerli/api/v1}
+        cow_api_url: ${COW_API_URL:str:https://api.cow.fi/mainnet/api/v1}
         service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
         tendermint_p2p_url: ${TENDERMINT_P2P_URL_1:str:node1:26656}
@@ -58,7 +58,7 @@ extra:
     params:
       args:
         setup: *id001
-        cow_api_url: ${COW_API_URL:str:https://api.cow.fi/goerli/api/v1}
+        cow_api_url: ${COW_API_URL:str:https://api.cow.fi/mainnet/api/v1}
         service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
         tendermint_p2p_url: ${TENDERMINT_P2P_URL_2:str:node2:26656}
@@ -68,7 +68,7 @@ extra:
     params:
       args:
         setup: *id001
-        cow_api_url: ${COW_API_URL:str:https://api.cow.fi/goerli/api/v1}
+        cow_api_url: ${COW_API_URL:str:https://api.cow.fi/mainnet/api/v1}
         service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
         tendermint_p2p_url: ${TENDERMINT_P2P_URL_3:str:node3:26656}
