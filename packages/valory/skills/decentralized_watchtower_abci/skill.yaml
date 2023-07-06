@@ -7,12 +7,12 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeif6ydkujrloa4ihfefwqgadlshqsxb4b24qay6z6htfrsamrpxjpq
-  behaviours.py: bafybeigccxrwocm6hkrya6amwsxrrctbhtcyskxifafktwogkghdcjcfwm
-  composition.py: bafybeicycxdvoe4tfmlsvrm7iwem62deuqdzc5vcig54hwpeiselwywbza
+  behaviours.py: bafybeifnv7atptmdcrxqvl4aiqb27f7dh4jdx27hlprlpdh3pwkw6m42xy
+  composition.py: bafybeiathrq663ilbfyxj5fg6dswi2xqz65hbpcrkbch3qo2txmvh7oi4u
   dialogues.py: bafybeihdhvtmrsj7ridlt6xv24qiyax2otozn6ucxzoci65wwxxfowetdi
   fsm_specification.yaml: bafybeibjdfk3igviai6jpgd7bha3nmdeknwcunc3mcxmiz4dbuqaojkcbe
   handlers.py: bafybeicjq7qnhuccdmqtgfp55btts6syzfkgmrmr4khynfdvlf4wogxwyq
-  models.py: bafybeib4loegcl7jti4emmjt75blmzlg4s3kzbmhonziomjlhhcyhj6fui
+  models.py: bafybeif3bsaxrkxgnby2j4q5m35byxhm77yrcufewqon5klf432loecswm
   payloads.py: bafybeifcoe6rgr5kkh4ka2nvat75vyanfo5du74v7ygryzw6tn5klslp5y
   tests/__init__.py: bafybeic32yxjnisd2cuesp5hwp476tk3uwhnefsrmse5sizy6wh4dk6wce
   tests/test_integration.py: bafybeib3hc3xmwk6kxlu727aeiut7pgfqmswmv2cchlugrrzqwjyxcdxly
@@ -26,6 +26,7 @@ skills:
 - valory/order_monitoring:0.1.0:bafybeifjd3n65hzdtc47jv7dtbbzt7feiqtldpyjrbmxkr2tmrgwsmcjxm
 - valory/registration_abci:0.1.0:bafybeib6fsfur5jnflcveidnaeylneybwazewufzwa5twnwovdqgwtwsxm
 - valory/reset_pause_abci:0.1.0:bafybeibqz7y3i4aepuprhijwdydkcsbqjtpeea6gdzpp5fgc6abrvjz25a
+- valory/termination_abci:0.1.0:bafybeieb3gnvjxxsh73g67m7rivzknwb63xu4qeagpkv7f4mqz33ecikem
 behaviours:
   main:
     args: {}
@@ -101,7 +102,9 @@ models:
       keeper_allowed_retries: 3
       keeper_timeout: 30.0
       max_attempts: 10
+      init_fallback_gas: 0
       max_healthcheck: 120
+      multisend_address: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761'
       on_chain_service_id: null
       request_retry_delay: 1.0
       request_timeout: 10.0
@@ -124,6 +127,7 @@ models:
       tendermint_max_retries: 5
       tendermint_p2p_url: localhost:26656
       tendermint_url: http://localhost:26657
+      termination_sleep: 900
       tx_timeout: 10.0
       use_termination: false
       validate_timeout: 1205

@@ -29,15 +29,18 @@ from packages.valory.skills.decentralized_watchtower_abci.composition import Dec
 from packages.valory.skills.registration_abci.behaviours import RegistrationStartupBehaviour, \
     AgentRegistrationRoundBehaviour
 from packages.valory.skills.reset_pause_abci.behaviours import ResetPauseABCIConsensusBehaviour
+from packages.valory.skills.termination_abci.behaviours import BackgroundBehaviour, TerminationAbciBehaviours
 
 
 class CowOrdersRoundBehaviours(AbstractRoundBehaviour):
     """CowOrdersRoundBehaviours"""
 
     initial_behaviour_cls = RegistrationStartupBehaviour
+    background_behaviour_cls = BackgroundBehaviour
     abci_app_cls = DecentralizedWatchtowerAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = {
         *AgentRegistrationRoundBehaviour.behaviours,
         *CowOrdersRoundBehaviour.behaviours,
         *ResetPauseABCIConsensusBehaviour.behaviours,
+        *TerminationAbciBehaviours.behaviours,
     }
