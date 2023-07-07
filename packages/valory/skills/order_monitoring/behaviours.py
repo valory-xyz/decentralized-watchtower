@@ -27,7 +27,7 @@ from aea.skills.behaviours import SimpleBehaviour
 
 from packages.valory.protocols.default.message import DefaultMessage
 from packages.valory.connections.websocket_client.connection import (
-    CONNECTION_ID,
+    PUBLIC_ID as CONNECTION_ID,
     WebSocketClient,
 )
 from packages.valory.contracts.composable_cow.contract import ComposableCowContract
