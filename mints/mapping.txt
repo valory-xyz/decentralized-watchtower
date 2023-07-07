@@ -1,8 +1,10 @@
 token_id-"component_id"
-X-"contract/valory/composable_cow/0.1.0"
-X-"skill/valory/cow_orders_abci/0.1.0" -> 14
-X-"skill/valory/order_monitoring/0.1.0" -> "protocol/valory/default/1.0.0", 3, "contract/valory/composable_cow/0.1.0", "connection/valory/websocket_client/0.1.0", 10
-X-"skill/valory/decentralized_watchtower_abci/0.1.0" -> 14, "skill/valory/cow_orders_abci/0.1.0", "skill/valory/order_monitoring/0.1.0", 16, 17, 33
+86-"contract/valory/composable_cow/0.1.0"
+87-"skill/valory/cow_orders_abci/0.1.0"
+88-"skill/valory/order_monitoring/0.1.0"
+89-"skill/valory/decentralized_watchtower_abci/0.1.0"
 ---
 token_id-"agent_id"
-X-"agent/valory/decentralized_watchtower/0.1.0" -> 1-7, 39, "protocol/valory/default/1.0.0", 8-11, 50, "connection/valory/websocket_client/0.1.0", 12, 18, 19, 20, "contract/valory/composable_cow/0.1.0", 13, 14, "skill/valory/cow_orders_abci/0.1.0", "skill/valory/order_monitoring/0.1.0", "skill/valory/decentralized_watchtower_abci/0.1.0", 16, 17, 22, 33
+10-"agent/valory/decentralized_watchtower/0.1.0"
+---
+token_id-"service_id"
