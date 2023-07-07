@@ -2,8 +2,7 @@ name: order_monitoring
 author: valory
 version: 0.1.0
 type: skill
-description: The scaffold skill is a simple client to subscribe to transactions using
-  the websocket connection.
+description: A skill used for monitoring ComposableCow orders.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
@@ -21,12 +20,12 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections:
 - valory/ledger:0.19.0:bafybeicgfupeudtmvehbwziqfxiz6ztsxr5rxzvalzvsdsspzz73o5fzfi
-- valory/websocket_client:0.1.0:bafybeicz53kzs5uvyiod2azntl76zwgmpgr22ven4wl5fnwt2m546j3wsu
+- valory/websocket_client:0.1.0:bafybeidxgkpajanybyjrmdnor4au4ttghzyp2ulgm7rttjgopxrjoaszzi
 contracts:
-- valory/composable_cow:0.1.0:bafybeiepmiflob4vagnscveoibjzracjyvul5sxkbrzop2xicamhklhbwi
+- valory/composable_cow:0.1.0:bafybeifxpmwd5nko6bcuzmvnnsudsuig5ntilfhqliwlnesginmmfjedyy
 protocols:
-- valory/default:1.0.0:bafybeiecmut3235aen7wxukllv424f3dysvvlgfmn562kzdunc5hdj3hxu
 - valory/contract_api:1.0.0:bafybeidv6wxpjyb2sdyibnmmum45et4zcla6tl63bnol6ztyoqvpl4spmy
+- valory/default:1.0.0:bafybeiecmut3235aen7wxukllv424f3dysvvlgfmn562kzdunc5hdj3hxu
 skills: []
 behaviours:
   subscriptions:

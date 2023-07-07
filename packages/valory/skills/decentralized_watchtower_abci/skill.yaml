@@ -2,7 +2,7 @@ name: decentralized_watchtower_abci
 author: valory
 version: 0.1.0
 type: skill
-description: The scaffold skill is a scaffold for your own skill implementation.
+description: The chained abci skill for the decentralized watchtower.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
@@ -22,8 +22,8 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiac62ennpw54gns2quk4g3yoaili2mb72nj6c52czobz5dcwj4mwi
-- valory/cow_orders_abci:0.1.0:bafybeihodltbmevssba64xwr5bpzhkbqomv7zaci3lyjq5rfi3yfsth5ea
-- valory/order_monitoring:0.1.0:bafybeia44ywul7zoizztgmkumlar5pph55qidmxegynn4vpy3x7fgifdze
+- valory/cow_orders_abci:0.1.0:bafybeidvdjjff3ii7qfgiudyasga6ws3tgyxhcylo67nevda6furywp5pi
+- valory/order_monitoring:0.1.0:bafybeifskxmobvp7kf7yvmik3jwpstvigwgwy272vtj6nt3643xlfkuzui
 - valory/registration_abci:0.1.0:bafybeib6fsfur5jnflcveidnaeylneybwazewufzwa5twnwovdqgwtwsxm
 - valory/reset_pause_abci:0.1.0:bafybeibqz7y3i4aepuprhijwdydkcsbqjtpeea6gdzpp5fgc6abrvjz25a
 - valory/termination_abci:0.1.0:bafybeieb3gnvjxxsh73g67m7rivzknwb63xu4qeagpkv7f4mqz33ecikem
@@ -98,11 +98,11 @@ models:
         genesis_time: '2022-05-20T16:00:21.735122717Z'
         voting_power: '10'
       history_check_timeout: 1205
+      init_fallback_gas: 0
       ipfs_domain_name: null
       keeper_allowed_retries: 3
       keeper_timeout: 30.0
       max_attempts: 10
-      init_fallback_gas: 0
       max_healthcheck: 120
       multisend_address: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761'
       on_chain_service_id: null

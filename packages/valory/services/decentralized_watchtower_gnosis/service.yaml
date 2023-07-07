@@ -1,13 +1,13 @@
 name: decentralized_watchtower_gnosis
 author: valory
 version: 0.1.0
-description: A set of agents implementing the Decentralized Watchtower.
+description: A set of agents implementing the Decentralized Watchtower on Gnosis.
 aea_version: '>=1.0.0, <2.0.0'
 license: Apache-2.0
 fingerprint:
   README.md: bafybeice2xo5lvncpwkkosb5ssd5motfvdjxrysitk3smcrveavhglwcwy
 fingerprint_ignore_patterns: []
-agent: valory/decentralized_watchtower:0.1.0:bafybeicebvrbu2fuwfbuqnivq6thphi2zclpdjkttd7g7ht44jr4mpgxvi
+agent: valory/decentralized_watchtower:0.1.0:bafybeiecevetwcykh7sv4hkgljbihutujw4fljvm37yj4zemgi7u65idsy
 number_of_agents: 4
 deployment:
   tendermint:
