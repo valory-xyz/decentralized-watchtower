@@ -34,6 +34,7 @@ from packages.valory.skills.cow_orders_abci.rounds import Event as CowOrdersEven
 from packages.valory.skills.decentralized_watchtower_abci.composition import DecentralizedWatchtowerAbciApp
 from packages.valory.skills.registration_abci.rounds import Event as RegistrationEvent
 from packages.valory.skills.reset_pause_abci.rounds import Event as ResetPauseEvent
+from packages.valory.skills.termination_abci.models import TerminationParams
 
 MARGIN = 5
 MULTIPLIER = 2
@@ -68,5 +69,5 @@ class SharedState(BaseSharedState):
 
 
 
-class Params(CowOrdersParams):
+class Params(CowOrdersParams, TerminationParams):
     """Parameters."""

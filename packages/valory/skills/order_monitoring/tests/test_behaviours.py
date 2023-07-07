@@ -22,7 +22,7 @@
 
 from unittest.mock import MagicMock
 
-from packages.fetchai.protocols.default.message import DefaultMessage
+from packages.valory.protocols.default.message import DefaultMessage
 from packages.valory.skills.order_monitoring import PUBLIC_ID
 from packages.valory.skills.order_monitoring.behaviours import MonitoringBehaviour
 from packages.valory.skills.order_monitoring.handlers import (
