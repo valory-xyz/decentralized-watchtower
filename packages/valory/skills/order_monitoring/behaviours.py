@@ -25,7 +25,7 @@ from typing import Any, Dict, List, Optional, cast
 from aea.mail.base import Envelope
 from aea.skills.behaviours import SimpleBehaviour
 
-from packages.fetchai.protocols.default.message import DefaultMessage
+from packages.valory.protocols.default.message import DefaultMessage
 from packages.valory.connections.websocket_client.connection import (
     CONNECTION_ID,
     WebSocketClient,

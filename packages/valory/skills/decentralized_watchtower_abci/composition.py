@@ -25,6 +25,8 @@ from packages.valory.skills.registration_abci.rounds import (
     FinishedRegistrationRound, RegistrationStartupRound, AgentRegistrationAbciApp)
 from packages.valory.skills.reset_pause_abci.rounds import FinishedResetAndPauseRound, FinishedResetAndPauseErrorRound, \
     ResetPauseAbciApp, ResetAndPauseRound
+from packages.valory.skills.termination_abci.rounds import BackgroundRound, TerminationAbciApp
+from packages.valory.skills.termination_abci.rounds import Event as TerminationEvent
 
 abci_app_transition_mapping: AbciAppTransitionMapping = {
     FinishedRegistrationRound: SelectOrdersRound,
@@ -40,4 +42,8 @@ DecentralizedWatchtowerAbciApp = chain(
         ResetPauseAbciApp,
     ),
     abci_app_transition_mapping,
+).add_termination(
+    background_round_cls=BackgroundRound,
+    termination_event=TerminationEvent.TERMINATE,
+    termination_abci_app=TerminationAbciApp,
 )
