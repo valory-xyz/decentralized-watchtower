@@ -2,7 +2,8 @@ name: composable_cow
 author: valory
 version: 0.1.0
 type: contract
-description: Gnosis Safe (GnosisSafeL2) contract
+description: A package for ComposableCoW contract. A contract that allows users to
+  create multiple conditional orders.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:

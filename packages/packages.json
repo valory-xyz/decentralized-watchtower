@@ -1,13 +1,13 @@
 {
     "dev": {
-        "skill/valory/cow_orders_abci/0.1.0": "bafybeihodltbmevssba64xwr5bpzhkbqomv7zaci3lyjq5rfi3yfsth5ea",
-        "skill/valory/decentralized_watchtower_abci/0.1.0": "bafybeiequ2wdroxxtps7dfvosmycehqx6if26vslkiqqmdudmiham6jdru",
-        "skill/valory/order_monitoring/0.1.0": "bafybeia44ywul7zoizztgmkumlar5pph55qidmxegynn4vpy3x7fgifdze",
-        "contract/valory/composable_cow/0.1.0": "bafybeiepmiflob4vagnscveoibjzracjyvul5sxkbrzop2xicamhklhbwi",
-        "agent/valory/decentralized_watchtower/0.1.0": "bafybeicebvrbu2fuwfbuqnivq6thphi2zclpdjkttd7g7ht44jr4mpgxvi",
-        "service/valory/decentralized_watchtower_goerli/0.1.0": "bafybeibh33t3z5p2u33huqfoktzgftrlzjlseh5psqjw6vfgha3xqi6hxm",
-        "service/valory/decentralized_watchtower/0.1.0": "bafybeicox5c6u6es6igyulyt6rvo4ddym6secyl5a3y7566hpdajvh6wvi",
-        "service/valory/decentralized_watchtower_gnosis/0.1.0": "bafybeibijp34lfhojai5fsxaahxbxj4h7yxlexxcpmtjhbvn7xjoczzjhe"
+        "skill/valory/cow_orders_abci/0.1.0": "bafybeibwemypildhzrmlytuxzuk3yazrggwci77garsjigi2oxtbyxftiu",
+        "skill/valory/decentralized_watchtower_abci/0.1.0": "bafybeicyn7zn6vniivksfhonccrcvyhr46wehivqlouzt54givyxmdbno4",
+        "skill/valory/order_monitoring/0.1.0": "bafybeia67dmifjomf246u2dilxsawkcy455cz5d7vxnlvj42wykxowekre",
+        "contract/valory/composable_cow/0.1.0": "bafybeifxpmwd5nko6bcuzmvnnsudsuig5ntilfhqliwlnesginmmfjedyy",
+        "agent/valory/decentralized_watchtower/0.1.0": "bafybeifhygfz7iq2xx5vlzjfs4upaa77pkhuwenfptovwjngov3tdz6uha",
+        "service/valory/decentralized_watchtower_goerli/0.1.0": "bafybeic3db2bpnrn7q3kvvc7blq7wjhthjpk5ifeuca25rk5frbrojz4pi",
+        "service/valory/decentralized_watchtower/0.1.0": "bafybeihjp5ysfr64kjaogp2rmjaozcrqya6euhqdqedvhqm575cuq6tyty",
+        "service/valory/decentralized_watchtower_gnosis/0.1.0": "bafybeidvmjm6ckyvrmpwxd6krnz4r2f5gcifyg5pbujn5y7dh4f6tgja54"
     },
     "third_party": {
         "protocol/valory/default/1.0.0": "bafybeiecmut3235aen7wxukllv424f3dysvvlgfmn562kzdunc5hdj3hxu",
