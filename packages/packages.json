@@ -1,16 +1,16 @@
 {
     "dev": {
         "skill/valory/cow_orders_abci/0.1.0": "bafybeihodltbmevssba64xwr5bpzhkbqomv7zaci3lyjq5rfi3yfsth5ea",
-        "skill/valory/decentralized_watchtower_abci/0.1.0": "bafybeibyjfpwgkfontqechpaxz2ue47bnn4jb5m2lziqttiqspo6bxnmmi",
-        "skill/valory/order_monitoring/0.1.0": "bafybeifjd3n65hzdtc47jv7dtbbzt7feiqtldpyjrbmxkr2tmrgwsmcjxm",
+        "skill/valory/decentralized_watchtower_abci/0.1.0": "bafybeiequ2wdroxxtps7dfvosmycehqx6if26vslkiqqmdudmiham6jdru",
+        "skill/valory/order_monitoring/0.1.0": "bafybeia44ywul7zoizztgmkumlar5pph55qidmxegynn4vpy3x7fgifdze",
         "contract/valory/composable_cow/0.1.0": "bafybeiepmiflob4vagnscveoibjzracjyvul5sxkbrzop2xicamhklhbwi",
-        "agent/valory/decentralized_watchtower/0.1.0": "bafybeiac6xguz6p6j3nylycs4z6vpulsriqvjov6uy5i5xaedwehownl4i",
-        "service/valory/decentralized_watchtower_goerli/0.1.0": "bafybeic2dlk2ps6kxwmzt4kfapvrppxe6jnglgmovj33t5dhhscr4vpxwm",
-        "service/valory/decentralized_watchtower/0.1.0": "bafybeidy5idqblkezemcyemfhrq54eov6o7zivro5bb62jgzjzogsgbglm",
-        "service/valory/decentralized_watchtower_gnosis/0.1.0": "bafybeie3uok6u456au7fdbovcflmig3yq37byahrirwrgsdcc444tz5zt4"
+        "agent/valory/decentralized_watchtower/0.1.0": "bafybeicebvrbu2fuwfbuqnivq6thphi2zclpdjkttd7g7ht44jr4mpgxvi",
+        "service/valory/decentralized_watchtower_goerli/0.1.0": "bafybeibh33t3z5p2u33huqfoktzgftrlzjlseh5psqjw6vfgha3xqi6hxm",
+        "service/valory/decentralized_watchtower/0.1.0": "bafybeicox5c6u6es6igyulyt6rvo4ddym6secyl5a3y7566hpdajvh6wvi",
+        "service/valory/decentralized_watchtower_gnosis/0.1.0": "bafybeibijp34lfhojai5fsxaahxbxj4h7yxlexxcpmtjhbvn7xjoczzjhe"
     },
     "third_party": {
-        "protocol/valory/default/1.0.0": "bafybeiczqi35fcqpk7pamy6dywp2eyt7lumirael6bosfco572jcjg7d7q",
+        "protocol/valory/default/1.0.0": "bafybeiecmut3235aen7wxukllv424f3dysvvlgfmn562kzdunc5hdj3hxu",
         "protocol/valory/abci/0.1.0": "bafybeig3dj5jhsowlvg3t73kgobf6xn4nka7rkttakdb2gwsg5bp7rt7q4",
         "connection/valory/abci/0.1.0": "bafybeihofnsokowicviac6yz3uhur52l3mf54s2hz4i2je5ie4vlruouga",
         "protocol/valory/contract_api/1.0.0": "bafybeidv6wxpjyb2sdyibnmmum45et4zcla6tl63bnol6ztyoqvpl4spmy",
@@ -34,6 +34,6 @@
         "skill/valory/termination_abci/0.1.0": "bafybeieb3gnvjxxsh73g67m7rivzknwb63xu4qeagpkv7f4mqz33ecikem",
         "protocol/valory/ipfs/0.1.0": "bafybeic72ncgqbzoz2guj4p4yjqulid7mv6yroeh65hxznloamoveeg7hq",
         "connection/valory/ipfs/0.1.0": "bafybeiatjutuiav7oxl4hszy3oypdwuetr6crjpminush54c5k4nbeciv4",
-        "connection/valory/websocket_client/0.1.0": "bafybeihdntezhot6evwdpkyjbgucmppllyf4vbg45ud7mbfj2opetxaowe"
+        "connection/valory/websocket_client/0.1.0": "bafybeicz53kzs5uvyiod2azntl76zwgmpgr22ven4wl5fnwt2m546j3wsu"
     }
 }

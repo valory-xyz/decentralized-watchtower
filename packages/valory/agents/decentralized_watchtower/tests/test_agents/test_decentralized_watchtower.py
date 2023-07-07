@@ -64,6 +64,7 @@ ORDER_CHECK_STRINGS = (
 )
 
 
+@pytest.mark.e2e
 @pytest.mark.parametrize("nb_nodes", (1,))
 class TestWatchtowerSingleAgent(
     BaseTestDecentralizedWatchtowerEnd2End,
@@ -91,6 +92,7 @@ class TestWatchtowerSingleAgent(
     use_benchmarks = True
 
 
+@pytest.mark.e2e
 @pytest.mark.parametrize("nb_nodes", (2,))
 class TestWatchtowerTwoAgents(
     BaseTestDecentralizedWatchtowerEnd2End,
@@ -118,6 +120,7 @@ class TestWatchtowerTwoAgents(
     use_benchmarks = True
 
 
+@pytest.mark.e2e
 @pytest.mark.parametrize("nb_nodes", (4,))
 class TestWatchtowerFourAgents(
     BaseTestDecentralizedWatchtowerEnd2End,
