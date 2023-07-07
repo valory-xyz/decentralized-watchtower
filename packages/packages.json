@@ -1,13 +1,13 @@
 {
     "dev": {
-        "skill/valory/cow_orders_abci/0.1.0": "bafybeidvdjjff3ii7qfgiudyasga6ws3tgyxhcylo67nevda6furywp5pi",
-        "skill/valory/decentralized_watchtower_abci/0.1.0": "bafybeibo6q3jfvxsj2r6ohuxre27wif4gxhantzumxmug4a7wd2wv7kcia",
+        "skill/valory/cow_orders_abci/0.1.0": "bafybeibwemypildhzrmlytuxzuk3yazrggwci77garsjigi2oxtbyxftiu",
+        "skill/valory/decentralized_watchtower_abci/0.1.0": "bafybeihrz72nyopngxnm3let6gteg4vw7tv6fts7zvqrzsk3r6melx2rdq",
         "skill/valory/order_monitoring/0.1.0": "bafybeifskxmobvp7kf7yvmik3jwpstvigwgwy272vtj6nt3643xlfkuzui",
         "contract/valory/composable_cow/0.1.0": "bafybeifxpmwd5nko6bcuzmvnnsudsuig5ntilfhqliwlnesginmmfjedyy",
-        "agent/valory/decentralized_watchtower/0.1.0": "bafybeiecevetwcykh7sv4hkgljbihutujw4fljvm37yj4zemgi7u65idsy",
-        "service/valory/decentralized_watchtower_goerli/0.1.0": "bafybeihbpjqgrgl3d2nbul237lt2pm6tnsc6o5ep5ajon5nzvgborduapq",
-        "service/valory/decentralized_watchtower/0.1.0": "bafybeifqbt3chc67payiswdieqqrxeny2i4ylpdruztaf3jyqroeegmoka",
-        "service/valory/decentralized_watchtower_gnosis/0.1.0": "bafybeigzbt7yvqpsjswhcy3ugzwjzftobizp3wz5rrkm5emmckldp5eaxe"
+        "agent/valory/decentralized_watchtower/0.1.0": "bafybeia7fyxsi3dvio57jwrccljcimwmr2fmblpztvsrloipqcnctdkcpm",
+        "service/valory/decentralized_watchtower_goerli/0.1.0": "bafybeiflwmww62ciexwciomjjuswgdkulqsvm43s4kh4pgzuld6fplihsi",
+        "service/valory/decentralized_watchtower/0.1.0": "bafybeihidwyge6nu5io56oyytut2rbgidiuptgcja4aafpvz26giyhsvm4",
+        "service/valory/decentralized_watchtower_gnosis/0.1.0": "bafybeic5dctap2uyngwierhz54o4aqrk3wzczznzwr2lwf4areftdr2x64"
     },
     "third_party": {
         "protocol/valory/default/1.0.0": "bafybeiecmut3235aen7wxukllv424f3dysvvlgfmn562kzdunc5hdj3hxu",
