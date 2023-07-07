@@ -7,7 +7,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeice2xo5lvncpwkkosb5ssd5motfvdjxrysitk3smcrveavhglwcwy
 fingerprint_ignore_patterns: []
-agent: valory/decentralized_watchtower:0.1.0:bafybeia7fyxsi3dvio57jwrccljcimwmr2fmblpztvsrloipqcnctdkcpm
+agent: valory/decentralized_watchtower:0.1.0:bafybeihribk3sk7kf3sliioun3hvjsvbyeppl7uuc5zicbnkhvrldps5em
 number_of_agents: 4
 deployment:
   tendermint:
@@ -82,7 +82,7 @@ config:
       address: ${HTTP_RPC:str:http://localhost:8545}
       chain_id: ${CHAIN_ID:int:5}
 ---
-public_id: valory/websocket_client:0.1.0:bafybeiexove4oqyhoae5xmk2hilskthosov5imdp65olpgj3cfrepbouyy
+public_id: valory/websocket_client:0.1.0:bafybeicz53kzs5uvyiod2azntl76zwgmpgr22ven4wl5fnwt2m546j3wsu
 type: connection
 config:
   endpoint: ${WS_RPC:str:ws://localhost:8545}
