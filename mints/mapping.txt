@@ -8,3 +8,7 @@ token_id-"agent_id"
 10-"agent/valory/decentralized_watchtower/0.1.0"
 ---
 token_id-"service_id"
+07-"service/valory/decentralized_watchtower/0.1.0"
+---
+token_id-"service_id" (Gnosis)
+07-"service/valory/decentralized_watchtower/0.1.0"
