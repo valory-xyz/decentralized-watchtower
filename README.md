@@ -1,6 +1,11 @@
 # Decentralized Watchtower
 
-Checkout the original Decentralized Watchtower proposal [here](https://forum.cow.fi/t/grant-application-decentralizing-cow-s-watchtower/1681).
+This project implements a decentralized Watchtower for CoW’s [Smart Contract Orders](https://blog.cow.fi/tutorial-creating-smart-orders-on-cow-protocol-683a5f9f4763?gi=892db4501ab6) (SCOs) using [Autonolas](https://olas.network/) technology. The SCOs allow autonomous trading based on predefined rules and strategies. The Watchtower monitors the activity of SCOs, registers new contracts, and forwards tradeable orders to the CoW Protocol API. 
+This implementation intentds to strike a balance between decentralization, efficiency, and scalability, contributing to increasingly the autonomy, security, and transparency of the off-chain components for CoW's trading ecosystem.
+
+The project leverages Autonolas technology to implement the Watchtower as a multi-agent system, enabling it to operate efficiently while minimizing the trust assumptions involved with running off-chain architecture. 
+
+More details can be found [here](https://forum.cow.fi/t/grant-application-decentralizing-cow-s-watchtower/1681).
 
 ## Developing
 
