@@ -6,8 +6,14 @@ aea_version: '>=1.0.0, <2.0.0'
 license: Apache-2.0
 fingerprint:
   README.md: bafybeia5wpsl5wqomo4t64vvxme7m6s6mr25nrcsqautoljhbhqdpyrfqq
+  abci_build/agent_keys/agent_0_private_key.yaml: bafybeihmb7zed5emxj47k7a4zejxfezgssa3hp7tnijfcblnc5co6qiywm
+  abci_build/agent_keys/agent_1_private_key.yaml: bafybeidohfqtu2cnbluevxluliq726cfwzqfbfnbuaqhxkpqd2gr5txury
+  abci_build/agent_keys/agent_2_private_key.yaml: bafybeifwcvuf3luhch2zwkor5v3xncnkeidk65bsjpgvfsrt3idwqaq43m
+  abci_build/agent_keys/agent_3_private_key.yaml: bafybeihdeiozyrk2oxzwjhl5o5e2evckwffwcsojlgmduowcavfq23y52y
+  abci_build/build.yaml: bafybeib22umpei2q4mewpihtixb746zaklcqgpqgqnvb4yrzwsfi2cnjmu
+  keys.json: bafybeig722ivfr7c4o65haeeat7xe2l6i7lalb6ls5uu6rj7p6th2drjh4
 fingerprint_ignore_patterns: []
-agent: valory/decentralized_watchtower:0.1.0:bafybeifhygfz7iq2xx5vlzjfs4upaa77pkhuwenfptovwjngov3tdz6uha
+agent: valory/decentralized_watchtower:0.1.0:bafybeih2qfqtjqieybd5ek4nqgvsfy447ckm6vbd72fm7ikn4ivv7j4lcm
 number_of_agents: 4
 deployment:
   tendermint:
@@ -27,12 +33,12 @@ extra:
   params_args:
     args:
       setup: &id001
-        safe_contract_address: ${SAFE_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
-        all_participants: ${ALL_PARTICIPANTS:list:["0x0000000000000000000000000000000000000000"]}
+        safe_contract_address: ${SAFE_CONTRACT_ADDRESS:str:0x755Eb42Cb214203c9be8BaF65F6eF0735F766128}
+        all_participants: ${ALL_PARTICIPANTS:list:["0x7bE95aA9Ab4676fE1925505cc547BC245C03Ce59","0xff26bf2A5A76E106a1AD444f28f2c6C225C4C945","0x491F8bB383dC41B880A66D342B083A9Ed2E2cC3e","0xad4AAa7B0C5689467bDa60FAf901b6Bcf1C3Fa41"]}
       cow_api_url: ${COW_API_URL:str:https://api.cow.fi/goerli/api/v1}
-      service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
+      service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x1cEe30D08943EB58EFF84DD1AB44a6ee6FEff63a}
       share_tm_config_on_startup: ${USE_ACN:bool:false}
-      on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:53}
+      on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:54}
 0:
   models:
     params:
@@ -42,50 +48,50 @@ extra:
         service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x1cEe30D08943EB58EFF84DD1AB44a6ee6FEff63a}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
         tendermint_p2p_url: ${TENDERMINT_P2P_URL_0:str:node0:26656}
-        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:53}
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:54}
 1:
   models:
     params:
       args:
         setup: *id001
         cow_api_url: ${COW_API_URL:str:https://api.cow.fi/goerli/api/v1}
-        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
+        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x1cEe30D08943EB58EFF84DD1AB44a6ee6FEff63a}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
         tendermint_p2p_url: ${TENDERMINT_P2P_URL_1:str:node1:26656}
-        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:53}
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:54}
 2:
   models:
     params:
       args:
         setup: *id001
         cow_api_url: ${COW_API_URL:str:https://api.cow.fi/goerli/api/v1}
-        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
+        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x1cEe30D08943EB58EFF84DD1AB44a6ee6FEff63a}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
         tendermint_p2p_url: ${TENDERMINT_P2P_URL_2:str:node2:26656}
-        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:53}
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:54}
 3:
   models:
     params:
       args:
         setup: *id001
         cow_api_url: ${COW_API_URL:str:https://api.cow.fi/goerli/api/v1}
-        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
+        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x1cEe30D08943EB58EFF84DD1AB44a6ee6FEff63a}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
         tendermint_p2p_url: ${TENDERMINT_P2P_URL_3:str:node3:26656}
-        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:53}
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:54}
 ---
 public_id: valory/ledger:0.19.0
 type: connection
 config:
   ledger_apis:
     ethereum:
-      address: ${HTTP_RPC:str:http://localhost:8545}
+      address: ${HTTP_RPC:str:https://eth-goerli.g.alchemy.com/v2/K7Qj3E2hj0v1JWVFFJn6U_smZ2JUp-gh}
       chain_id: ${CHAIN_ID:int:5}
 ---
 public_id: valory/websocket_client:0.1.0:bafybeicz53kzs5uvyiod2azntl76zwgmpgr22ven4wl5fnwt2m546j3wsu
 type: connection
 config:
-  endpoint: ${WS_RPC:str:ws://localhost:8545}
+  endpoint: ${WS_RPC:str:wss://eth-goerli.g.alchemy.com/v2/K7Qj3E2hj0v1JWVFFJn6U_smZ2JUp-gh}
 ---
 public_id: valory/order_monitoring:0.1.0:bafybeiby5ajjc7a3m2uq73d2pprx6enqt4ghfcq2gkmrtsr75e4d4napi4
 type: skill
@@ -97,7 +103,7 @@ handlers:
   new_event:
     args:
       contract_to_monitor: ${CONTRACT_TO_MONITOR:str:0xFf82123dFB52ab75C417195c5fDB87630145ae81}
-      websocket_provider: ${WS_RPC:str:ws://localhost:8545}
+      websocket_provider: ${WS_RPC:str:wss://eth-goerli.g.alchemy.com/v2/K7Qj3E2hj0v1JWVFFJn6U_smZ2JUp-gh}
 models:
   params:
     args:

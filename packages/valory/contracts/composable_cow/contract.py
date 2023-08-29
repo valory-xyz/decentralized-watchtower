@@ -135,14 +135,14 @@ class ComposableCowContract(Contract):
     ) -> JSONLike:
         """Process order events"""
         contract = cls.get_instance(ledger_api, contract_address)
-        receipt = ledger_api.api.eth.getTransactionReceipt(tx_hash)
+        receipt = ledger_api.api.eth.get_transaction_receipt(tx_hash)
         conditional_orders = [
             {**event.get("args", {}), "composableCow": event.address}
-            for event in contract.events.ConditionalOrderCreated().processReceipt(receipt)
+            for event in contract.events.ConditionalOrderCreated().process_receipt(receipt)
         ]
         merkle_root_set = [
             {**event.get("args", {}), "composableCow": event.address}
-            for event in contract.events.MerkleRootSet().processReceipt(receipt)
+            for event in contract.events.MerkleRootSet().process_receipt(receipt)
         ]
         data = {
             "conditional_orders": conditional_orders,

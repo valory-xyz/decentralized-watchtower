@@ -81,8 +81,9 @@ class CowOrdersBaseBehaviour(BaseBehaviour, ABC):
         :param order: the order
         """
         orders = self.orders
-        orders.remove(order)
-        self.context.shared_state[ORDERS] = orders
+        if order in orders:
+            orders.remove(order)
+            self.context.shared_state[ORDERS] = orders
 
     @property
     def synchronized_data(self) -> SynchronizedData:
