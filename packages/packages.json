@@ -1,15 +1,16 @@
 {
     "dev": {
         "skill/valory/cow_orders_abci/0.1.0": "bafybeiddlvxmgg2px7cgo24lnrwwha62udfjcok6p7whhw6ojj3iag7zzi",
-        "skill/valory/decentralized_watchtower_abci/0.1.0": "bafybeicmiorucw7nvii3sulj3rlrk5ozlpsgdmw3l5vq6vxu5z2i4m7pni",
-        "skill/valory/order_monitoring/0.1.0": "bafybeid2bk23zkk745twgab7h7vltxphcuwbx6urd3ht2irjxycgszuice",
+        "skill/valory/decentralized_watchtower_abci/0.1.0": "bafybeied7cxbtmosvajxuhpmqqkkwxgp7trg75cdxcmfrnvhgjnnrlbpve",
+        "skill/valory/order_monitoring/0.1.0": "bafybeifv4pjvwkowg63q3bucbzxewzl5flkyrvux3rudoljgd6thtxc67i",
         "contract/valory/composable_cow/0.1.0": "bafybeifsi2mwo3r4qh5oqccpbc47llz3tkxyodj7gtrnrm5z4bekv63che",
-        "agent/valory/decentralized_watchtower/0.1.0": "bafybeih2qfqtjqieybd5ek4nqgvsfy447ckm6vbd72fm7ikn4ivv7j4lcm",
-        "service/valory/decentralized_watchtower_goerli/0.1.0": "bafybeicg7r4nmn2qwn6ypixvmk6h6j777vldg5ufadgakqoyj55in5cd74",
-        "service/valory/decentralized_watchtower/0.1.0": "bafybeih5mafsbmkjg2zzhkbxxmyoijkddxzl7n7owb7aiudbjqyud4ko5e",
-        "service/valory/decentralized_watchtower_gnosis/0.1.0": "bafybeihsvgqr6k5bjyisfoa4lmbrlayagh5twzu6rrakqtdbhllznzkdty"
+        "agent/valory/decentralized_watchtower/0.1.0": "bafybeifwat2npsa4tukim4qppgap2nuckjkwe76n33jsjnvl243mjxrmlu",
+        "service/valory/decentralized_watchtower_goerli/0.1.0": "bafybeibhix5jmpoc2dyqtfshvqlda7jjn5ikzvs7lew6sbndzknh7uipfu",
+        "service/valory/decentralized_watchtower/0.1.0": "bafybeiba27ogufxvbrf4z63gtcehj6kvovn4nlifz4nhpp6zne5yrvebmu",
+        "service/valory/decentralized_watchtower_gnosis/0.1.0": "bafybeigpdw3om5euf5k47s6fq3rlrngjccymmcg3fy74nqt477uzvbxeke"
     },
     "third_party": {
+        "connection/fetchai/http_server/0.22.0": "bafybeihp5umafxzx45aad5pj7s3343se2wjkgnbirt4pybrape22swm6de",
         "protocol/valory/default/1.0.0": "bafybeiecmut3235aen7wxukllv424f3dysvvlgfmn562kzdunc5hdj3hxu",
         "protocol/valory/abci/0.1.0": "bafybeigootsvqpk6th5xpdtzanxum3earifrrezfyhylfrit7yvqdrtgpe",
         "connection/valory/abci/0.1.0": "bafybeicasheudousm2unmh5qmy5n3qdq5hmkg2j42fxfm2crxmgq3nzjkq",

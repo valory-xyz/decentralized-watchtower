@@ -17,6 +17,7 @@ fingerprint:
   tests/test_agents/test_decentralized_watchtower.py: bafybeiackbxkmxhmpnfe5kvtfksq3lktaa5ebtwruowkzu72aav54ip2ci
 fingerprint_ignore_patterns: []
 connections:
+- fetchai/http_server:0.22.0:bafybeihp5umafxzx45aad5pj7s3343se2wjkgnbirt4pybrape22swm6de
 - valory/abci:0.1.0:bafybeicasheudousm2unmh5qmy5n3qdq5hmkg2j42fxfm2crxmgq3nzjkq
 - valory/http_client:0.23.0:bafybeieoeuy4brzimtnubmokwirhrx27ezls6cdnl5qik4rkykfle3nn2y
 - valory/ipfs:0.1.0:bafybeiau32pzy55ta6ugl2bebevlxudal6pnlfomhplfm5mph6reaw3krq
@@ -43,8 +44,8 @@ skills:
 - valory/abstract_abci:0.1.0:bafybeicg7dv7cff34nv2k2z47c4yp4kddsxp3wozonzow6tnvfvwndz3cy
 - valory/abstract_round_abci:0.1.0:bafybeigxjcci53vwytymzlhr37436yvenh7jup4astrn7dgyixo24aq2pq
 - valory/cow_orders_abci:0.1.0:bafybeiddlvxmgg2px7cgo24lnrwwha62udfjcok6p7whhw6ojj3iag7zzi
-- valory/decentralized_watchtower_abci:0.1.0:bafybeicmiorucw7nvii3sulj3rlrk5ozlpsgdmw3l5vq6vxu5z2i4m7pni
-- valory/order_monitoring:0.1.0:bafybeid2bk23zkk745twgab7h7vltxphcuwbx6urd3ht2irjxycgszuice
+- valory/decentralized_watchtower_abci:0.1.0:bafybeied7cxbtmosvajxuhpmqqkkwxgp7trg75cdxcmfrnvhgjnnrlbpve
+- valory/order_monitoring:0.1.0:bafybeifv4pjvwkowg63q3bucbzxewzl5flkyrvux3rudoljgd6thtxc67i
 - valory/registration_abci:0.1.0:bafybeibc4kczqbh23sc6tufrzn3axmhp3vjav7fa3u6cnpvolrbbc2fd7i
 - valory/reset_pause_abci:0.1.0:bafybeid445uy6wwvugf3byzl7r73c7teu6xr5ezxb4h7cxbenghg3copvy
 - valory/termination_abci:0.1.0:bafybeiguy7pkrcptg6c754ioig4mlkr7truccym3fpv6jwpjx2tmpdbzhi
@@ -173,3 +174,9 @@ models:
       use_polling: ${bool:false}
       composable_cow_address: ${str:0x9A676e781A523b5d0C0e43731313A708CB607508}
       event_topics: ${list:["0x2cceac5555b0ca45a3744ced542f54b56ad2eb45e521962372eef212a2cbf361"]}
+---
+public_id: fetchai/http_server:0.22.0:bafybeihp5umafxzx45aad5pj7s3343se2wjkgnbirt4pybrape22swm6de
+type: connection
+config:
+  host: 0.0.0.0
+  target_skill_id: valory/decentralized_watchtower_abci:0.1.0

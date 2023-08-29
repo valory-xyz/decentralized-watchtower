@@ -13,7 +13,7 @@ fingerprint:
   abci_build/build.yaml: bafybeib22umpei2q4mewpihtixb746zaklcqgpqgqnvb4yrzwsfi2cnjmu
   keys.json: bafybeig722ivfr7c4o65haeeat7xe2l6i7lalb6ls5uu6rj7p6th2drjh4
 fingerprint_ignore_patterns: []
-agent: valory/decentralized_watchtower:0.1.0:bafybeih2qfqtjqieybd5ek4nqgvsfy447ckm6vbd72fm7ikn4ivv7j4lcm
+agent: valory/decentralized_watchtower:0.1.0:bafybeifwat2npsa4tukim4qppgap2nuckjkwe76n33jsjnvl243mjxrmlu
 number_of_agents: 4
 deployment:
   tendermint:
