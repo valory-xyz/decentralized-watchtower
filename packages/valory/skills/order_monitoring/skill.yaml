@@ -12,9 +12,9 @@ fingerprint:
   handlers.py: bafybeiaaje5wep553g3c7xkteduj44yvi7od46l4fkbpikroeqrboogofq
   models.py: bafybeibp2p2afluv7n6cfeofbglcrbduimhk43vbsezomslk4hfpvuujgq
   order_utils.py: bafybeic77blgy6vljjl5ykrgyyn24ljzbjweu3hic4gqnjve2m6a5uldhe
-  sig_utils/__init__.py: bafybeiftu27piztiu5bfxbvhqsbppgtseykyfot6wtlrrzeuzya6zrgpky
-  sig_utils/encoding.py: bafybeif7aoitjbqfp37kri3ubwq2dcoc6r5tiqdfrth6dcryx4ngccxa2m
-  sig_utils/utils.py: bafybeievazopihpetimsmi5xyyivskff2znaqjathhupss2bbgqxatiszm
+  sig_utils/__init__.py: bafybeihbsg7wxo2z3urpk26w5u46u2bsdgjxpsi4stgdbq3ginrkz4qxdq
+  sig_utils/encoding.py: bafybeibveisf2d264uiquxiyfp7pl22xzo5ruohu7ezxviccuug7ni6czi
+  sig_utils/utils.py: bafybeid3kny7nb2ab7fkz5x7qhd73ha2dqqjakqfm6ooxqhitkzefktmaa
   tests/__init__.py: bafybeib2dgq23y4dvdpvftmnfcruocssbjoec3zrcdpugs6sxoxeh5lce4
   tests/test_behaviours.py: bafybeicsxep75tq4fheoljaugywvkpvzzvhxkslpe7bc4tbujauthvr5le
   tests/test_dialogues.py: bafybeiftjdqbjhsvuqgcxdlht5dj4gimro4v7f4ya2ohk5qmkvur3egtwa
