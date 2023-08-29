@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiglilmcvbbxt6oczjbyayv6w6cr5j6wh4dkhgupej4jkjsedjwaiu
-  behaviours.py: bafybeidai3pzxzqjul6trlcqdts5tszpdn6o4mn2lssxwhthz3x5fe2zta
+  behaviours.py: bafybeicrq7sl6p6hctsoax35rtkor6jnmdsyt4bo3jpjuao5wkluxa5mte
   dialogues.py: bafybeic7fqe7r3culyuwprdyxfa4g7szku66wtl2kiqzm5vd7sr7cfgxfu
   handlers.py: bafybeiaaje5wep553g3c7xkteduj44yvi7od46l4fkbpikroeqrboogofq
   models.py: bafybeibp2p2afluv7n6cfeofbglcrbduimhk43vbsezomslk4hfpvuujgq
@@ -61,5 +61,5 @@ models:
     class_name: Params
 dependencies:
   eth_abi: {}
-  web3: {}
+  open-aea-web3: {}
 is_abstract: false

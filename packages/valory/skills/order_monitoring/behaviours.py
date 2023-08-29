@@ -92,9 +92,9 @@ class MonitoringBehaviour(SimpleBehaviour):
                 "id": order.id,
                 "owner": owner,
                 "params": [
-                    order.params.handler,
-                    order.params.salt,
-                    order.params.staticInput,
+                    bytes.fromhex(order.params.handler[2:]),
+                    bytes.fromhex(order.params.salt[2:]),
+                    bytes.fromhex(order.params.staticInput[2:]),
                 ],
                 "offchainInput": order.offchainInput,
                 "proof": order.proof if order.proof is not None else [],
