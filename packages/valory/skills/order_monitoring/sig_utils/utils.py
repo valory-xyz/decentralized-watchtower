@@ -19,7 +19,7 @@
 """This module contains an implementation of py_eth_utils utils."""
 
 try:
-    from Crypto.Hash import keccak
+    from Crypto.Hash import keccak  # nosec
 
     def sha3_256(x: bytes) -> bytes:
         """Compute the SHA3-256 hash of the input bytes."""
@@ -205,7 +205,7 @@ def debug(label: str) -> callable:
 
     def deb(f: callable) -> callable:
         def inner(*args, **kwargs) -> any:
-            i = random.randrange(1000000)
+            i = random.randrange(1000000)  # nosec
             print(label, i, "start", args)
             x = f(*args, **kwargs)
             print(label, i, "end", x)
