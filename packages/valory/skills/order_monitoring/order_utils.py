@@ -25,9 +25,12 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
 from eth_abi.packed import encode_packed
-from py_eth_sig_utils.eip712.encoding import create_struct_hash
-from py_eth_sig_utils.utils import sha3
 from web3 import Web3
+
+from packages.valory.skills.order_monitoring.sig_utils.encoding import (
+    create_struct_hash,
+)
+from packages.valory.skills.order_monitoring.sig_utils.utils import sha3
 
 
 ORDER_TYPE_FIELDS = [
@@ -209,6 +212,6 @@ def extract_order_uid_params(order_uid: bytes) -> OrderUidParams:
     if len(order_uid) != ORDER_UID_LENGTH:
         raise ValueError("Invalid order UID length")
     order_digest = order_uid[:32]
-    owner = Web3.toChecksumAddress(order_uid[32:52].hex())
+    owner = Web3.to_checksum_address(order_uid[32:52].hex())
     valid_to = int.from_bytes(order_uid[52:], byteorder="big")
     return OrderUidParams(order_digest, owner, valid_to)

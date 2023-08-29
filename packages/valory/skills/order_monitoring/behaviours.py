@@ -25,13 +25,13 @@ from typing import Any, Dict, List, Optional, cast
 from aea.mail.base import Envelope
 from aea.skills.behaviours import SimpleBehaviour
 
-from packages.valory.protocols.default.message import DefaultMessage
 from packages.valory.connections.websocket_client.connection import (
     PUBLIC_ID as CONNECTION_ID,
-    WebSocketClient,
 )
+from packages.valory.connections.websocket_client.connection import WebSocketClient
 from packages.valory.contracts.composable_cow.contract import ComposableCowContract
 from packages.valory.protocols.contract_api import ContractApiMessage
+from packages.valory.protocols.default.message import DefaultMessage
 from packages.valory.skills.order_monitoring.handlers import (
     DISCONNECTION_POINT,
     LEDGER_API_ADDRESS,
