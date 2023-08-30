@@ -13,7 +13,7 @@ fingerprint:
   tests/helpers/docker.py: bafybeibtyhtiny3lw67rzvlkvprcnsopxvwkisn3q4ooll2wn557ipad3y
   tests/helpers/fixtures.py: bafybeihxzhlr3tbwsoe3y3zczivoxbbkvccvtct4c6rff6qhfentcyl32i
   tests/test_agents/__init__.py: bafybeicmv3jjcqcdnmubfmrgdgeyic3nkm77z4mutsyuo34hpddwupofre
-  tests/test_agents/base.py: bafybeict5wlx6k2rdyhpo6otvthwticefisfh3el6so5tyxmjufry5hegq
+  tests/test_agents/base.py: bafybeialg3wvgoxrzzbhn7rgkt4wda6lm5hth3ljuksswvvxb2ixdosxky
   tests/test_agents/test_decentralized_watchtower.py: bafybeiackbxkmxhmpnfe5kvtfksq3lktaa5ebtwruowkzu72aav54ip2ci
 fingerprint_ignore_patterns: []
 connections:

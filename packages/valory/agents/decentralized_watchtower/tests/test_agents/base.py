@@ -39,6 +39,22 @@ class BaseTestDecentralizedWatchtowerEnd2End(
     skill_package = "valory/decentralized_watchtower_abci:0.1.0"
     package_registry_src_rel = Path(__file__).parents[5]
 
+    BASE_PORT = 18000
+
+    def prepare(self, nb_nodes: int) -> None:
+        """Set up the agents."""
+        super().prepare(nb_nodes)
+
+        for i in range(nb_nodes):
+            agent_name = self._get_agent_name(i)
+            self.set_agent_context(agent_name)
+            port = self.BASE_PORT + i
+            self.set_config(
+                dotted_path="vendor.fetchai.connections.http_server.config.port",
+                value=port,
+                type_="int",
+            )
+
     def test_run(self, nb_nodes: int) -> None:
         """Run the test."""
         self.prepare_and_launch(nb_nodes)
