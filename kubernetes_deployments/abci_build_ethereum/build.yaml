@@ -1,0 +1,867 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: abci0
+  name: abci0
+spec:
+  ports:
+  - name: tcp1
+    port: 26656
+    protocol: TCP
+  - name: tcp2
+    port: 26657
+    protocol: TCP
+  selector:
+    app: agent-svc
+    instance: agent-node-0
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-node-0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agent-svc
+      instance: agent-node-0
+  template:
+    metadata:
+      labels:
+        app: agent-svc
+        instance: agent-node-0
+    spec:
+      containers:
+      - args:
+        - run
+        - --no-reload
+        - --host=0.0.0.0
+        - --port=8080
+        env:
+        - name: HOSTNAME
+          value: node0
+        - name: ID
+          value: '0'
+        - name: PROXY_APP
+          value: tcp://localhost:26658
+        - name: TMHOME
+          value: /tendermint
+        - name: CREATE_EMPTY_BLOCKS
+          value: 'true'
+        - name: LOG_FILE
+          value: /logs/node_0.txt
+        - name: LOG_LEVEL
+          value: INFO
+        image: valory/open-autonomy-tendermint:0.11.1
+        imagePullPolicy: Always
+        name: node0
+        ports:
+        - containerPort: 26656
+        - containerPort: 26657
+        resources:
+          limits:
+            cpu: '0.05'
+            memory: 350Mi
+          requests:
+            cpu: '0.05'
+            memory: 350Mi
+        volumeMounts:
+        - mountPath: /tm_state
+          name: persistent-data-tm
+        - mountPath: /logs
+          name: persistent-data
+        - mountPath: /tendermint
+          name: local-tendermint
+        workingDir: /tendermint
+      - env:
+        - name: HOSTNAME
+          value: agent-node-0
+        - name: CLUSTERED
+          value: '1'
+        - name: LOG_FILE
+          value: /logs/aea_0.txt
+        - name: PYTHONHASHSEED
+          value: '0'
+        - name: ID
+          value: '0'
+        - name: AEA_AGENT
+          value: valory/decentralized_watchtower:0.1.0:bafybeidgk5y26dcvamf2umujoty2fwptfwuk4nlatcj57kcttd4fddmsgi
+        - name: LOG_LEVEL
+          value: INFO
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_SETUP_SAFE_CONTRACT_ADDRESS
+          value: '0xcD1C69fC6066036D0216E8479F2ca8F7019BD910'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_SETUP_ALL_PARTICIPANTS
+          value: '["0x4C04db92F3d7F9F78a344D4C6f80250d3e6f4cA6", "0xCAF30F32e34482e3818C95B9C40702e77D879dBf",
+            "0x9B4205930F4bF6a0D402F1068279f5A57fC346Fb", "0x3b3964b4b2C92aB3ca2Af5EBfF08c32B0A2B1A6A"]'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_COW_API_URL
+          value: https://api.cow.fi/mainnet/api/v1
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_SERVICE_REGISTRY_ADDRESS
+          value: '0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_SHARE_TM_CONFIG_ON_STARTUP
+          value: 'True'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_TENDERMINT_P2P_URL
+          value: node1:26656
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_ON_CHAIN_SERVICE_ID
+          value: '7'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_TENDERMINT_URL
+          value: http://localhost:26657
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_TENDERMINT_COM_URL
+          value: http://localhost:8080
+        - name: CONNECTION_LEDGER_CONFIG_LEDGER_APIS_ETHEREUM_ADDRESS
+          value: YOUR_HTTP_RPC
+        - name: CONNECTION_LEDGER_CONFIG_LEDGER_APIS_ETHEREUM_CHAIN_ID
+          value: '1'
+        - name: CONNECTION_WEBSOCKET_CLIENT_CONFIG_ENDPOINT
+          value: YOUR_WS_RPC
+        - name: SKILL_ORDER_MONITORING_BEHAVIOURS_SUBSCRIPTIONS_ARGS_CONTRACTS
+          value: '["0xFf82123dFB52ab75C417195c5fDB87630145ae81"]'
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_USE_POLLING
+          value: 'False'
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_COMPOSABLE_COW_ADDRESS
+          value: '0x9A676e781A523b5d0C0e43731313A708CB607508'
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_EVENT_TOPICS
+          value: '["0x2cceac5555b0ca45a3744ced542f54b56ad2eb45e521962372eef212a2cbf361"]'
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_TENDERMINT_URL
+          value: http://localhost:26657
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_TENDERMINT_COM_URL
+          value: http://localhost:8080
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_TENDERMINT_P2P_URL
+          value: decentralizedwatchtower_tm_1:26656
+        - name: SKILL_ORDER_MONITORING_HANDLERS_NEW_EVENT_ARGS_CONTRACT_TO_MONITOR
+          value: '0xFf82123dFB52ab75C417195c5fDB87630145ae81'
+        - name: SKILL_ORDER_MONITORING_HANDLERS_NEW_EVENT_ARGS_WEBSOCKET_PROVIDER
+          value: YOUR_WS_RPC
+        - name: CONNECTION_ABCI_CONFIG_HOST
+          value: localhost
+        - name: CONNECTION_ABCI_CONFIG_PORT
+          value: '26658'
+        image: valory/oar-decentralized_watchtower:bafybeidgk5y26dcvamf2umujoty2fwptfwuk4nlatcj57kcttd4fddmsgi
+        imagePullPolicy: Always
+        name: aea
+        resources:
+          limits:
+            cpu: '0.5'
+            memory: 1512Mi
+          requests:
+            cpu: '0.5'
+            memory: 1512Mi
+        volumeMounts:
+        - mountPath: /logs
+          name: persistent-data
+        - mountPath: /benchmark
+          name: persistent-data-benchmark
+        - mountPath: /build
+          name: nodes
+        - mountPath: /agent_key
+          name: agent-key
+      imagePullSecrets:
+      - name: regcred
+      initContainers:
+      - args:
+        - while [ ! -d /tendermint/node0 ]; do sleep 1; done; cp -r /tendermint/node0/*
+          /tm/
+        command:
+        - bash
+        - -c
+        image: ubuntu:20.04
+        name: copy-tendermint-configuration
+        volumeMounts:
+        - mountPath: /tendermint
+          name: nodes
+        - mountPath: /tm
+          name: local-tendermint
+      restartPolicy: Always
+      volumes:
+      - name: agent-key
+        secret:
+          items:
+          - key: ethereum_private_key.txt
+            path: ethereum_private_key.txt
+          secretName: agent-validator-0-key
+      - name: persistent-data
+        persistentVolumeClaim:
+          claimName: logs-pvc
+      - name: persistent-data-benchmark
+        persistentVolumeClaim:
+          claimName: benchmark-pvc
+      - name: persistent-data-tm
+        persistentVolumeClaim:
+          claimName: tendermint-pvc
+      - name: nodes
+        persistentVolumeClaim:
+          claimName: nodes
+      - emptyDir: {}
+        name: local-tendermint
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: abci1
+  name: abci1
+spec:
+  ports:
+  - name: tcp1
+    port: 26656
+    protocol: TCP
+  - name: tcp2
+    port: 26657
+    protocol: TCP
+  selector:
+    app: agent-svc
+    instance: agent-node-1
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-node-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agent-svc
+      instance: agent-node-1
+  template:
+    metadata:
+      labels:
+        app: agent-svc
+        instance: agent-node-1
+    spec:
+      containers:
+      - args:
+        - run
+        - --no-reload
+        - --host=0.0.0.0
+        - --port=8080
+        env:
+        - name: HOSTNAME
+          value: node1
+        - name: ID
+          value: '1'
+        - name: PROXY_APP
+          value: tcp://localhost:26658
+        - name: TMHOME
+          value: /tendermint
+        - name: CREATE_EMPTY_BLOCKS
+          value: 'true'
+        - name: LOG_FILE
+          value: /logs/node_1.txt
+        - name: LOG_LEVEL
+          value: INFO
+        image: valory/open-autonomy-tendermint:0.11.1
+        imagePullPolicy: Always
+        name: node1
+        ports:
+        - containerPort: 26656
+        - containerPort: 26657
+        resources:
+          limits:
+            cpu: '0.05'
+            memory: 350Mi
+          requests:
+            cpu: '0.05'
+            memory: 350Mi
+        volumeMounts:
+        - mountPath: /tm_state
+          name: persistent-data-tm
+        - mountPath: /logs
+          name: persistent-data
+        - mountPath: /tendermint
+          name: local-tendermint
+        workingDir: /tendermint
+      - env:
+        - name: HOSTNAME
+          value: agent-node-1
+        - name: CLUSTERED
+          value: '1'
+        - name: LOG_FILE
+          value: /logs/aea_1.txt
+        - name: PYTHONHASHSEED
+          value: '0'
+        - name: ID
+          value: '1'
+        - name: AEA_AGENT
+          value: valory/decentralized_watchtower:0.1.0:bafybeidgk5y26dcvamf2umujoty2fwptfwuk4nlatcj57kcttd4fddmsgi
+        - name: LOG_LEVEL
+          value: INFO
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_SETUP_SAFE_CONTRACT_ADDRESS
+          value: '0xcD1C69fC6066036D0216E8479F2ca8F7019BD910'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_SETUP_ALL_PARTICIPANTS
+          value: '["0x4C04db92F3d7F9F78a344D4C6f80250d3e6f4cA6", "0xCAF30F32e34482e3818C95B9C40702e77D879dBf",
+            "0x9B4205930F4bF6a0D402F1068279f5A57fC346Fb", "0x3b3964b4b2C92aB3ca2Af5EBfF08c32B0A2B1A6A"]'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_COW_API_URL
+          value: https://api.cow.fi/mainnet/api/v1
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_SERVICE_REGISTRY_ADDRESS
+          value: '0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_SHARE_TM_CONFIG_ON_STARTUP
+          value: 'True'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_TENDERMINT_P2P_URL
+          value: node3:26656
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_ON_CHAIN_SERVICE_ID
+          value: '7'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_TENDERMINT_URL
+          value: http://localhost:26657
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_TENDERMINT_COM_URL
+          value: http://localhost:8080
+        - name: CONNECTION_LEDGER_CONFIG_LEDGER_APIS_ETHEREUM_ADDRESS
+          value: YOUR_HTTP_RPC
+        - name: CONNECTION_LEDGER_CONFIG_LEDGER_APIS_ETHEREUM_CHAIN_ID
+          value: '1'
+        - name: CONNECTION_WEBSOCKET_CLIENT_CONFIG_ENDPOINT
+          value: YOUR_WS_RPC
+        - name: SKILL_ORDER_MONITORING_BEHAVIOURS_SUBSCRIPTIONS_ARGS_CONTRACTS
+          value: '["0xFf82123dFB52ab75C417195c5fDB87630145ae81"]'
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_USE_POLLING
+          value: 'False'
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_COMPOSABLE_COW_ADDRESS
+          value: '0x9A676e781A523b5d0C0e43731313A708CB607508'
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_EVENT_TOPICS
+          value: '["0x2cceac5555b0ca45a3744ced542f54b56ad2eb45e521962372eef212a2cbf361"]'
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_TENDERMINT_URL
+          value: http://localhost:26657
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_TENDERMINT_COM_URL
+          value: http://localhost:8080
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_TENDERMINT_P2P_URL
+          value: decentralizedwatchtower_tm_3:26656
+        - name: SKILL_ORDER_MONITORING_HANDLERS_NEW_EVENT_ARGS_CONTRACT_TO_MONITOR
+          value: '0xFf82123dFB52ab75C417195c5fDB87630145ae81'
+        - name: SKILL_ORDER_MONITORING_HANDLERS_NEW_EVENT_ARGS_WEBSOCKET_PROVIDER
+          value: YOUR_WS_RPC
+        - name: CONNECTION_ABCI_CONFIG_HOST
+          value: localhost
+        - name: CONNECTION_ABCI_CONFIG_PORT
+          value: '26658'
+        image: valory/oar-decentralized_watchtower:bafybeidgk5y26dcvamf2umujoty2fwptfwuk4nlatcj57kcttd4fddmsgi
+        imagePullPolicy: Always
+        name: aea
+        resources:
+          limits:
+            cpu: '0.5'
+            memory: 1512Mi
+          requests:
+            cpu: '0.5'
+            memory: 1512Mi
+        volumeMounts:
+        - mountPath: /logs
+          name: persistent-data
+        - mountPath: /benchmark
+          name: persistent-data-benchmark
+        - mountPath: /build
+          name: nodes
+        - mountPath: /agent_key
+          name: agent-key
+      imagePullSecrets:
+      - name: regcred
+      initContainers:
+      - args:
+        - while [ ! -d /tendermint/node1 ]; do sleep 1; done; cp -r /tendermint/node1/*
+          /tm/
+        command:
+        - bash
+        - -c
+        image: ubuntu:20.04
+        name: copy-tendermint-configuration
+        volumeMounts:
+        - mountPath: /tendermint
+          name: nodes
+        - mountPath: /tm
+          name: local-tendermint
+      restartPolicy: Always
+      volumes:
+      - name: agent-key
+        secret:
+          items:
+          - key: ethereum_private_key.txt
+            path: ethereum_private_key.txt
+          secretName: agent-validator-1-key
+      - name: persistent-data
+        persistentVolumeClaim:
+          claimName: logs-pvc
+      - name: persistent-data-benchmark
+        persistentVolumeClaim:
+          claimName: benchmark-pvc
+      - name: persistent-data-tm
+        persistentVolumeClaim:
+          claimName: tendermint-pvc
+      - name: nodes
+        persistentVolumeClaim:
+          claimName: nodes
+      - emptyDir: {}
+        name: local-tendermint
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: abci2
+  name: abci2
+spec:
+  ports:
+  - name: tcp1
+    port: 26656
+    protocol: TCP
+  - name: tcp2
+    port: 26657
+    protocol: TCP
+  selector:
+    app: agent-svc
+    instance: agent-node-2
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-node-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agent-svc
+      instance: agent-node-2
+  template:
+    metadata:
+      labels:
+        app: agent-svc
+        instance: agent-node-2
+    spec:
+      containers:
+      - args:
+        - run
+        - --no-reload
+        - --host=0.0.0.0
+        - --port=8080
+        env:
+        - name: HOSTNAME
+          value: node2
+        - name: ID
+          value: '2'
+        - name: PROXY_APP
+          value: tcp://localhost:26658
+        - name: TMHOME
+          value: /tendermint
+        - name: CREATE_EMPTY_BLOCKS
+          value: 'true'
+        - name: LOG_FILE
+          value: /logs/node_2.txt
+        - name: LOG_LEVEL
+          value: INFO
+        image: valory/open-autonomy-tendermint:0.11.1
+        imagePullPolicy: Always
+        name: node2
+        ports:
+        - containerPort: 26656
+        - containerPort: 26657
+        resources:
+          limits:
+            cpu: '0.05'
+            memory: 350Mi
+          requests:
+            cpu: '0.05'
+            memory: 350Mi
+        volumeMounts:
+        - mountPath: /tm_state
+          name: persistent-data-tm
+        - mountPath: /logs
+          name: persistent-data
+        - mountPath: /tendermint
+          name: local-tendermint
+        workingDir: /tendermint
+      - env:
+        - name: HOSTNAME
+          value: agent-node-2
+        - name: CLUSTERED
+          value: '1'
+        - name: LOG_FILE
+          value: /logs/aea_2.txt
+        - name: PYTHONHASHSEED
+          value: '0'
+        - name: ID
+          value: '2'
+        - name: AEA_AGENT
+          value: valory/decentralized_watchtower:0.1.0:bafybeidgk5y26dcvamf2umujoty2fwptfwuk4nlatcj57kcttd4fddmsgi
+        - name: LOG_LEVEL
+          value: INFO
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_SETUP_SAFE_CONTRACT_ADDRESS
+          value: '0xcD1C69fC6066036D0216E8479F2ca8F7019BD910'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_SETUP_ALL_PARTICIPANTS
+          value: '["0x4C04db92F3d7F9F78a344D4C6f80250d3e6f4cA6", "0xCAF30F32e34482e3818C95B9C40702e77D879dBf",
+            "0x9B4205930F4bF6a0D402F1068279f5A57fC346Fb", "0x3b3964b4b2C92aB3ca2Af5EBfF08c32B0A2B1A6A"]'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_COW_API_URL
+          value: https://api.cow.fi/mainnet/api/v1
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_SERVICE_REGISTRY_ADDRESS
+          value: '0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_SHARE_TM_CONFIG_ON_STARTUP
+          value: 'True'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_TENDERMINT_P2P_URL
+          value: 213.179.96.235:26656
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_ON_CHAIN_SERVICE_ID
+          value: '7'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_TENDERMINT_URL
+          value: http://localhost:26657
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_TENDERMINT_COM_URL
+          value: http://localhost:8080
+        - name: CONNECTION_LEDGER_CONFIG_LEDGER_APIS_ETHEREUM_ADDRESS
+          value: YOUR_HTTP_RPC
+        - name: CONNECTION_LEDGER_CONFIG_LEDGER_APIS_ETHEREUM_CHAIN_ID
+          value: '1'
+        - name: CONNECTION_WEBSOCKET_CLIENT_CONFIG_ENDPOINT
+          value: YOUR_WS_RPC
+        - name: SKILL_ORDER_MONITORING_BEHAVIOURS_SUBSCRIPTIONS_ARGS_CONTRACTS
+          value: '["0xFf82123dFB52ab75C417195c5fDB87630145ae81"]'
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_USE_POLLING
+          value: 'False'
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_COMPOSABLE_COW_ADDRESS
+          value: '0x9A676e781A523b5d0C0e43731313A708CB607508'
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_EVENT_TOPICS
+          value: '["0x2cceac5555b0ca45a3744ced542f54b56ad2eb45e521962372eef212a2cbf361"]'
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_TENDERMINT_URL
+          value: http://localhost:26657
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_TENDERMINT_COM_URL
+          value: http://localhost:8080
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_TENDERMINT_P2P_URL
+          value: decentralizedwatchtower_tm_0:26656
+        - name: SKILL_ORDER_MONITORING_HANDLERS_NEW_EVENT_ARGS_CONTRACT_TO_MONITOR
+          value: '0xFf82123dFB52ab75C417195c5fDB87630145ae81'
+        - name: SKILL_ORDER_MONITORING_HANDLERS_NEW_EVENT_ARGS_WEBSOCKET_PROVIDER
+          value: YOUR_WS_RPC
+        - name: CONNECTION_ABCI_CONFIG_HOST
+          value: localhost
+        - name: CONNECTION_ABCI_CONFIG_PORT
+          value: '26658'
+        image: valory/oar-decentralized_watchtower:bafybeidgk5y26dcvamf2umujoty2fwptfwuk4nlatcj57kcttd4fddmsgi
+        imagePullPolicy: Always
+        name: aea
+        resources:
+          limits:
+            cpu: '0.5'
+            memory: 1512Mi
+          requests:
+            cpu: '0.5'
+            memory: 1512Mi
+        volumeMounts:
+        - mountPath: /logs
+          name: persistent-data
+        - mountPath: /benchmark
+          name: persistent-data-benchmark
+        - mountPath: /build
+          name: nodes
+        - mountPath: /agent_key
+          name: agent-key
+      imagePullSecrets:
+      - name: regcred
+      initContainers:
+      - args:
+        - while [ ! -d /tendermint/node2 ]; do sleep 1; done; cp -r /tendermint/node2/*
+          /tm/
+        command:
+        - bash
+        - -c
+        image: ubuntu:20.04
+        name: copy-tendermint-configuration
+        volumeMounts:
+        - mountPath: /tendermint
+          name: nodes
+        - mountPath: /tm
+          name: local-tendermint
+      restartPolicy: Always
+      volumes:
+      - name: agent-key
+        secret:
+          items:
+          - key: ethereum_private_key.txt
+            path: ethereum_private_key.txt
+          secretName: agent-validator-2-key
+      - name: persistent-data
+        persistentVolumeClaim:
+          claimName: logs-pvc
+      - name: persistent-data-benchmark
+        persistentVolumeClaim:
+          claimName: benchmark-pvc
+      - name: persistent-data-tm
+        persistentVolumeClaim:
+          claimName: tendermint-pvc
+      - name: nodes
+        persistentVolumeClaim:
+          claimName: nodes
+      - emptyDir: {}
+        name: local-tendermint
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: abci3
+  name: abci3
+spec:
+  ports:
+  - name: tcp1
+    port: 26656
+    protocol: TCP
+  - name: tcp2
+    port: 26657
+    protocol: TCP
+  selector:
+    app: agent-svc
+    instance: agent-node-3
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-node-3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agent-svc
+      instance: agent-node-3
+  template:
+    metadata:
+      labels:
+        app: agent-svc
+        instance: agent-node-3
+    spec:
+      containers:
+      - args:
+        - run
+        - --no-reload
+        - --host=0.0.0.0
+        - --port=8080
+        env:
+        - name: HOSTNAME
+          value: node3
+        - name: ID
+          value: '3'
+        - name: PROXY_APP
+          value: tcp://localhost:26658
+        - name: TMHOME
+          value: /tendermint
+        - name: CREATE_EMPTY_BLOCKS
+          value: 'true'
+        - name: LOG_FILE
+          value: /logs/node_3.txt
+        - name: LOG_LEVEL
+          value: INFO
+        image: valory/open-autonomy-tendermint:0.11.1
+        imagePullPolicy: Always
+        name: node3
+        ports:
+        - containerPort: 26656
+        - containerPort: 26657
+        resources:
+          limits:
+            cpu: '0.05'
+            memory: 350Mi
+          requests:
+            cpu: '0.05'
+            memory: 350Mi
+        volumeMounts:
+        - mountPath: /tm_state
+          name: persistent-data-tm
+        - mountPath: /logs
+          name: persistent-data
+        - mountPath: /tendermint
+          name: local-tendermint
+        workingDir: /tendermint
+      - env:
+        - name: HOSTNAME
+          value: agent-node-3
+        - name: CLUSTERED
+          value: '1'
+        - name: LOG_FILE
+          value: /logs/aea_3.txt
+        - name: PYTHONHASHSEED
+          value: '0'
+        - name: ID
+          value: '3'
+        - name: AEA_AGENT
+          value: valory/decentralized_watchtower:0.1.0:bafybeidgk5y26dcvamf2umujoty2fwptfwuk4nlatcj57kcttd4fddmsgi
+        - name: LOG_LEVEL
+          value: INFO
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_SETUP_SAFE_CONTRACT_ADDRESS
+          value: '0xcD1C69fC6066036D0216E8479F2ca8F7019BD910'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_SETUP_ALL_PARTICIPANTS
+          value: '["0x4C04db92F3d7F9F78a344D4C6f80250d3e6f4cA6", "0xCAF30F32e34482e3818C95B9C40702e77D879dBf",
+            "0x9B4205930F4bF6a0D402F1068279f5A57fC346Fb", "0x3b3964b4b2C92aB3ca2Af5EBfF08c32B0A2B1A6A"]'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_COW_API_URL
+          value: https://api.cow.fi/mainnet/api/v1
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_SERVICE_REGISTRY_ADDRESS
+          value: '0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_SHARE_TM_CONFIG_ON_STARTUP
+          value: 'True'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_TENDERMINT_P2P_URL
+          value: node2:26656
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_ON_CHAIN_SERVICE_ID
+          value: '7'
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_TENDERMINT_URL
+          value: http://localhost:26657
+        - name: SKILL_DECENTRALIZED_WATCHTOWER_ABCI_MODELS_PARAMS_ARGS_TENDERMINT_COM_URL
+          value: http://localhost:8080
+        - name: CONNECTION_LEDGER_CONFIG_LEDGER_APIS_ETHEREUM_ADDRESS
+          value: YOUR_HTTP_RPC
+        - name: CONNECTION_LEDGER_CONFIG_LEDGER_APIS_ETHEREUM_CHAIN_ID
+          value: '1'
+        - name: CONNECTION_WEBSOCKET_CLIENT_CONFIG_ENDPOINT
+          value: YOUR_WS_RPC
+        - name: SKILL_ORDER_MONITORING_BEHAVIOURS_SUBSCRIPTIONS_ARGS_CONTRACTS
+          value: '["0xFf82123dFB52ab75C417195c5fDB87630145ae81"]'
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_USE_POLLING
+          value: 'False'
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_COMPOSABLE_COW_ADDRESS
+          value: '0x9A676e781A523b5d0C0e43731313A708CB607508'
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_EVENT_TOPICS
+          value: '["0x2cceac5555b0ca45a3744ced542f54b56ad2eb45e521962372eef212a2cbf361"]'
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_TENDERMINT_URL
+          value: http://localhost:26657
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_TENDERMINT_COM_URL
+          value: http://localhost:8080
+        - name: SKILL_ORDER_MONITORING_MODELS_PARAMS_ARGS_TENDERMINT_P2P_URL
+          value: decentralizedwatchtower_tm_2:26656
+        - name: SKILL_ORDER_MONITORING_HANDLERS_NEW_EVENT_ARGS_CONTRACT_TO_MONITOR
+          value: '0xFf82123dFB52ab75C417195c5fDB87630145ae81'
+        - name: SKILL_ORDER_MONITORING_HANDLERS_NEW_EVENT_ARGS_WEBSOCKET_PROVIDER
+          value: YOUR_WS_RPC
+        - name: CONNECTION_ABCI_CONFIG_HOST
+          value: localhost
+        - name: CONNECTION_ABCI_CONFIG_PORT
+          value: '26658'
+        image: valory/oar-decentralized_watchtower:bafybeidgk5y26dcvamf2umujoty2fwptfwuk4nlatcj57kcttd4fddmsgi
+        imagePullPolicy: Always
+        name: aea
+        resources:
+          limits:
+            cpu: '0.5'
+            memory: 1512Mi
+          requests:
+            cpu: '0.5'
+            memory: 1512Mi
+        volumeMounts:
+        - mountPath: /logs
+          name: persistent-data
+        - mountPath: /benchmark
+          name: persistent-data-benchmark
+        - mountPath: /build
+          name: nodes
+        - mountPath: /agent_key
+          name: agent-key
+      imagePullSecrets:
+      - name: regcred
+      initContainers:
+      - args:
+        - while [ ! -d /tendermint/node3 ]; do sleep 1; done; cp -r /tendermint/node3/*
+          /tm/
+        command:
+        - bash
+        - -c
+        image: ubuntu:20.04
+        name: copy-tendermint-configuration
+        volumeMounts:
+        - mountPath: /tendermint
+          name: nodes
+        - mountPath: /tm
+          name: local-tendermint
+      restartPolicy: Always
+      volumes:
+      - name: agent-key
+        secret:
+          items:
+          - key: ethereum_private_key.txt
+            path: ethereum_private_key.txt
+          secretName: agent-validator-3-key
+      - name: persistent-data
+        persistentVolumeClaim:
+          claimName: logs-pvc
+      - name: persistent-data-benchmark
+        persistentVolumeClaim:
+          claimName: benchmark-pvc
+      - name: persistent-data-tm
+        persistentVolumeClaim:
+          claimName: tendermint-pvc
+      - name: nodes
+        persistentVolumeClaim:
+          claimName: nodes
+      - emptyDir: {}
+        name: local-tendermint
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: config-nodes
+spec:
+  template:
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: config-nodes
+        image: valory/open-autonomy-tendermint:0.11.1
+        command: ['/usr/bin/tendermint']
+        args: ["testnet",
+         "--config",
+         "/etc/tendermint/config-template.toml",
+         "--o",  ".", "--hostname=abci0", "--hostname=abci1", "--hostname=abci2", "--hostname=abci3",
+         "--v", "4"
+         ]
+        volumeMounts:
+          - mountPath: /tendermint
+            name: nodes
+      volumes:
+        - name: nodes
+          persistentVolumeClaim:
+            claimName: 'nodes'
+      restartPolicy: Never
+  backoffLimit: 3
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: logs-pvc
+spec:
+  storageClassName: nfs-ephemeral
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1000M
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tendermint-pvc
+spec:
+  storageClassName: nfs-ephemeral
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1000M
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: benchmark-pvc
+spec:
+  storageClassName: nfs-ephemeral
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1000M
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nodes
+spec:
+  storageClassName: nfs-ephemeral
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1000M
