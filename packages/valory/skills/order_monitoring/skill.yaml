@@ -64,4 +64,5 @@ dependencies:
   open-aea-web3: {}
   rlp: {}
   eth_utils: {}
+  py_ecc: {}
 is_abstract: false
