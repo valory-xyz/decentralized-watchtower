@@ -87,14 +87,17 @@ class MonitoringBehaviour(SimpleBehaviour):
         if self.params.in_flight_req:
             # do nothing if there are no orders or if there is an in flight request
             return
+        self.context.logger.info(
+            f"order.params.handler: {[order for order in self.orders.items()]}"
+        )
         orders = [
             {
                 "id": order.id,
                 "owner": owner,
                 "params": [
-                    bytes.fromhex(order.params.handler[2:]),
-                    bytes.fromhex(order.params.salt[2:]),
-                    bytes.fromhex(order.params.staticInput[2:]),
+                    order.params.handler,
+                    order.params.salt,
+                    order.params.staticInput,
                 ],
                 "offchainInput": order.offchainInput,
                 "proof": order.proof if order.proof is not None else [],

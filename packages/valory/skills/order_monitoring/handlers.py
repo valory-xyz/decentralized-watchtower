@@ -266,7 +266,11 @@ class ContractHandler(Handler):
                 id = uuid4().hex
                 conditional_order = ConditionalOrder(
                     id=id,
-                    params=ConditionalOrderParamsStruct(*params),
+                    params=ConditionalOrderParamsStruct(
+                        handler=params["handler"],
+                        salt=params["salt"],
+                        staticInput=params["staticInput"],
+                    ),
                     proof=proof,
                     orders={},
                     composableCow=composable_cow,
@@ -284,7 +288,11 @@ class ContractHandler(Handler):
             self.orders[owner] = [
                 ConditionalOrder(
                     id=id,
-                    params=ConditionalOrderParamsStruct(*params),
+                    params=ConditionalOrderParamsStruct(
+                        handler=params["handler"],
+                        salt=params["salt"],
+                        staticInput=params["staticInput"],
+                    ),
                     proof=proof,
                     orders={},
                     composableCow=composable_cow,
