@@ -62,4 +62,6 @@ models:
 dependencies:
   eth_abi: {}
   open-aea-web3: {}
+  rlp: {}
+  eth_utils: {}
 is_abstract: false
