@@ -60,9 +60,15 @@ models:
       use_polling: false
     class_name: Params
 dependencies:
-  eth_abi: {}
   open-aea-web3: {}
-  rlp: {}
-  eth_utils: {}
-  py_ecc: {}
+  rlp:
+    version: '>=1.1.0'
+  py-ecc:
+    version: '>=1.7.1'
+  eth-utils:
+    version: ==2.2.0
+  eth-abi:
+    version: ==4.0.0
+  pycryptodome:
+    version: ==3.18.0
 is_abstract: false
