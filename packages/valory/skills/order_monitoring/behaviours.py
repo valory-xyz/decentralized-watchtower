@@ -87,9 +87,6 @@ class MonitoringBehaviour(SimpleBehaviour):
         if self.params.in_flight_req:
             # do nothing if there are no orders or if there is an in flight request
             return
-        self.context.logger.info(
-            f"order.params.handler: {[order for order in self.orders.items()]}"
-        )
         orders = [
             {
                 "id": order.id,
