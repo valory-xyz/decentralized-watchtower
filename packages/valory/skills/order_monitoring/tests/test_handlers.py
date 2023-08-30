@@ -185,7 +185,7 @@ class TestContractHandler:
         """
         Test _add_contract method of ContractHandler for existing owner.
         """
-        params = ("param1", b"param2", b"param3")
+        params = {"handler": "param1", "salt": b"param2", "staticInput": b"param3"}
         self.handler.context.shared_state[ORDERS]["owner"] = []
         self.handler._add_contract("owner", params, None, None)
         assert len(self.handler.orders["owner"]) == 1
@@ -195,7 +195,7 @@ class TestContractHandler:
         """
         Test _add_contract method of ContractHandler for new owner.
         """
-        params = ("param1", b"param2", b"param3")
+        params = {"handler": "param1", "salt": b"param2", "staticInput": b"param3"}
         self.handler._add_contract("owner", params, None, None)
         assert len(self.handler.orders) == 1
         assert len(self.handler.orders["owner"]) == 1
