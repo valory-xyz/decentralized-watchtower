@@ -8,7 +8,30 @@ This folder contains sample Kubernetes deployments for four agents and their cor
 
 The following guide assumes that you have a running Kubernetes cluster and that the KUBECONFIG environment variable is correctly pointing to the Kubernetes configuration file.
 
-We provide template Kubernetes deployments using the sample Ethereum keys from `keys.json` file. You can find these deployments in the folders
+We provide template Kubernetes deployments using a sample Ethereum `keys.json` file (randomly generated):
+
+```json
+[
+  {
+    "address": "0xCAF30F32e34482e3818C95B9C40702e77D879dBf",
+    "private_key": "0xc5b34c07c92a7f3f57e3c4a6dc9625706c19291f161fa98f5cc55fa701852b45"
+  },
+  {
+    "address": "0x3b3964b4b2C92aB3ca2Af5EBfF08c32B0A2B1A6A",
+    "private_key": "0x99fdaf57ee6e7cc270a61e9491ee5d81385d9b32fd38a73e9a358fc0c9d5f577"
+  },
+  {
+    "address": "0x4C04db92F3d7F9F78a344D4C6f80250d3e6f4cA6",
+    "private_key": "0x846de4f71f73055ff934fcdf32b218e628823c7253e807bcd81e7488b68165ca"
+  },
+  {
+    "address": "0x9B4205930F4bF6a0D402F1068279f5A57fC346Fb",
+    "private_key": "0x037a823b7d4e4ecc81b88862f5836b4852b4ac4e10ea03b6b9bea4d1b8922e33"
+  }
+]
+```
+
+You can find these deployments in the folders
 
 - `./abci_build_goerli`,
 - `./abci_build_ethereum`, and
@@ -35,6 +58,9 @@ export HTTP_RPC=YOUR_HTTP_RPC
 export WS_RPC=YOUR_WS_RPC
 
 autonomy init --remote --author open_operator --reset
+
+# The fetch hash can be obtained from `packages.json`.
+# Ensure that you are fetching the hash corresponding to the version you want to deploy.
 autonomy fetch bafybeihfusu3so7k6ksp36tqm6w2ss5uyz76u4u2vh62rsjpdnjsy5z4y4 --service
 cd decentralized_watchtower_goerli
 
@@ -63,6 +89,9 @@ export HTTP_RPC=YOUR_HTTP_RPC
 export WS_RPC=YOUR_WS_RPC
 
 autonomy init --remote --author open_operator --reset
+
+# The fetch hash can be obtained from `packages.json`.
+# Ensure that you are fetching the hash corresponding to the version you want to deploy.
 autonomy fetch bafybeibmi7ap625qg7hea52nysxqllmlqpleu4loks5mnnof63b4pmmjem --service
 cd decentralized_watchtower
 
@@ -91,6 +120,9 @@ export HTTP_RPC=YOUR_HTTP_RPC
 export WS_RPC=YOUR_WS_RPC
 
 autonomy init --remote --author open_operator --reset
+
+# The fetch hash can be obtained from `packages.json`.
+# Ensure that you are fetching the hash corresponding to the version you want to deploy.
 autonomy fetch bafybeifpzq6tejipr75fgea5zt67cqjoe2ugps545rqcb53uike7vc2eba --service
 cd decentralized_watchtower_gnosis
 
