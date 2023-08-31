@@ -27,7 +27,6 @@ from aea.protocols.base import Message
 from aea.skills.base import Handler
 from web3 import Web3
 
-from packages.valory.protocols.default.message import DefaultMessage
 from packages.valory.connections.ledger.connection import (
     PUBLIC_ID as LEDGER_CONNECTION_PUBLIC_ID,
 )
@@ -36,6 +35,7 @@ from packages.valory.contracts.composable_cow.contract import (
     ComposableCowContract,
 )
 from packages.valory.protocols.contract_api import ContractApiMessage
+from packages.valory.protocols.default.message import DefaultMessage
 from packages.valory.skills.order_monitoring.models import Params
 from packages.valory.skills.order_monitoring.order_utils import (
     ConditionalOrder,
@@ -266,7 +266,11 @@ class ContractHandler(Handler):
                 id = uuid4().hex
                 conditional_order = ConditionalOrder(
                     id=id,
-                    params=ConditionalOrderParamsStruct(*params),
+                    params=ConditionalOrderParamsStruct(
+                        handler=params["handler"],
+                        salt=params["salt"],
+                        staticInput=params["staticInput"],
+                    ),
                     proof=proof,
                     orders={},
                     composableCow=composable_cow,
@@ -284,7 +288,11 @@ class ContractHandler(Handler):
             self.orders[owner] = [
                 ConditionalOrder(
                     id=id,
-                    params=ConditionalOrderParamsStruct(*params),
+                    params=ConditionalOrderParamsStruct(
+                        handler=params["handler"],
+                        salt=params["salt"],
+                        staticInput=params["staticInput"],
+                    ),
                     proof=proof,
                     orders={},
                     composableCow=composable_cow,

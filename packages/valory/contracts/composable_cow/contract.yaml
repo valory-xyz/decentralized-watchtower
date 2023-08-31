@@ -9,7 +9,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiaihi3b3drfbgs5iimy5ijfkurmuluh6wum3dgvsramcbrttimwrm
   build/ComposableCow.json: bafybeiene4ejo3x74qxrsmo3zaw6clhp3c22mtegv6k6m4fltldzi7odim
-  contract.py: bafybeiaxebmjp7dxxxwt6aeeps5qs7lyhyqkllmu42wffjpvzmegrusvry
+  contract.py: bafybeibihhnecevmba7zouc6svakwaen62bhlfaa4etqctmefbr6lw7kg4
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: ComposableCowContract
@@ -21,11 +21,11 @@ dependencies:
   eth_typing: {}
   hexbytes: {}
   open-aea-ledger-ethereum:
-    version: ==1.35.0
+    version: ==1.38.0
   open-aea-test-autonomy:
-    version: ==0.10.7
+    version: ==0.11.1
+  open-aea-web3:
+    version: ==6.0.1
   packaging: {}
   py-eth-sig-utils: {}
   requests: {}
-  web3:
-    version: ==5.31.4

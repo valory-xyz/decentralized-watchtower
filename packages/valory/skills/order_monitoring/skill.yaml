@@ -7,24 +7,27 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiglilmcvbbxt6oczjbyayv6w6cr5j6wh4dkhgupej4jkjsedjwaiu
-  behaviours.py: bafybeigsh2yblkhjmo7k6jufd2lazyaqkqxdtbrhhqew4oecbpp3ujv6j4
-  dialogues.py: bafybeictu4rgb7uxyaoyxtlh2hi6g6ity2gfjeorjchpiabemv6tr2d72q
-  handlers.py: bafybeih6irtfqsjjl5jmp3e5totjmmsyytoee6m3p3gjdglrk6invrbnvi
+  behaviours.py: bafybeidai3pzxzqjul6trlcqdts5tszpdn6o4mn2lssxwhthz3x5fe2zta
+  dialogues.py: bafybeic7fqe7r3culyuwprdyxfa4g7szku66wtl2kiqzm5vd7sr7cfgxfu
+  handlers.py: bafybeie2lesdiwfokifmchaxxc7fhuvzlqqfbwcb6dbjunwk5oaibipeue
   models.py: bafybeibp2p2afluv7n6cfeofbglcrbduimhk43vbsezomslk4hfpvuujgq
-  order_utils.py: bafybeihaqmc2tcsyuf3gdqboqf3qhlaydy5b325zohkcd5vqqremmv6xdu
+  order_utils.py: bafybeic77blgy6vljjl5ykrgyyn24ljzbjweu3hic4gqnjve2m6a5uldhe
+  sig_utils/__init__.py: bafybeihbsg7wxo2z3urpk26w5u46u2bsdgjxpsi4stgdbq3ginrkz4qxdq
+  sig_utils/encoding.py: bafybeibveisf2d264uiquxiyfp7pl22xzo5ruohu7ezxviccuug7ni6czi
+  sig_utils/utils.py: bafybeifnebxbisqg67isj5zuuj5b7vqt4t325bf3al47kkplageysvbwmy
   tests/__init__.py: bafybeib2dgq23y4dvdpvftmnfcruocssbjoec3zrcdpugs6sxoxeh5lce4
   tests/test_behaviours.py: bafybeicsxep75tq4fheoljaugywvkpvzzvhxkslpe7bc4tbujauthvr5le
   tests/test_dialogues.py: bafybeiftjdqbjhsvuqgcxdlht5dj4gimro4v7f4ya2ohk5qmkvur3egtwa
-  tests/test_handlers.py: bafybeietywtth6enkwi6rzbvnoetpvx3hodjrb6yowdf52n7ax3lyvtv6q
+  tests/test_handlers.py: bafybeihshguzx7dwgaclgzl3lalxohfvnsszcqxvbppzju2vg5d6jdwidy
   tests/test_order_utils.py: bafybeiekwcpqalwngvidmkvjtw7v7jfzqoqatap43n3s3gv3c4tg76tpqm
 fingerprint_ignore_patterns: []
 connections:
-- valory/ledger:0.19.0:bafybeicgfupeudtmvehbwziqfxiz6ztsxr5rxzvalzvsdsspzz73o5fzfi
+- valory/ledger:0.19.0:bafybeigfoz7d7si7s4jehvloq2zmiiocpbxcaathl3bxkyarxoerxq7g3a
 - valory/websocket_client:0.1.0:bafybeicz53kzs5uvyiod2azntl76zwgmpgr22ven4wl5fnwt2m546j3wsu
 contracts:
-- valory/composable_cow:0.1.0:bafybeifxpmwd5nko6bcuzmvnnsudsuig5ntilfhqliwlnesginmmfjedyy
+- valory/composable_cow:0.1.0:bafybeifsi2mwo3r4qh5oqccpbc47llz3tkxyodj7gtrnrm5z4bekv63che
 protocols:
-- valory/contract_api:1.0.0:bafybeidv6wxpjyb2sdyibnmmum45et4zcla6tl63bnol6ztyoqvpl4spmy
+- valory/contract_api:1.0.0:bafybeiasywsvax45qmugus5kxogejj66c5taen27h4voriodz7rgushtqa
 - valory/default:1.0.0:bafybeiecmut3235aen7wxukllv424f3dysvvlgfmn562kzdunc5hdj3hxu
 skills: []
 behaviours:
@@ -57,7 +60,15 @@ models:
       use_polling: false
     class_name: Params
 dependencies:
-  eth_abi: {}
-  py_eth_sig_utils: {}
-  web3: {}
+  open-aea-web3: {}
+  rlp:
+    version: '>=1.1.0'
+  py-ecc:
+    version: '>=1.7.1'
+  eth-utils:
+    version: ==2.2.0
+  eth-abi:
+    version: ==4.0.0
+  pycryptodome:
+    version: ==3.18.0
 is_abstract: false
