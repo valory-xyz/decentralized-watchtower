@@ -48,7 +48,7 @@ More details can be found [here](https://forum.cow.fi/t/grant-application-decent
 ## Healthcheck for the agent
 
 The agents offer an http endpoint. It listens on port 8000. Once you have an agent running, you can check it's health status by calling the /healthcheck endpoint. 
-Example:  
+Example (agent running locally):
 ```bash
 curl http://localhost:8000/healthcheck
 ```
