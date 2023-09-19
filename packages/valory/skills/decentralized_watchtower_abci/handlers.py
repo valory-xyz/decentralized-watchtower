@@ -202,26 +202,48 @@ class HttpHandler(BaseHttpHandler):
         :param http_msg: the http message
         :param http_dialogue: the http dialogue
         """
-        try:
-            is_connected = self._ws_client_connection.is_connected
-            is_tm_unhealthy = self.context.state.round_sequence.block_stall_deadline_expired
-            is_healthy = all(
-                [
-                    is_connected,
-                    not is_tm_unhealthy,
-                ]
+        seconds_since_last_transition = None
+        is_tm_unhealthy = None
+        is_transitioning_fast = None
+        current_round = None
+        previous_rounds = None
+
+        round_sequence = cast(SharedState, self.context.state).round_sequence
+        is_connected = self._ws_client_connection.is_connected
+
+        if round_sequence._last_round_transition_timestamp:
+            is_tm_unhealthy = cast(
+                SharedState, self.context.state
+            ).round_sequence.block_stall_deadline_expired
+
+            current_time = datetime.now().timestamp()
+            seconds_since_last_transition = current_time - datetime.timestamp(
+                round_sequence._last_round_transition_timestamp
             )
-            data = {
-                "healthy": is_healthy,
-                "period": self.synchronized_data.period_count,
-                "tm_ok": not is_tm_unhealthy,
-                "web3_ok": is_connected,
-            }
-        except (AttributeError, KeyError, ValueError):
-            data = {
-                "healthy": False,
-                "reason": "Not ready."
-            }
+
+            is_transitioning_fast = (
+                not is_tm_unhealthy
+                and seconds_since_last_transition
+                < 2 * self.context.params.reset_pause_duration
+            )
+
+        if round_sequence._abci_app:
+            current_round = round_sequence._abci_app.current_round.round_id
+            previous_rounds = [
+                r.round_id for r in round_sequence._abci_app._previous_rounds[-10:]
+            ]
+
+        data = {
+            "is_transitioning_fast": is_transitioning_fast,
+            "is_tm_healthy": not is_tm_unhealthy,
+            "seconds_since_last_transition": seconds_since_last_transition,
+            "reset_pause_duration": self.context.params.reset_pause_duration,
+            "period": self.synchronized_data.period_count,
+            "previous_rounds": previous_rounds,
+            "current_round": current_round,
+            "web3_ok": is_connected
+        }
+
         self._send_ok_response(http_msg, http_dialogue, data)
 
     def _send_ok_response(
