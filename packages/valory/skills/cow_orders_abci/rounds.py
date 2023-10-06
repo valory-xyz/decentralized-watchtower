@@ -59,6 +59,7 @@ class Event(Enum):
     NO_ACTION = "no_action"
     BAD_SUBMISSION = "bad_submission"
     DONE = "done"
+    TRY_NEXT_BLOCK = "try_next_block"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -145,11 +146,15 @@ class PlaceOrdersRound(OnlyKeeperSendsRound):
     synchronized_data_class = SynchronizedData
 
     ERROR_PAYLOAD = "error"
+    TRY_NEXT_BLOCK_PAYLOAD = "try_next_block"
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
         """End the block."""
         if self.keeper_payload is None:
             return None
+
+        if self.keeper_payload.content == self.TRY_NEXT_BLOCK_PAYLOAD:
+            return self.synchronized_data, Event.TRY_NEXT_BLOCK
 
         # even if the content is ERROR_PAYLOAD, we still want to update the state
         order_uid = self.keeper_payload.content
@@ -280,6 +285,7 @@ class CowOrdersAbciApp(AbciApp[Event]):
         PlaceOrdersRound: {
             Event.DONE: VerifyExecutionRound,
             Event.ROUND_TIMEOUT: PlaceOrdersRound,
+            Event.TRY_NEXT_BLOCK: SelectOrdersRound,
         },
         VerifyExecutionRound: {
             Event.DONE: SelectOrdersRound,

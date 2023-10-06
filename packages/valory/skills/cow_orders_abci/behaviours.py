@@ -111,6 +111,11 @@ class PlaceOrdersBehaviour(CowOrdersBaseBehaviour):
     """PlaceOrdersBehaviour"""
 
     matching_round: Type[AbstractRound] = PlaceOrdersRound
+    try_next_block_errors = [
+      "InsufficientBalance",
+      "InsufficientAllowance",
+      "InsufficientFee",
+    ]
 
     def async_act(self) -> Generator:
         """
@@ -164,16 +169,21 @@ class PlaceOrdersBehaviour(CowOrdersBaseBehaviour):
             headers=DEFAULT_HTTP_HEADERS,
             content=order_bytes,
         )
-        if response.status_code != 201:
-            self.context.logger.error(
-                f"Could not retrieve submit order to CoW API. "
-                f"Received status code {response.status_code} response body: {response.body.decode()}."
+        if response.status_code == 200:
+            order_uid = response.body.decode()
+            self.context.logger.info(f"Order {order} placed with uid {order_uid}")
+            return order_uid
+        body = json.loads(response.body.decode())
+        error = body["errorType"]
+        if error in self.try_next_block_errors:
+            self.context.logger.info(
+                f"Order {order} cannot be placed now, will try next block. "
+                f"Error: {error}"
             )
-            return PlaceOrdersRound.ERROR_PAYLOAD
+            return PlaceOrdersRound.TRY_NEXT_BLOCK_PAYLOAD
 
-        order_uid = response.body.decode()
-        return order_uid
-
+        # in any other case we drop the order
+        return PlaceOrdersRound.ERROR_PAYLOAD
 
 class RandomnessBehaviour(BaseRandomnessBehaviour, CowOrdersBaseBehaviour):
     """RandomnessBehaviour"""

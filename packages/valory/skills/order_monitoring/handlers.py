@@ -169,7 +169,7 @@ class ContractHandler(Handler):
             self._handle_event_processing(data)
 
         if call_type == CallType.GET_TRADEABLE_ORDER.value:
-            self._handle_get_tradeable_order(data)
+            self._handle_get_tradeable_order(data["tradeable_orders"], data["drop_orders"])
 
     def get_domain(  # pylint: disable=no-self-use
         self, order: Dict[str, Any]
@@ -184,7 +184,7 @@ class ContractHandler(Handler):
         return domain
 
     def _handle_get_tradeable_order(
-        self, tradeable_orders: List[Dict[str, Any]]
+        self, tradeable_orders: List[Dict[str, Any]], drop_orders: List[Dict[str, Any]],
     ) -> None:
         """Handle get tradeable order."""
         for order in tradeable_orders:
