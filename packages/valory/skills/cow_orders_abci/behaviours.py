@@ -22,6 +22,7 @@ import json
 from abc import ABC
 from collections import deque
 from copy import deepcopy
+from json import JSONDecodeError
 from typing import Any, Deque, Dict, Generator, List, Set, Type, cast
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
@@ -112,9 +113,9 @@ class PlaceOrdersBehaviour(CowOrdersBaseBehaviour):
 
     matching_round: Type[AbstractRound] = PlaceOrdersRound
     try_next_block_errors = [
-      "InsufficientBalance",
-      "InsufficientAllowance",
-      "InsufficientFee",
+        "InsufficientBalance",
+        "InsufficientAllowance",
+        "InsufficientFee",
     ]
 
     def async_act(self) -> Generator:
@@ -173,17 +174,19 @@ class PlaceOrdersBehaviour(CowOrdersBaseBehaviour):
             order_uid = response.body.decode()
             self.context.logger.info(f"Order {order} placed with uid {order_uid}")
             return order_uid
-        body = json.loads(response.body.decode())
-        error = body["errorType"]
-        if error in self.try_next_block_errors:
-            self.context.logger.info(
-                f"Order {order} cannot be placed now, will try next block. "
-                f"Error: {error}"
-            )
-            return PlaceOrdersRound.TRY_NEXT_BLOCK_PAYLOAD
+        try:
+            body = json.loads(response.body.decode())
+            error = body["errorType"]
+            if error in self.try_next_block_errors:
+                self.context.logger.info(
+                    f"Order {order} cannot be placed now, will try next block. "
+                    f"Error: {error}"
+                )
+                return PlaceOrdersRound.TRY_NEXT_BLOCK_PAYLOAD
 
-        # in any other case we drop the order
-        return PlaceOrdersRound.ERROR_PAYLOAD
+        except JSONDecodeError:
+            return PlaceOrdersRound.ERROR_PAYLOAD
+
 
 class RandomnessBehaviour(BaseRandomnessBehaviour, CowOrdersBaseBehaviour):
     """RandomnessBehaviour"""

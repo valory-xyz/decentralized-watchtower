@@ -7,7 +7,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeia5wpsl5wqomo4t64vvxme7m6s6mr25nrcsqautoljhbhqdpyrfqq
 fingerprint_ignore_patterns: []
-agent: valory/decentralized_watchtower:0.1.0:bafybeichfz5coycy535a2kydwx46xraf4bfmi2kisgghly2uzo7homco3i
+agent: valory/decentralized_watchtower:0.1.0:bafybeiamadhq4e6o2rim4qb2dvofl2n4hfbemakxkrn66dsh3pzwlue4ha
 number_of_agents: 4
 deployment:
   tendermint:
@@ -92,11 +92,11 @@ type: skill
 behaviours:
   subscriptions:
     args:
-      contracts: ${CONTRACT_TO_MONITOR:list:["0xFf82123dFB52ab75C417195c5fDB87630145ae81"]}
+      contracts: ${CONTRACT_TO_MONITOR:list:["0xfdaFc9d1902f4e0b84f65F49f244b32b31013b74"]}
 handlers:
   new_event:
     args:
-      contract_to_monitor: ${CONTRACT_TO_MONITOR:str:0xFf82123dFB52ab75C417195c5fDB87630145ae81}
+      contract_to_monitor: ${CONTRACT_TO_MONITOR:str:0xfdaFc9d1902f4e0b84f65F49f244b32b31013b74}
       websocket_provider: ${WS_RPC:str:ws://localhost:8545}
 models:
   params:

@@ -169,7 +169,9 @@ class ContractHandler(Handler):
             self._handle_event_processing(data)
 
         if call_type == CallType.GET_TRADEABLE_ORDER.value:
-            self._handle_get_tradeable_order(data["tradeable_orders"], data["drop_orders"])
+            self._handle_get_tradeable_order(
+                data["tradeable_orders"], data["drop_orders"]
+            )
 
     def get_domain(  # pylint: disable=no-self-use
         self, order: Dict[str, Any]
@@ -184,7 +186,9 @@ class ContractHandler(Handler):
         return domain
 
     def _handle_get_tradeable_order(
-        self, tradeable_orders: List[Dict[str, Any]], drop_orders: List[Dict[str, Any]],
+        self,
+        tradeable_orders: List[Dict[str, Any]],
+        drop_orders: List[Dict[str, Any]],
     ) -> None:
         """Handle get tradeable order."""
         for order in tradeable_orders:
@@ -210,6 +214,14 @@ class ContractHandler(Handler):
                     "kind": kind_to_string(order["kind"]),
                 }
             )
+        for order in drop_orders:
+            domain = self.get_domain(order)
+            id = order.pop("id")
+            order_uid = compute_order_uid(domain, order, order["from"])
+            order["order_uid"] = order_uid
+            owner = order["from"]
+            owner_orders = self.orders.get(owner, [])
+            self.orders[owner] = [o for o in owner_orders if o.id != id]
         self.params.in_flight_req = False
 
     def _handle_event_processing(self, events: Dict[str, Any]) -> None:

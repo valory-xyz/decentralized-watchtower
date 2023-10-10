@@ -10,7 +10,7 @@ fingerprint:
   behaviours.py: bafybeifnv7atptmdcrxqvl4aiqb27f7dh4jdx27hlprlpdh3pwkw6m42xy
   composition.py: bafybeiathrq663ilbfyxj5fg6dswi2xqz65hbpcrkbch3qo2txmvh7oi4u
   dialogues.py: bafybeihdhvtmrsj7ridlt6xv24qiyax2otozn6ucxzoci65wwxxfowetdi
-  fsm_specification.yaml: bafybeibjdfk3igviai6jpgd7bha3nmdeknwcunc3mcxmiz4dbuqaojkcbe
+  fsm_specification.yaml: bafybeifsblqkhzeyxoqqytl24hzdzyh5clpipuz6d4ea3bsgxth2sd7dv4
   handlers.py: bafybeidrqvaadneehmqqjjhtt4eu7d4zkb4jfuxiitnhwhuheprdwqav34
   models.py: bafybeif3bsaxrkxgnby2j4q5m35byxhm77yrcufewqon5klf432loecswm
   payloads.py: bafybeifcoe6rgr5kkh4ka2nvat75vyanfo5du74v7ygryzw6tn5klslp5y
@@ -24,8 +24,8 @@ protocols:
 - valory/http:1.0.0:bafybeia5bxdua2i6chw6pg47bvoljzcpuqxzy4rdrorbdmcbnwmnfdobtu
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeigxjcci53vwytymzlhr37436yvenh7jup4astrn7dgyixo24aq2pq
-- valory/cow_orders_abci:0.1.0:bafybeigbfcftwh6gisgcnb6klbeesg6dpjabjynr2a6peuy6xpi7oip2ky
-- valory/order_monitoring:0.1.0:bafybeiexbsdmzjtaoydlngquigf6ufd3n3zhos74ssywbsar6ru56plqs4
+- valory/cow_orders_abci:0.1.0:bafybeighmw55yxe6l4drdepnsyelf7oxnneagzvm4bbzzs3cocwz44nkmu
+- valory/order_monitoring:0.1.0:bafybeihmcau5gomxw5ti4f66qpkosuztmoitqypddiaxuh5rdl6dkhjmuy
 - valory/registration_abci:0.1.0:bafybeibc4kczqbh23sc6tufrzn3axmhp3vjav7fa3u6cnpvolrbbc2fd7i
 - valory/reset_pause_abci:0.1.0:bafybeid445uy6wwvugf3byzl7r73c7teu6xr5ezxb4h7cxbenghg3copvy
 - valory/termination_abci:0.1.0:bafybeiguy7pkrcptg6c754ioig4mlkr7truccym3fpv6jwpjx2tmpdbzhi

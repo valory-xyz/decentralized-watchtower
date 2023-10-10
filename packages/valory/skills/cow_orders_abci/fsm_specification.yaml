@@ -4,6 +4,7 @@ alphabet_in:
 - NO_ACTION
 - NO_MAJORITY
 - ROUND_TIMEOUT
+- TRY_NEXT_BLOCK
 default_start_state: SelectOrdersRound
 final_states:
 - FinishedWithOrdersRound
@@ -20,6 +21,7 @@ states:
 transition_func:
     (PlaceOrdersRound, DONE): VerifyExecutionRound
     (PlaceOrdersRound, ROUND_TIMEOUT): PlaceOrdersRound
+    (PlaceOrdersRound, TRY_NEXT_BLOCK): SelectOrdersRound
     (RandomnessRound, DONE): SelectKeeperRound
     (RandomnessRound, NO_MAJORITY): RandomnessRound
     (RandomnessRound, ROUND_TIMEOUT): RandomnessRound

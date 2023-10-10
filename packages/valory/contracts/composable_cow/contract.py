@@ -27,6 +27,8 @@ from aea.common import JSONLike
 from aea.configurations.base import PublicId
 from aea.contracts.base import Contract
 from aea.crypto.base import LedgerApi
+from aea_ledger_ethereum import EthereumApi
+from web3 import Web3
 
 PUBLIC_ID = PublicId.from_str("valory/composable_cow:0.1.0")
 
@@ -136,19 +138,6 @@ class ComposableCowContract(Contract):
             try:
                 static_input = order["params"][2]
                 composable_cow = order["composableCow"]
-                twap_data = cls.decode_twap_struct(
-                    ledger_api,
-                    static_input,
-                )
-                should_drop_order = cls.should_drop_order(
-                    ledger_api,
-                    composable_cow,
-                    order,
-                    twap_data,
-                )
-                if should_drop_order:
-                    drop_orders.append(order)
-                    continue
                 instance = cls.get_instance(ledger_api, order["composableCow"])
                 (
                     order_data,
@@ -159,16 +148,29 @@ class ComposableCowContract(Contract):
                     order["offchainInput"],
                     order["proof"],
                 ).call()
-                tradeable_orders.append(
-                    {
-                        **cls.parse_order_data(order_data),
-                        "signingScheme": "eip1271",
-                        "signature": "0x" + signature.hex(),
-                        "from": order["owner"],
-                        "id": order["id"],
-                        "chainId": ledger_api.api.eth.chain_id,
-                    }
+                twap_data = cls.decode_twap_struct(
+                    ledger_api,
+                    static_input,
                 )
+                should_drop_order = cls.should_drop_order(
+                    ledger_api,
+                    composable_cow,
+                    order,
+                    twap_data,
+                )
+                order = {
+                    **cls.parse_order_data(order_data),
+                    "signingScheme": "eip1271",
+                    "signature": "0x" + signature.hex(),
+                    "from": order["owner"],
+                    "id": order["id"],
+                    "chainId": ledger_api.api.eth.chain_id,
+                }
+                if should_drop_order:
+                    drop_orders.append(order)
+                    continue
+
+                tradeable_orders.append(order)
             except Exception as e:
                 _logger.info(f"Order {order} not tradeable : {e}")
 
@@ -180,6 +182,7 @@ class ComposableCowContract(Contract):
         static_input: bytes,
     ) -> Optional[TWAPData]:
         """Decode twap struct."""
+        abi = [type_ for type_, name in TWAP_STRUCT_ABI]
         [
             sellToken,
             buyToken,
@@ -191,7 +194,7 @@ class ComposableCowContract(Contract):
             t,
             span,
             appData,
-        ] = ledger_api.api.codec.decode_abi(TWAP_STRUCT_ABI, static_input)
+        ] = ledger_api.api.codec.decode(abi, static_input)
         return TWAPData(
             sellToken=sellToken,
             buyToken=buyToken,
@@ -212,8 +215,9 @@ class ComposableCowContract(Contract):
             return data.t0
 
         contract = cls.get_instance(ledger_api, contract_address)
-        start_timestamp_hex = contract.functions.cabinet(order["owner"], order["id"]).call()
-        start_timestamp = ledger_api.api.codec.decode_abi(['unit256'], start_timestamp_hex)[0]
+        owner, id = Web3.to_checksum_address(order["owner"]), contract.functions.hash(order["params"]).call()
+        start_timestamp_hex = contract.functions.cabinet(owner, id).call()
+        start_timestamp = ledger_api.api.codec.decode(['uint256'], start_timestamp_hex)[0]
         return start_timestamp
 
     @classmethod
