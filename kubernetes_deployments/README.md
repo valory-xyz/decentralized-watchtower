@@ -168,7 +168,75 @@ kubectl apply --recursive -f .
 
 This command initiates the deployment process, recursively applying the necessary configurations from the current directory and its subdirectories.
 
+## Source code updates
+
+This section summarizes the process of implementing code updates on the service and so that it can be used within a Kubernetes cluster. The information contained in this section is an excerpt of the [Open Autonomy - Guides](https://docs.autonolas.network/open-autonomy/guides/).
+
+The goal is to generate and publish the **Docker image** and the **Kubernetes configuration files** reflecting the change in the code base of the service.
+
+1. Clone, prepare your repository and Pipenv environment as described in the section [Developing](../README.md#developing) in the main README.md of this repository. Follow the recommendations therein when updating the code base (usage of code formatters, testing, etc.).
+
+2. Once you are happy and have tested locally the changes in the code base, lock and push your packages:
+
+    ```bash
+    autonomy packages lock
+    autonomy push-all
+    ```
+
+3. Fetch the service you are interested in updating. We will be using the Görli variant as an example.
+
+    ```bash
+    autonomy fetch valory/decentralized_watchtower_goerli --service --local
+    cd decentralized_watchtower_goerli
+    ```
+
+4. Build the Docker image. You must use your Docker Hub user name as `--image-author`. We use `valory` as an example:
+
+    ```bash
+    autonomy build-image --image-author valory
+    ```
+
+    The output should look similar to this:
+
+    ```bash
+    [docker]Successfully tagged valory/oar-decentralized_watchtower:<hash>
+    ```
+
+5. Publish the Docker image to your Docker Hub account use the `<hash>` value from the step above.
+
+    ```bash
+    docker login -u valory -p <password>
+    docker push valory/oar-decentralized_watchtower:<hash>
+    docker logout
+    ```
+
+    Ensure that the image is publicly available.
+
+6. Re-create the Kubernetes deployment defining the appropriate environment variables as [specified above](#re-create-the-kubernetes-deployments). Note that you can skip init the framework and fetching the service, because these steps have been done in steps 1-3 above. Ensure that `--image-author` matches your Docker Hub name in the command `autonomy deploy build` (this is to reference the correct Docker Hub user and image name in the generated deployment). Here is an example for Göerli and image author `valory`:
+
+    ```bash
+    # Replace with your agents' addresses
+    export ALL_PARTICIPANTS='["0x4C04db92F3d7F9F78a344D4C6f80250d3e6f4cA6", "0xCAF30F32e34482e3818C95B9C40702e77D879dBf", "0x9B4205930F4bF6a0D402F1068279f5A57fC346Fb", "0x3b3964b4b2C92aB3ca2Af5EBfF08c32B0A2B1A6A"]'
+
+    # Replace with your service Gnosis Safe
+    export SAFE_CONTRACT_ADDRESS=0x5000000000000000000000000000000000000000
+    export USE_ACN=false
+    export COW_API_URL=https://api.cow.fi/goerli/api/v1
+    export SERVICE_REGISTRY_ADDRESS=0x9c7d6D8D6c11e5F146628fd8478f73FAcc10C6B3
+    export ON_CHAIN_SERVICE_ID=53
+    export CHAIN_ID=5
+    export HTTP_RPC=YOUR_HTTP_RPC
+    export WS_RPC=YOUR_WS_RPC
+
+    # Use your own keys.json file
+    cp ../keys.json .
+    autonomy deploy build --kubernetes -ltm --image-author valory
+    cd abci_build
+    # The Kubernetes deployment YAML files are located in the /abci_build folder
+    ```
+
 ## References
 
+- [Autonolas Developer Documentation - Open Autonomy framework](https://docs.autonolas.network/open-autonomy/)
 - [Autonolas Developer Documentation - Deploy the service](https://docs.autonolas.network/open-autonomy/guides/deploy_service/)
 - [Open Operator - Decentralized Watchtower Service](https://github.com/valory-xyz/open-operator-watchtower)
