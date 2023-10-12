@@ -1,13 +1,13 @@
 {
     "dev": {
-        "skill/valory/cow_orders_abci/0.1.0": "bafybeiddlvxmgg2px7cgo24lnrwwha62udfjcok6p7whhw6ojj3iag7zzi",
-        "skill/valory/decentralized_watchtower_abci/0.1.0": "bafybeicmbazwvhjcxj447bgte3vdxxoeq2mmma47iqeh3fikv5uyi5m5s4",
-        "skill/valory/order_monitoring/0.1.0": "bafybeighhrj2bxpzwta6ybnv2fdwfmlcoaigr5d7sv6hwap4gugpoyjeie",
-        "contract/valory/composable_cow/0.1.0": "bafybeifsi2mwo3r4qh5oqccpbc47llz3tkxyodj7gtrnrm5z4bekv63che",
-        "agent/valory/decentralized_watchtower/0.1.0": "bafybeihuhj32j7al4n3e7oeovg5wy4yb4vu4kajarnblmczyfcxx6us7ge",
-        "service/valory/decentralized_watchtower_goerli/0.1.0": "bafybeie54mkabubpbn5njt34qm7wbyuapveckbmw2wxnlcou52sy6hklii",
-        "service/valory/decentralized_watchtower/0.1.0": "bafybeifgefee5emykcj5fgtqlq67kamebcwuehkckp6oalzimkegldewam",
-        "service/valory/decentralized_watchtower_gnosis/0.1.0": "bafybeicbzoubxozipysenhlpd655usangq7rk675p3y3ht4zvzb27ndg3u"
+        "skill/valory/cow_orders_abci/0.1.0": "bafybeighmw55yxe6l4drdepnsyelf7oxnneagzvm4bbzzs3cocwz44nkmu",
+        "skill/valory/decentralized_watchtower_abci/0.1.0": "bafybeibn2k6mxxx4onz2sd3d4etubzafnsaugeqjqhqwx55nbitpplsizq",
+        "skill/valory/order_monitoring/0.1.0": "bafybeicubggxk536c6k7fdhygfgauv227rm3rbaxjihvows7ho2nvjgvfu",
+        "contract/valory/composable_cow/0.1.0": "bafybeidn75swamcvqeuhc2svuqvuzxoxg7ispwjmdg5bwfwk4pve2phzeu",
+        "agent/valory/decentralized_watchtower/0.1.0": "bafybeidwwji34l46pz4s2oludbjbqghavdry24xtov5zhjwuxjibjh2juq",
+        "service/valory/decentralized_watchtower_goerli/0.1.0": "bafybeiadmc7i5er27em3migt57f24thaq2ercqx7urwb5fayg4uhiergem",
+        "service/valory/decentralized_watchtower/0.1.0": "bafybeihvlvb6xupirtboavhsalbfmadkqgjk3tmblqz5ewu3hcroclokza",
+        "service/valory/decentralized_watchtower_gnosis/0.1.0": "bafybeieti7xquiku5okuzrpm3epmmzhsunsi4cyidmp4iaj7gwlu63gvz4"
     },
     "third_party": {
         "connection/fetchai/http_server/0.22.0": "bafybeihp5umafxzx45aad5pj7s3343se2wjkgnbirt4pybrape22swm6de",

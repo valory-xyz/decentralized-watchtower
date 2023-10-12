@@ -9,7 +9,7 @@ fingerprint:
   __init__.py: bafybeiglilmcvbbxt6oczjbyayv6w6cr5j6wh4dkhgupej4jkjsedjwaiu
   behaviours.py: bafybeidai3pzxzqjul6trlcqdts5tszpdn6o4mn2lssxwhthz3x5fe2zta
   dialogues.py: bafybeic7fqe7r3culyuwprdyxfa4g7szku66wtl2kiqzm5vd7sr7cfgxfu
-  handlers.py: bafybeie2lesdiwfokifmchaxxc7fhuvzlqqfbwcb6dbjunwk5oaibipeue
+  handlers.py: bafybeihuijp7go4eqw5n3nfvtorgwv56bsx7fmzx6ro4sojwvwwjliybre
   models.py: bafybeibp2p2afluv7n6cfeofbglcrbduimhk43vbsezomslk4hfpvuujgq
   order_utils.py: bafybeic77blgy6vljjl5ykrgyyn24ljzbjweu3hic4gqnjve2m6a5uldhe
   sig_utils/__init__.py: bafybeihbsg7wxo2z3urpk26w5u46u2bsdgjxpsi4stgdbq3ginrkz4qxdq
@@ -18,14 +18,14 @@ fingerprint:
   tests/__init__.py: bafybeib2dgq23y4dvdpvftmnfcruocssbjoec3zrcdpugs6sxoxeh5lce4
   tests/test_behaviours.py: bafybeicsxep75tq4fheoljaugywvkpvzzvhxkslpe7bc4tbujauthvr5le
   tests/test_dialogues.py: bafybeiftjdqbjhsvuqgcxdlht5dj4gimro4v7f4ya2ohk5qmkvur3egtwa
-  tests/test_handlers.py: bafybeihshguzx7dwgaclgzl3lalxohfvnsszcqxvbppzju2vg5d6jdwidy
+  tests/test_handlers.py: bafybeihm5ysj5v5fca7teqkayouceevnfqgivsn5dbbdbi4engo6ffxnje
   tests/test_order_utils.py: bafybeiekwcpqalwngvidmkvjtw7v7jfzqoqatap43n3s3gv3c4tg76tpqm
 fingerprint_ignore_patterns: []
 connections:
 - valory/ledger:0.19.0:bafybeigfoz7d7si7s4jehvloq2zmiiocpbxcaathl3bxkyarxoerxq7g3a
 - valory/websocket_client:0.1.0:bafybeicz53kzs5uvyiod2azntl76zwgmpgr22ven4wl5fnwt2m546j3wsu
 contracts:
-- valory/composable_cow:0.1.0:bafybeifsi2mwo3r4qh5oqccpbc47llz3tkxyodj7gtrnrm5z4bekv63che
+- valory/composable_cow:0.1.0:bafybeidn75swamcvqeuhc2svuqvuzxoxg7ispwjmdg5bwfwk4pve2phzeu
 protocols:
 - valory/contract_api:1.0.0:bafybeiasywsvax45qmugus5kxogejj66c5taen27h4voriodz7rgushtqa
 - valory/default:1.0.0:bafybeiecmut3235aen7wxukllv424f3dysvvlgfmn562kzdunc5hdj3hxu

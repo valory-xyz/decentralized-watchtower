@@ -19,15 +19,16 @@
 
 """This module contains the handlers for the skill of CowOrdersAbciApp."""
 import json
-import re
-from ctypes import cast
 from datetime import datetime
 from enum import Enum
-from typing import Optional, Tuple, Callable, Dict
-from urllib.parse import urlparse
+from typing import Optional, Tuple, Callable, Dict, cast
 
 from aea.protocols.base import Message
 
+from packages.fetchai.connections.http_server.connection import (
+    PUBLIC_ID as HTTP_SERVER_PUBLIC_ID,
+)
+from packages.valory.protocols.http.message import HttpMessage
 from packages.valory.skills.abstract_round_abci.handlers import (
     ABCIRoundHandler as BaseABCIRoundHandler,
 )
@@ -49,13 +50,9 @@ from packages.valory.skills.abstract_round_abci.handlers import (
 from packages.valory.skills.abstract_round_abci.handlers import (
     TendermintHandler as BaseTendermintHandler,
 )
-from packages.fetchai.connections.http_server.connection import (
-    PUBLIC_ID as HTTP_SERVER_PUBLIC_ID,
-)
-from packages.valory.skills.decentralized_watchtower_abci.models import SharedState
 from packages.valory.skills.cow_orders_abci.rounds import SynchronizedData
-from packages.valory.skills.decentralized_watchtower_abci.dialogues import HttpDialogues, HttpDialogue
-from packages.valory.protocols.http.message import HttpMessage
+from packages.valory.skills.decentralized_watchtower_abci.dialogues import HttpDialogue
+from packages.valory.skills.decentralized_watchtower_abci.models import SharedState
 
 ABCIHandler = BaseABCIRoundHandler
 SigningHandler = BaseSigningHandler

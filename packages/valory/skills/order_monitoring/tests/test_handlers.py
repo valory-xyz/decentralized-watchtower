@@ -138,10 +138,10 @@ class TestContractHandler:
     def test_handle_get_tradeable_order(self) -> None:
         """Test handle method of ContractHandler for get_tradeable_order performative."""
         order = {"chainId": "chain_id", "from": "from_address"}
-        tradeable_orders = [order]
+        data = {"tradeable_orders": [order], "drop_orders": []}
         contract_api_msg = MagicMock(
             performative=ContractApiMessage.Performative.STATE,
-            state=MagicMock(body={"type": "tradable_order", "data": tradeable_orders}),
+            state=MagicMock(body={"type": "tradable_order", "data": data}),
         )
         self.handler._handle_get_tradeable_order = MagicMock()
         self.handler.handle(contract_api_msg)

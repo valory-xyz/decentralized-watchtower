@@ -8,8 +8,8 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiaihi3b3drfbgs5iimy5ijfkurmuluh6wum3dgvsramcbrttimwrm
-  build/ComposableCow.json: bafybeiene4ejo3x74qxrsmo3zaw6clhp3c22mtegv6k6m4fltldzi7odim
-  contract.py: bafybeibihhnecevmba7zouc6svakwaen62bhlfaa4etqctmefbr6lw7kg4
+  build/ComposableCow.json: bafybeibfkaq4z53ovmmvzkhio4qz4le6cr2nz5gxgc3j7pmuz3ypa2dazy
+  contract.py: bafybeigpbk346cdbqjtzgxkumf5a7pey5ozrw3kisux32lvavumu3rimn4
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: ComposableCowContract
