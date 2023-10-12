@@ -14,7 +14,7 @@ fingerprint:
   tests/helpers/fixtures.py: bafybeihxzhlr3tbwsoe3y3zczivoxbbkvccvtct4c6rff6qhfentcyl32i
   tests/test_agents/__init__.py: bafybeicmv3jjcqcdnmubfmrgdgeyic3nkm77z4mutsyuo34hpddwupofre
   tests/test_agents/base.py: bafybeialg3wvgoxrzzbhn7rgkt4wda6lm5hth3ljuksswvvxb2ixdosxky
-  tests/test_agents/test_decentralized_watchtower.py: bafybeiackbxkmxhmpnfe5kvtfksq3lktaa5ebtwruowkzu72aav54ip2ci
+  tests/test_agents/test_decentralized_watchtower.py: bafybeih3z5yedcbddxa62i7hkg5zbvu6ctee3zr6c2wuompobam2etvzce
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeihp5umafxzx45aad5pj7s3343se2wjkgnbirt4pybrape22swm6de
