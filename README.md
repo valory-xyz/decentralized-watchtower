@@ -40,6 +40,27 @@ More details can be found [here](https://forum.cow.fi/t/grant-application-decent
 
 - During development use `make formatters`, `make code-checks` and `make generators`
 
+
 - After building your development environment and pulling the packages, you can conduct an end-to-end test with a local network and 4 agents by running
       
       pytest packages/valory/agents/decentralized_watchtower/tests/test_agents/test_decentralized_watchtower.py::TestWatchtowerFourAgents
+
+## Healthcheck for the agent
+
+The agents offer an http endpoint. It listens on port 8000. Once you have an agent running, you can check it's health status by calling the /healthcheck endpoint. 
+Example (agent running locally):
+```bash
+curl http://localhost:8000/healthcheck
+```
+
+An example response:
+```json
+{
+      "healthy": true,
+      "period": 1,
+      "tm_ok": true,
+      "web3_ok": true,
+}
+```
+
+In case of issues with the agent, the "healthy" field will be set to false.
